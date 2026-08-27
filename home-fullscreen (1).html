@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumen Perfil — Iluminação LED para bancadas e ambientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #f2ede2;
+    --muted: rgba(242,237,226,0.7);
+    --brass: #c9973b;
+    --ember: #f2b968;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; height:100%; }
+
+  body{
+    background:#0a0a0b;
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- fullscreen hero / frame ---------- */
+  .hero{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 560px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .hero img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .img-off{ z-index:1; }
+
+  .img-on{
+    z-index:2;
+    opacity:0;
+    filter: brightness(0.85);
+    transition: opacity 1.3s ease, filter 1.3s ease;
+  }
+
+  .hero:hover .img-on{
+    opacity:1;
+    filter: brightness(1);
+  }
+
+  .glow{
+    position:absolute;
+    z-index:3;
+    top:0; left:6%;
+    width:88%; height:42%;
+    pointer-events:none;
+    background: radial-gradient(ellipse at top, rgba(242,185,104,0.5) 0%, rgba(242,185,104,0) 70%);
+    opacity:0;
+    mix-blend-mode: screen;
+    transition: opacity 1.5s ease .2s;
+  }
+  .hero:hover .glow{ opacity:1; }
+
+  /* dark gradient so nav/text stay legible over either image state */
+  .scrim{
+    position:absolute;
+    inset:0;
+    z-index:4;
+    pointer-events:none;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
+  }
+
+  /* ---------- nav, overlaid ---------- */
+  .nav{
+    position:absolute;
+    top:0; left:0; right:0;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 30px 48px;
+  }
+
+  .logo{
+    display:flex;
+    flex-direction:column;
+    line-height:1;
+    text-decoration:none;
+  }
+
+  .logo-top{
+    font-family:'Fraunces', serif;
+    font-size: 21px;
+    letter-spacing: 0.12em;
+  }
+
+  .logo-bottom{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    color: var(--ember);
+    margin-top: 5px;
+  }
+
+  .nav-links{
+    display:flex;
+    gap: 38px;
+    list-style:none;
+    margin:0; padding:0;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-links a{ text-decoration:none; transition: color .2s ease; }
+  .nav-links a:hover, .nav-links a:focus-visible{ color: var(--ink); }
+
+  .nav-cta{
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 1px solid rgba(242,237,226,0.4);
+    padding: 10px 20px;
+    border-radius: 999px;
+    text-decoration:none;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .nav-cta:hover, .nav-cta:focus-visible{ background: rgba(242,237,226,0.1); border-color: var(--ink); }
+
+  @media (max-width: 860px){ .nav-links{ display:none; } }
+
+  /* ---------- hero headline overlay ---------- */
+  .hero-copy{
+    position:absolute;
+    z-index:8;
+    right: 6%;
+    bottom: 14%;
+    max-width: 560px;
+    text-align:right;
+    pointer-events:none;
+  }
+
+  .hero-copy .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 18px;
+  }
+
+  .hero-copy h1{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(28px, 4.4vw, 54px);
+    line-height: 1.12;
+    margin: 0;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+  }
+
+  @media (max-width: 720px){
+    .hero-copy{ right: 6%; left: 6%; bottom: 20%; text-align:left; max-width: none; }
+  }
+
+  /* ---------- subtle affordance, not a full explanation ---------- */
+  .cue{
+    position:absolute;
+    z-index:8;
+    left: 6%;
+    bottom: 9%;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: opacity .5s ease;
+  }
+
+  .cue-dot{
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 10px 2px rgba(242,185,104,0.7);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%, 100%{ opacity: .4; transform: scale(0.9); }
+    50%{ opacity: 1; transform: scale(1.15); }
+  }
+
+  .hero:hover .cue{ opacity: 0; }
+
+  /* ---------- scroll indicator, decorative like the reference dots ---------- */
+  .scroll-dots{
+    position:absolute;
+    z-index:8;
+    left: 50%;
+    bottom: 36px;
+    transform: translateX(-50%);
+    display:flex;
+    gap: 8px;
+  }
+
+  .scroll-dots span{
+    width: 22px; height: 3px;
+    border-radius: 2px;
+    background: rgba(242,237,226,0.25);
+  }
+  .scroll-dots span:first-child{ background: var(--ink); width: 28px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .img-on, .glow, .cue, .cue-dot{ transition: opacity .2s linear !important; animation:none !important; }
+  }
+
+  /* ---------- section below the fold, kept short ---------- */
+  .below{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 90px 48px 100px;
+  }
+
+  .below-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .below-item .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--brass);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  .below-item h3{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: 21px;
+    margin: 0 0 10px;
+  }
+
+  .below-item p{
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  @media (max-width: 800px){
+    .below-grid{ grid-template-columns: 1fr; gap: 34px; }
+    .nav{ padding: 22px 24px; }
+    .below{ padding: 64px 24px 72px; }
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <img class="img-off" src="sala-off.jpg" alt="Sala com painel de TV sem iluminação LED">
+    <img class="img-on"  src="sala-on.jpg"  alt="Mesma sala com iluminação LED acesa no painel">
+    <div class="glow"></div>
+    <div class="scrim"></div>
+
+    <nav class="nav">
+      <a class="logo" href="#">
+        <span class="logo-top">LUMEN PERFIL</span>
+        <span class="logo-bottom">LIGHT EXPERIENCE</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">Institucional</a></li>
+        <li><a href="#">Produtos</a></li>
+        <li><a href="#">Projetos</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+      <a class="nav-cta" href="#">Orçamento</a>
+    </nav>
+
+    <div class="hero-copy">
+      <div class="eyebrow">Perfis de LED embutidos</div>
+      <h1>A luz que muda<br>a forma como você<br>vive a sua sala</h1>
+    </div>
+
+    <div class="cue">
+      <span class="cue-dot"></span>
+      mova o mouse sobre a imagem
+    </div>
+
+    <div class="scroll-dots">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <section class="below">
+    <div class="below-grid">
+      <div class="below-item">
+        <div class="num">2700K</div>
+        <h3>Luz quente, sem ofuscar</h3>
+        <p>Temperatura de cor pensada para painéis de TV, nichos e prateleiras, sem o brilho frio de LED comum.</p>
+      </div>
+      <div class="below-item">
+        <div class="num">CORTE INVISÍVEL</div>
+        <h3>Instalação embutida</h3>
+        <p>Perfil escondido atrás do painel e das prateleiras, sem fio aparente e sem pontos de luz estourados.</p>
+      </div>
+      <div class="below-item">
+        <div class="num">SOB MEDIDA</div>
+        <h3>Projeto e instalação</h3>
+        <p>Medimos o ambiente, cortamos o perfil no tamanho certo e instalamos direto no seu móvel planejado.</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
