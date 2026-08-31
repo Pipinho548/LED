@@ -13,6 +13,8 @@
     --muted: rgba(242,237,226,0.7);
     --brass: #c9973b;
     --ember: #f2b968;
+    --panel: #16171b;
+    --line: rgba(255,255,255,0.08);
   }
 
   *{ box-sizing: border-box; }
@@ -240,70 +242,54 @@
     padding:0;
     margin:0;
     cursor:pointer;
-    perspective: 260px;
   }
 
   .switch-plate{
+    position:relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     display:flex;
-    flex-direction:column;
     align-items:center;
-    width: 56px;
-    padding: 10px 8px 12px;
-    border-radius: 14px;
-    background: linear-gradient(160deg, #2c2e34, #16171b);
+    justify-content:center;
+    background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
     box-shadow:
-      0 12px 26px rgba(0,0,0,0.55),
-      inset 0 1px 0 rgba(255,255,255,0.07),
-      inset 0 -1px 0 rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.06);
+      0 10px 22px rgba(0,0,0,0.55),
+      inset 0 1px 1px rgba(255,255,255,0.12),
+      inset 0 -2px 4px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: box-shadow .3s ease;
+  }
+
+  /* quando ligado, um leve halo dourado contorna o encaixe do botao, como se a luz
+     interna do interruptor tivesse acendido junto */
+  .switch.is-on .switch-plate{
+    box-shadow:
+      0 10px 22px rgba(0,0,0,0.55),
+      inset 0 1px 1px rgba(255,255,255,0.12),
+      inset 0 -2px 4px rgba(0,0,0,0.6),
+      0 0 0 3px rgba(242,185,104,0.5),
+      0 0 20px 4px rgba(242,185,104,0.4);
   }
 
   .switch-knob{
-    position:relative;
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: radial-gradient(circle at 34% 28%, #3d3e44, #101114 72%);
+    background: radial-gradient(circle at 35% 28%, #f4efe5, #cdc7bb 78%);
     box-shadow:
-      0 4px 8px rgba(0,0,0,0.5),
-      inset 0 1px 1px rgba(255,255,255,0.16),
-      inset 0 -2px 3px rgba(0,0,0,0.65);
-    transform-style: preserve-3d;
-    transform: rotateX(-15deg);
-    transition: transform .16s cubic-bezier(.25,1.1,.3,1.35), box-shadow .2s ease;
+      0 3px 6px rgba(0,0,0,0.4),
+      inset 0 1px 1px rgba(255,255,255,0.65),
+      inset 0 -3px 5px rgba(0,0,0,0.18);
+    transition: transform .12s ease, box-shadow .12s ease;
   }
 
-  .switch.is-on .switch-knob{ transform: rotateX(15deg); }
-
-  .switch:active .switch-knob{ transform: scale(0.94) rotateX(0deg); }
-
-  .mark{
-    position:absolute;
-    left:0; right:0;
-    text-align:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    font-weight: 500;
-    color: rgba(242,237,226,0.32);
-    transition: color .25s ease;
-  }
-  .mark-off{ top: 6px; }
-  .mark-on{ bottom: 6px; }
-
-  .switch:not(.is-on) .mark-off{ color: rgba(242,237,226,0.75); }
-  .switch.is-on .mark-on{ color: var(--ember); }
-
-  .switch-led{
-    margin-top: 9px;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: rgba(130,26,26,0.9);
-    box-shadow: 0 0 6px 1px rgba(190,30,30,0.55);
-    transition: background .25s ease, box-shadow .25s ease;
-  }
-  .switch.is-on .switch-led{
-    background: var(--ember);
-    box-shadow: 0 0 10px 3px rgba(242,185,104,0.85);
+  .switch:active .switch-knob{
+    transform: translateY(2px) scale(0.95);
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.4),
+      inset 0 2px 3px rgba(0,0,0,0.35),
+      inset 0 -1px 1px rgba(255,255,255,0.35);
   }
 
   .switch-label{
@@ -337,7 +323,105 @@
     .img-on, .cursor-glow, .switch-knob{ transition: opacity .2s linear, transform .01s linear !important; }
   }
 
-  /* ---------- section below the fold, kept short ---------- */
+  /* ---------- segunda vitrine: perfil de LED, aceso x apagado ---------- */
+  .profiles{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 30px 48px 20px;
+  }
+
+  .profiles-head{
+    margin-bottom: 30px;
+    max-width: 620px;
+  }
+
+  .profiles .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 14px;
+  }
+
+  .profiles h2{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(24px, 3.6vw, 36px);
+    line-height: 1.15;
+    margin: 0 0 12px;
+  }
+
+  .profiles p{
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .pframe{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    cursor: pointer;
+  }
+
+  .pimg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .pimg-off{ z-index:1; }
+
+  .pimg-on{
+    z-index:2;
+    opacity:0;
+    filter: brightness(0.9);
+    transition: opacity 1s ease, filter 1s ease;
+  }
+
+  /* desktop: acende passando o mouse */
+  .pframe:hover .pimg-on{ opacity:1; filter: brightness(1); }
+
+  /* mobile/tap: classe controlada por JS, ja que nao existe hover no toque */
+  .pframe.is-lit .pimg-on{ opacity:1; filter: brightness(1); }
+
+  .ptag{
+    position:absolute;
+    z-index:3;
+    left: 16px;
+    bottom: 16px;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    background: rgba(10,10,11,0.55);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 7px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    transition: opacity .4s ease;
+  }
+  .ptag-dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--ember);
+  }
+  .pframe:hover .ptag,
+  .pframe.is-lit .ptag{ opacity: 0; }
+
+  /* ---------- specs, logo abaixo da vitrine ---------- */
   .below{
     max-width: 1180px;
     margin: 0 auto;
@@ -376,6 +460,7 @@
     .below-grid{ grid-template-columns: 1fr; gap: 34px; }
     .nav{ padding: calc(env(safe-area-inset-top, 0px) + 20px) 24px 20px; }
     .below{ padding: 64px 24px 72px; }
+    .profiles{ padding: 24px 24px 12px; }
   }
 </style>
 </head>
@@ -415,11 +500,7 @@
     <div class="switch-wrap">
       <button class="switch" type="button" aria-pressed="false" aria-label="Ligar luz do ambiente">
         <span class="switch-plate">
-          <span class="switch-knob">
-            <span class="mark mark-off">O</span>
-            <span class="mark mark-on">I</span>
-          </span>
-          <span class="switch-led"></span>
+          <span class="switch-knob"></span>
         </span>
       </button>
       <span class="switch-label">interruptor</span>
@@ -427,6 +508,23 @@
 
     <div class="scroll-dots">
       <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <section class="profiles">
+    <div class="profiles-head">
+      <div class="eyebrow">Perfil de LED</div>
+      <h2>O mesmo perfil, aceso e apagado</h2>
+      <p>Toque ou passe o mouse sobre a imagem para ver o perfil de embutir ligado.</p>
+    </div>
+
+    <div class="pframe">
+      <img class="pimg pimg-off" src="profile-off.jpg" alt="Perfil de LED de embutir apagado">
+      <img class="pimg pimg-on"  src="profile-on.jpg"  alt="Mesmo perfil de LED de embutir aceso">
+      <span class="ptag">
+        <span class="ptag-dot"></span>
+        toque para acender
+      </span>
     </div>
   </section>
 
@@ -503,6 +601,14 @@
         if (e.target.closest('.nav')) return;
         setLights(!isOn);
       });
+
+      // ---------- vitrine do perfil de LED: toque alterna aceso/apagado (hover ja cobre desktop via CSS) ----------
+      var pframe = document.querySelector('.pframe');
+      if (pframe){
+        pframe.addEventListener('click', function(){
+          pframe.classList.toggle('is-lit');
+        });
+      }
 
       if (reduced) return; // respeita "reduzir movimento": lanterna do mouse fica só no fallback CSS
 
