@@ -3,39 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Iluminiun Brasil — Iluminação LED para ambientes</title>
+<title>Iluminium Brasil — Iluminação em LED, perfis e acessórios</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
+  /* =====================================================================
+     TOKENS — paleta e tipografia da marca. #183C32 é a cor principal
+     (header, botões de destaque, títulos de seção, detalhes gráficos).
+     Dourado/âmbar entra só como acento, simulando luz LED quente.
+     ===================================================================== */
   :root{
-    --ink: #f2ede2;
-    --muted: rgba(242,237,226,0.7);
-    --brass: #c9973b;
-    --ember: #f2b968;
-    --panel: #16171b;
-    --line: rgba(255,255,255,0.08);
+    --brand: #183C32;        /* verde escuro, cor principal da marca */
+    --brand-light: #2B5548;  /* tom claro do brand, pra hover/gradiente */
+    --brand-dark: #0E241D;   /* tom escuro do brand, pro footer */
+    --paper: #FFFFFF;
+    --soft: #F3F2ED;         /* cinza claro neutro, fundo alternado */
+    --ink: #142320;          /* texto escuro sobre fundo claro */
+    --muted: #5C6A64;        /* texto secundário sobre fundo claro */
+    --line: rgba(20,35,32,0.12);
+    --amber: #C9973B;        /* dourado/âmbar de destaque, luz quente */
+    --amber-warm: #EFB86B;
+    --ink-onhero: #F2EDE2;   /* texto claro sobre o hero escuro */
+    --muted-onhero: rgba(242,237,226,0.7);
+    --panel-dark: #16171b;
+    --line-dark: rgba(255,255,255,0.1);
+    --radius: 14px;
   }
 
   *{ box-sizing: border-box; }
-  html, body{ margin:0; height:100%; }
+  html, body{ margin:0; }
+  html{ scroll-behavior: smooth; }
 
   body{
-    background:#0a0a0b;
+    background: var(--paper);
     color: var(--ink);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
   a{ color:inherit; }
+  img{ max-width:100%; display:block; }
 
-  /* ---------- fullscreen hero / frame ---------- */
+  .container{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  @media (max-width: 800px){
+    .container{ padding: 0 24px; }
+  }
+
+  h1, h2, h3{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  /* respeita quem pede menos movimento no sistema operacional */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* =====================================================================
+     NAV — fixa em toda a página. Começa transparente sobre o hero escuro
+     e ganha fundo verde sólido assim que a pessoa rola a página.
+     ===================================================================== */
+  .site-nav{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 200;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: calc(env(safe-area-inset-top, 0px) + 22px) 48px 22px;
+    transition: background .3s ease, padding .3s ease, box-shadow .3s ease;
+  }
+
+  .site-nav.is-solid{
+    background: var(--brand);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+    padding-bottom: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+
+  @media (max-width: 800px){
+    .site-nav{ padding: calc(env(safe-area-inset-top, 0px) + 20px) 24px 20px; }
+    .site-nav.is-solid{ padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: 14px; }
+  }
+
+  .nav-logo{
+    display:flex;
+    flex-direction:column;
+    line-height:1;
+    text-decoration:none;
+    color: var(--ink-onhero);
+  }
+  .nav-logo-top{ font-family:'Fraunces', serif; font-size: 20px; letter-spacing: 0.02em; }
+  .nav-logo-bottom{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--amber-warm); margin-top: 4px; }
+
+  .nav-links{
+    display:flex;
+    gap: 34px;
+    list-style:none;
+    margin:0; padding:0;
+    font-size: 14px;
+    color: var(--muted-onhero);
+  }
+  .nav-links a{ text-decoration:none; transition: color .2s ease; }
+  .nav-links a:hover, .nav-links a:focus-visible{ color: var(--ink-onhero); }
+
+  .nav-cta{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brand);
+    background: var(--ink-onhero);
+    padding: 10px 20px;
+    border-radius: 999px;
+    text-decoration:none;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .nav-cta:hover, .nav-cta:focus-visible{ background: var(--amber-warm); transform: translateY(-1px); }
+
+  @media (max-width: 860px){ .nav-links{ display:none; } }
+
+  /* botão de menu simples pra telas pequenas (sem submenu — só ancoras pra secao de contato) */
+  .nav-burger{
+    display:none;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(242,237,226,0.35);
+    background: rgba(255,255,255,0.06);
+    color: var(--ink-onhero);
+    align-items:center;
+    justify-content:center;
+    font-size: 18px;
+    cursor:pointer;
+  }
+  /* botão de menu simples pra telas pequenas (sem submenu — só ancoras pra secao de contato) */
+  .nav-burger{
+    display:none;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(242,237,226,0.35);
+    background: rgba(255,255,255,0.06);
+    color: var(--ink-onhero);
+    align-items:center;
+    justify-content:center;
+    font-size: 18px;
+    cursor:pointer;
+  }
+  @media (max-width: 860px){ .nav-burger{ display:flex; } }
+
+  /* =====================================================================
+     HERO — reaproveitado do protótipo anterior: imagem cheia com lanterna
+     que segue o mouse, interruptor físico e toque pra acender no celular.
+     ===================================================================== */
   .hero{
     position: relative;
     width: 100%;
     height: 100vh;   /* fallback pra navegadores sem suporte a dvh */
-    height: 100dvh;  /* altura real da tela, sem "pular" quando a barra do navegador mobile aparece/some */
-    min-height: 560px;
+    height: 100dvh;  /* altura real da tela, sem "pular" com a barra do navegador mobile */
+    min-height: 620px;
     overflow: hidden;
     cursor: pointer;
   }
@@ -57,9 +188,7 @@
 
   .img-off{ z-index:1; }
 
-  /* imagem "acesa" fica sempre em opacidade total, mas é recortada por uma
-     mascara circular que segue o mouse — so aparece perto do cursor,
-     revelando a imagem apagada por baixo no resto da tela */
+  /* imagem "acesa" recortada por uma mascara circular que segue o mouse */
   .img-on{
     z-index:2;
     opacity: 1;
@@ -69,7 +198,6 @@
             mask-repeat: no-repeat;
   }
 
-  /* brilho quente que acompanha o cursor, reforça a sensação de luz real se movendo */
   .cursor-glow{
     position:absolute;
     z-index:3;
@@ -88,7 +216,6 @@
     will-change: transform, opacity;
   }
 
-  /* sem JS ou com "reduzir movimento" ativado: cai para o efeito simples de acender tudo no hover */
   .no-js .img-on,
   .reduced-motion .img-on{
     -webkit-mask-image: none;
@@ -99,7 +226,6 @@
   .no-js .hero:hover .img-on,
   .reduced-motion .hero:hover .img-on{ opacity: 1; }
 
-  /* dark gradient so nav/text stay legible over either image state */
   .scrim{
     position:absolute;
     inset:0;
@@ -109,73 +235,11 @@
       linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
   }
 
-  /* ---------- nav, overlaid ---------- */
-  .nav{
-    position:absolute;
-    top:0; left:0; right:0;
-    z-index:10;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding: calc(env(safe-area-inset-top, 0px) + 22px) 48px 22px;
-  }
-
-  .logo{
-    display:flex;
-    flex-direction:column;
-    line-height:1;
-    text-decoration:none;
-  }
-
-  .logo-top{
-    font-family:'Fraunces', serif;
-    font-size: 21px;
-    letter-spacing: 0.12em;
-  }
-
-  .logo-bottom{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    color: var(--ember);
-    margin-top: 5px;
-  }
-
-  .nav-links{
-    display:flex;
-    gap: 38px;
-    list-style:none;
-    margin:0; padding:0;
-    font-size: 12.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .nav-links a{ text-decoration:none; transition: color .2s ease; }
-  .nav-links a:hover, .nav-links a:focus-visible{ color: var(--ink); }
-
-  .nav-cta{
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink);
-    border: 1px solid rgba(242,237,226,0.4);
-    padding: 10px 20px;
-    border-radius: 999px;
-    text-decoration:none;
-    transition: background .2s ease, border-color .2s ease;
-  }
-  .nav-cta:hover, .nav-cta:focus-visible{ background: rgba(242,237,226,0.1); border-color: var(--ink); }
-
-  @media (max-width: 860px){ .nav-links{ display:none; } }
-
-  /* ---------- hero headline overlay ---------- */
   .hero-copy{
     position:absolute;
     z-index:8;
     right: 6%;
-    bottom: 14%;
+    bottom: 16%;
     max-width: 560px;
     text-align:right;
     pointer-events:none;
@@ -186,7 +250,7 @@
     font-size: 11.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ember);
+    color: var(--amber-warm);
     margin-bottom: 18px;
   }
 
@@ -196,8 +260,27 @@
     font-weight: 400;
     font-size: clamp(28px, 4.4vw, 54px);
     line-height: 1.12;
-    margin: 0;
+    color: var(--ink-onhero);
+    margin: 0 0 22px;
     text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+  }
+
+  .hero-copy .hero-cta{
+    display:inline-flex;
+    pointer-events:auto;
+    align-items:center;
+    gap:8px;
+    background: var(--amber-warm);
+    color: var(--brand-dark);
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    text-decoration:none;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .hero-copy .hero-cta:hover, .hero-copy .hero-cta:focus-visible{
+    background: var(--ink-onhero); transform: translateY(-1px);
   }
 
   @media (max-width: 720px){
@@ -205,8 +288,6 @@
     .hero-copy h1{ font-size: clamp(26px, 8vw, 38px); }
   }
 
-  /* quando o interruptor é acionado, a luz do ambiente fica ligada por completo,
-     independente de onde o mouse esteja — sobrepõe a mascara da lanterna */
   .hero.lights-on .img-on{
     -webkit-mask-image: none;
     mask-image: none;
@@ -218,7 +299,6 @@
       linear-gradient(180deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.08) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.4) 100%);
   }
 
-  /* ---------- interruptor fisico, canto inferior esquerdo ---------- */
   .switch-wrap{
     position:absolute;
     z-index:9;
@@ -261,8 +341,6 @@
     transition: box-shadow .3s ease;
   }
 
-  /* quando ligado, um leve halo dourado contorna o encaixe do botao, como se a luz
-     interna do interruptor tivesse acendido junto */
   .switch.is-on .switch-plate{
     box-shadow:
       0 10px 22px rgba(0,0,0,0.55),
@@ -297,10 +375,9 @@
     font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--muted-onhero);
   }
 
-  /* ---------- scroll indicator, decorative like the reference dots ---------- */
   .scroll-dots{
     position:absolute;
     z-index:8;
@@ -311,52 +388,239 @@
     gap: 8px;
     pointer-events: none;
   }
-
-  .scroll-dots span{
-    width: 22px; height: 3px;
-    border-radius: 2px;
-    background: rgba(242,237,226,0.25);
-  }
-  .scroll-dots span:first-child{ background: var(--ink); width: 28px; }
+  .scroll-dots span{ width: 22px; height: 3px; border-radius: 2px; background: rgba(242,237,226,0.25); }
+  .scroll-dots span:first-child{ background: var(--ink-onhero); width: 28px; }
 
   @media (prefers-reduced-motion: reduce){
     .img-on, .cursor-glow, .switch-knob{ transition: opacity .2s linear, transform .01s linear !important; }
   }
 
-  /* ---------- segunda vitrine: perfil de LED, aceso x apagado ---------- */
-  .profiles{
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 30px 48px 20px;
+  /* =====================================================================
+     SEÇÃO INSTITUCIONAL — "A Iluminium Brasil". Duas colunas: imagem da
+     fábrica à esquerda (placeholder, ver nota no rodapé do documento) e
+     texto institucional à direita.
+     ===================================================================== */
+  .institucional{
+    padding: 100px 0;
+    background: var(--paper);
   }
 
-  .profiles-head{
-    margin-bottom: 30px;
+  .institucional .container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items:center;
+  }
+
+  .institucional-photo{
+    position:relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    overflow:hidden;
+    background: linear-gradient(155deg, var(--brand) 0%, var(--brand-dark) 100%);
+  }
+
+  /* padrão gráfico simples representando linhas de perfil de alumínio,
+     no lugar da foto real da fábrica (ainda não disponível) */
+  .institucional-photo svg{ position:absolute; inset:0; width:100%; height:100%; }
+
+  .institucional-photo-tag{
+    position:absolute;
+    left: 18px; bottom: 18px;
+    z-index: 2;
+    font-size: 12px;
+    color: var(--ink-onhero);
+    background: rgba(0,0,0,0.35);
+    padding: 8px 13px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+
+  .institucional-text .kicker{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    color: var(--amber);
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .institucional-text h2{
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    color: var(--brand);
+    margin-bottom: 20px;
+    max-width: 14ch;
+  }
+
+  .institucional-text p{
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 56ch;
+    margin: 0 0 16px;
+  }
+
+  .institucional-text p:last-of-type{ margin-bottom: 28px; }
+
+  .institucional-facts{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  .institucional-facts div strong{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-size: 26px;
+    color: var(--brand);
+    margin-bottom: 4px;
+  }
+  .institucional-facts div span{
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 900px){
+    .institucional{ padding: 72px 0; }
+    .institucional .container{ grid-template-columns: 1fr; gap: 36px; }
+    .institucional-photo{ aspect-ratio: 16/10; }
+  }
+
+  /* =====================================================================
+     PRODUTOS — grid de cards por categoria.
+     ===================================================================== */
+  .produtos{
+    padding: 100px 0;
+    background: var(--soft);
+  }
+
+  .produtos-head{
     max-width: 620px;
+    margin: 0 auto 48px;
+    text-align:center;
   }
 
-  .profiles .eyebrow{
+  .produtos-head h2{
+    font-size: clamp(28px, 3.4vw, 40px);
+    color: var(--brand);
+    margin-bottom: 14px;
+  }
+
+  .produtos-head p{
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin:0;
+  }
+
+  .produtos-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .produto-card{
+    display:flex;
+    flex-direction:column;
+    gap: 18px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 30px 26px;
+    text-decoration:none;
+    color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+
+  .produto-card:hover, .produto-card:focus-visible{
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(24,60,50,0.12);
+    border-color: rgba(24,60,50,0.25);
+  }
+
+  .produto-icon{
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: rgba(24,60,50,0.07);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .produto-icon svg{ width: 26px; height: 26px; stroke: var(--brand); }
+
+  .produto-card h3{
+    font-size: 19px;
+    color: var(--brand);
+  }
+
+  .produto-card p{
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: -8px 0 0;
+  }
+
+  .produto-card .produto-link{
+    margin-top: auto;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--amber);
+  }
+
+  @media (max-width: 900px){
+    .produtos{ padding: 72px 0; }
+    .produtos-grid{ grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  }
+  @media (max-width: 560px){
+    .produtos-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* =====================================================================
+     "A DIFERENÇA ESTÁ NA LUZ" — vitrine interativa do perfil de alumínio,
+     reaproveitando o mesmo componente de aceso/apagado já usado no hero,
+     agora com controles extras de cor e difusor.
+     ===================================================================== */
+  .luz-demo{
+    padding: 100px 0;
+    background: var(--brand-dark);
+    color: var(--ink-onhero);
+  }
+
+  .luz-demo-head{
+    max-width: 620px;
+    margin-bottom: 44px;
+  }
+
+  .luz-demo-head .kicker{
     font-family:'IBM Plex Mono', monospace;
     font-size: 11.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--brass);
+    color: var(--amber-warm);
+    margin-bottom: 16px;
+  }
+
+  .luz-demo-head h2{
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1.15;
+    color: var(--ink-onhero);
     margin-bottom: 14px;
   }
 
-  .profiles h2{
-    font-family:'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(24px, 3.6vw, 36px);
-    line-height: 1.15;
-    margin: 0 0 12px;
+  .luz-demo-head p{
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted-onhero);
+    margin: 0;
   }
 
-  .profiles p{
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0;
+  .luz-demo-body{
+    display:grid;
+    grid-template-columns: 1fr 260px;
+    gap: 36px;
+    align-items:start;
   }
 
   .pframe{
@@ -365,8 +629,8 @@
     aspect-ratio: 16 / 9;
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid var(--line);
-    background: var(--panel);
+    border: 1px solid var(--line-dark);
+    background: var(--panel-dark);
     box-shadow: 0 24px 60px rgba(0,0,0,0.45);
     cursor: pointer;
   }
@@ -385,15 +649,11 @@
   .pimg-on{
     z-index:2;
     opacity:0;
-    filter: brightness(0.9);
-    transition: opacity 1s ease, filter 1s ease;
+    transition: opacity 1s ease, filter .5s ease;
   }
 
-  /* desktop: acende passando o mouse */
-  .pframe:hover .pimg-on{ opacity:1; filter: brightness(1); }
-
-  /* mobile/tap: classe controlada por JS, ja que nao existe hover no toque */
-  .pframe.is-lit .pimg-on{ opacity:1; filter: brightness(1); }
+  .pframe:hover .pimg-on{ opacity:1; }
+  .pframe.is-lit .pimg-on{ opacity:1; }
 
   .ptag{
     position:absolute;
@@ -406,7 +666,7 @@
     font-family:'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.05em;
-    color: var(--ink);
+    color: var(--ink-onhero);
     background: rgba(10,10,11,0.55);
     border: 1px solid rgba(255,255,255,0.12);
     padding: 7px 12px;
@@ -414,280 +674,940 @@
     backdrop-filter: blur(6px);
     transition: opacity .4s ease;
   }
-  .ptag-dot{
-    width:6px; height:6px; border-radius:50%;
-    background: var(--ember);
-  }
-  .pframe:hover .ptag,
-  .pframe.is-lit .ptag{ opacity: 0; }
+  .ptag-dot{ width:6px; height:6px; border-radius:50%; background: var(--amber-warm); }
+  .pframe:hover .ptag, .pframe.is-lit .ptag{ opacity: 0; }
 
-  /* ---------- specs, logo abaixo da vitrine ---------- */
-  .below{
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 90px 48px 100px;
+  .luz-controls{
+    display:flex;
+    flex-direction:column;
+    gap: 26px;
   }
 
-  .below-grid{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-  }
-
-  .below-item .num{
+  .luz-control-group .label{
     font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--brass);
-    letter-spacing: 0.1em;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-onhero);
+    margin-bottom: 12px;
+  }
+
+  .swatches{ display:flex; flex-wrap:wrap; gap: 10px; }
+
+  .swatch{
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    position:relative;
+  }
+  .swatch.is-active{ border-color: var(--ink-onhero); }
+  .swatch::after{
+    content:"";
+    position:absolute; inset: 4px;
+    border-radius: 50%;
+  }
+  .swatch-quente{ background: rgba(255,255,255,0.06); }
+  .swatch-quente::after{ background: #f2b968; }
+  .swatch-neutro{ background: rgba(255,255,255,0.06); }
+  .swatch-neutro::after{ background: #ecdcc0; }
+  .swatch-fria{ background: rgba(255,255,255,0.06); }
+  .swatch-fria::after{ background: #bcd8e8; }
+  .swatch-rgb{ background: rgba(255,255,255,0.06); }
+  .swatch-rgb::after{ background: conic-gradient(from 0deg, #f2618a, #7c6df2, #56c2e8, #67d99b, #f2618a); }
+
+  .toggle-pair{
+    display:inline-flex;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line-dark);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .toggle-pair button{
+    appearance:none;
+    border:none;
+    background:none;
+    color: var(--muted-onhero);
+    font-family:'Inter', sans-serif;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor:pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+  .toggle-pair button.is-active{
+    background: var(--ink-onhero);
+    color: var(--brand-dark);
+    font-weight: 600;
+  }
+
+  .luz-note{
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--muted-onhero);
+    border-top: 1px solid var(--line-dark);
+    padding-top: 16px;
+  }
+
+  @media (max-width: 860px){
+    .luz-demo{ padding: 72px 0; }
+    .luz-demo-body{ grid-template-columns: 1fr; }
+  }
+
+  /* =====================================================================
+     LOCALIZAÇÃO — mapa embed + endereço.
+     ===================================================================== */
+  .localizacao{
+    padding: 100px 0;
+    background: var(--soft);
+  }
+
+  .localizacao-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 40px;
+    align-items:stretch;
+  }
+
+  .localizacao-info h2{
+    font-size: clamp(26px, 3vw, 34px);
+    color: var(--brand);
+    margin-bottom: 16px;
+  }
+  .localizacao-info p{
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 22px;
+  }
+  .localizacao-info ul{
+    list-style:none;
+    margin:0; padding:0;
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  .localizacao-info li strong{ color: var(--brand); display:block; font-size: 12px; text-transform:uppercase; letter-spacing:0.04em; margin-bottom: 2px; }
+
+  .map-frame{
+    border-radius: var(--radius);
+    overflow:hidden;
+    border: 1px solid var(--line);
+    min-height: 340px;
+  }
+  .map-frame iframe{ width:100%; height:100%; min-height: 340px; border:0; display:block; }
+
+  @media (max-width: 860px){
+    .localizacao{ padding: 72px 0; }
+    .localizacao-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* =====================================================================
+     CONTATO / CATÁLOGO
+     ===================================================================== */
+  .contato{
+    padding: 100px 0;
+    background: var(--paper);
+  }
+
+  .contato-grid{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+  }
+
+  .contato-head h2{
+    font-size: clamp(26px, 3vw, 34px);
+    color: var(--brand);
     margin-bottom: 14px;
   }
-
-  .below-item h3{
-    font-family:'Fraunces', serif;
-    font-weight: 500;
-    font-size: 21px;
-    margin: 0 0 10px;
-  }
-
-  .below-item p{
-    font-size: 14.5px;
-    line-height: 1.6;
+  .contato-head p{
+    font-size: 15px;
+    line-height: 1.7;
     color: var(--muted);
-    margin: 0;
+    margin: 0 0 28px;
+    max-width: 44ch;
   }
 
-  @media (max-width: 800px){
-    .below-grid{ grid-template-columns: 1fr; gap: 34px; }
-    .nav{ padding: calc(env(safe-area-inset-top, 0px) + 20px) 24px 20px; }
-    .below{ padding: 64px 24px 72px; }
-    .profiles{ padding: 24px 24px 12px; }
+  .field{ margin-bottom: 18px; }
+  .field label{
+    display:block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 6px;
   }
+  .field input, .field select, .field textarea{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(24,60,50,0.12);
+  }
+  .field textarea{ resize: vertical; min-height: 100px; }
+
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px){ .field-row{ grid-template-columns: 1fr; } }
+
+  .btn-brand{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background: var(--brand);
+    color: #fff;
+    font-family:'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .btn-brand:hover, .btn-brand:focus-visible{ background: var(--brand-light); transform: translateY(-1px); }
+
+  .form-note{
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .catalogo-card{
+    background: var(--soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+    display:flex;
+    flex-direction:column;
+    gap: 14px;
+    height: fit-content;
+  }
+  .catalogo-card h3{ font-size: 19px; color: var(--brand); }
+  .catalogo-card p{ font-size: 14px; line-height: 1.6; color: var(--muted); margin:0; }
+  .catalogo-card .btn-outline{
+    appearance:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap: 8px;
+    text-decoration:none;
+    border: 1.5px solid var(--brand);
+    color: var(--brand);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .catalogo-card .btn-outline:hover{ background: var(--brand); color: #fff; }
+
+  .catalogo-whats{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size: 13.5px;
+    color: var(--muted);
+    text-decoration:none;
+  }
+  .catalogo-whats svg{ width:18px; height:18px; stroke: var(--brand); flex-shrink:0; }
+
+  @media (max-width: 860px){
+    .contato{ padding: 72px 0; }
+    .contato-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* =====================================================================
+     FOOTER
+     ===================================================================== */
+  .site-footer{
+    background: var(--brand-dark);
+    color: var(--muted-onhero);
+    padding: 64px 0 32px;
+  }
+
+  .footer-grid{
+    display:grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 36px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-logo{
+    display:flex; flex-direction:column; line-height:1; margin-bottom: 14px;
+  }
+  .footer-logo .top{ font-family:'Fraunces', serif; font-size: 20px; color: var(--ink-onhero); }
+  .footer-logo .bottom{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--amber-warm); margin-top:4px; }
+
+  .footer-grid p{ font-size: 13.5px; line-height: 1.6; max-width: 32ch; margin: 0; }
+
+  .footer-col h4{
+    font-family:'Inter', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-onhero);
+    margin: 0 0 16px;
+  }
+  .footer-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap: 10px; }
+  .footer-col a{ text-decoration:none; font-size: 13.5px; color: var(--muted-onhero); transition: color .2s ease; }
+  .footer-col a:hover{ color: var(--ink-onhero); }
+
+  .footer-social{ display:flex; gap: 10px; margin-top: 4px; }
+  .footer-social a{
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .footer-social a svg{ width: 16px; height: 16px; stroke: var(--ink-onhero); }
+
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap: 12px;
+    padding-top: 24px;
+    font-size: 12.5px;
+  }
+
+  @media (max-width: 900px){
+    .footer-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .footer-grid{ grid-template-columns: 1fr; gap: 28px; }
+  }
+
 </style>
 </head>
 <body>
 
-  <section class="hero">
-    <picture class="img-off">
-      <source media="(max-width: 700px)" srcset="sala-mobile-off.jpg">
-      <img src="sala-off.jpg" alt="Sala com painel de TV sem iluminação LED">
-    </picture>
-    <picture class="img-on">
-      <source media="(max-width: 700px)" srcset="sala-mobile-on.jpg">
-      <img src="sala-on.jpg" alt="Mesma sala com iluminação LED acesa no painel">
-    </picture>
-    <div class="cursor-glow"></div>
-    <div class="scrim"></div>
+<!-- ======================================================================
+     HEADER / NAV — logo + menu fixo (Produtos | Contato | Representante)
+     ====================================================================== -->
+<nav class="site-nav" id="siteNav">
+  <a class="nav-logo" href="#topo">
+    <span class="nav-logo-top">A ILUMINIUM</span>
+    <span class="nav-logo-bottom">BRASIL</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#produtos">Produtos</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#contato" id="navRepresentante">Representante</a></li>
+  </ul>
+  <a class="nav-cta" href="#contato">Fale com um representante</a>
+</nav>
 
-    <nav class="nav">
-      <a class="logo" href="#">
-        <span class="logo-top">ILUMINIUN</span>
-        <span class="logo-bottom">BRASIL</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#">Institucional</a></li>
-        <li><a href="#">Produtos</a></li>
-        <li><a href="#">Projetos</a></li>
-        <li><a href="#">Contato</a></li>
-      </ul>
-      <a class="nav-cta" href="#">Orçamento</a>
-    </nav>
+<!-- ======================================================================
+     HERO — foto de ambiente com fita de LED. A "lanterna" segue o mouse
+     no desktop; no celular, um toque na imagem acende tudo. O interruptor
+     no canto liga a luz geral. Componente reaproveitado do protótipo.
+     ====================================================================== -->
+<section class="hero" id="topo">
+  <picture class="img-off">
+    <source media="(max-width: 700px)" srcset="sala-mobile-off.jpg">
+    <img src="sala-off.jpg" alt="Sala com painel de TV sem iluminação LED">
+  </picture>
+  <picture class="img-on">
+    <source media="(max-width: 700px)" srcset="sala-mobile-on.jpg">
+    <img src="sala-on.jpg" alt="Mesma sala com iluminação LED acesa no painel">
+  </picture>
+  <div class="cursor-glow"></div>
+  <div class="scrim"></div>
 
-    <div class="hero-copy">
-      <div class="eyebrow">Perfis de LED embutidos</div>
-      <h1>A luz que muda<br>a forma como você<br>vive a sua sala</h1>
-    </div>
+  <div class="hero-copy">
+    <div class="eyebrow">Fitas e perfis de LED</div>
+    <h1>A luz que muda a<br>forma como você vive<br>o seu ambiente</h1>
+    <a class="hero-cta" href="#produtos">Conheça nossos produtos</a>
+  </div>
 
-    <div class="switch-wrap">
-      <button class="switch" type="button" aria-pressed="false" aria-label="Ligar luz do ambiente">
-        <span class="switch-plate">
-          <span class="switch-knob"></span>
-        </span>
-      </button>
-      <span class="switch-label">interruptor</span>
-    </div>
-
-    <div class="scroll-dots">
-      <span></span><span></span><span></span><span></span>
-    </div>
-  </section>
-
-  <section class="profiles">
-    <div class="profiles-head">
-      <div class="eyebrow">Perfil de LED</div>
-      <h2>O mesmo perfil, aceso e apagado</h2>
-      <p>Toque ou passe o mouse sobre a imagem para ver o perfil de embutir ligado.</p>
-    </div>
-
-    <div class="pframe">
-      <img class="pimg pimg-off" src="profile-off.jpg" alt="Perfil de LED de embutir apagado">
-      <img class="pimg pimg-on"  src="profile-on.jpg"  alt="Mesmo perfil de LED de embutir aceso">
-      <span class="ptag">
-        <span class="ptag-dot"></span>
-        toque para acender
+  <div class="switch-wrap">
+    <button class="switch" type="button" aria-pressed="false" aria-label="Ligar luz do ambiente">
+      <span class="switch-plate">
+        <span class="switch-knob"></span>
       </span>
+    </button>
+    <span class="switch-label">interruptor</span>
+  </div>
+
+  <div class="scroll-dots">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</section>
+
+<!-- ======================================================================
+     INSTITUCIONAL — "A Iluminium Brasil". Foto da fábrica (placeholder
+     gráfico — substituir pela foto real) + texto institucional editável.
+     ====================================================================== -->
+<section class="institucional" id="institucional">
+  <div class="container">
+    <div class="institucional-photo">
+      <svg viewBox="0 0 500 625" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="factoryFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#EFB86B" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#0E241D" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="500" height="625" fill="url(#factoryFade)"/>
+        <!-- linhas representando perfis de aluminio empilhados -->
+        <g stroke="#EFB86B" stroke-opacity="0.5" stroke-width="1.5">
+          <line x1="40" y1="120" x2="460" y2="120"/>
+          <line x1="40" y1="150" x2="460" y2="150"/>
+          <line x1="40" y1="180" x2="460" y2="180"/>
+          <line x1="40" y1="330" x2="460" y2="330"/>
+          <line x1="40" y1="360" x2="460" y2="360"/>
+          <line x1="40" y1="390" x2="460" y2="390"/>
+          <line x1="40" y1="480" x2="460" y2="480"/>
+          <line x1="40" y1="510" x2="460" y2="510"/>
+        </g>
+      </svg>
+      <span class="institucional-photo-tag">Foto da fábrica — placeholder</span>
     </div>
-  </section>
 
-  <section class="below">
-    <div class="below-grid">
-      <div class="below-item">
-        <div class="num">2700K</div>
-        <h3>Luz quente, sem ofuscar</h3>
-        <p>Temperatura de cor pensada para painéis de TV, nichos e prateleiras, sem o brilho frio de LED comum.</p>
-      </div>
-      <div class="below-item">
-        <div class="num">CORTE INVISÍVEL</div>
-        <h3>Instalação embutida</h3>
-        <p>Perfil escondido atrás do painel e das prateleiras, sem fio aparente e sem pontos de luz estourados.</p>
-      </div>
-      <div class="below-item">
-        <div class="num">SOB MEDIDA</div>
-        <h3>Projeto e instalação</h3>
-        <p>Medimos o ambiente, cortamos o perfil no tamanho certo e instalamos direto no seu móvel planejado.</p>
+    <div class="institucional-text">
+      <div class="kicker">Quem somos</div>
+      <h2>Feita pra quem projeta luz de verdade</h2>
+      <p>
+        A Iluminium Brasil desenvolve fitas de LED, perfis de alumínio, difusores, fontes,
+        sensores e acessórios pensados pra funcionar juntos — sem gambiarra, sem fiação
+        aparente e sem luz desigual.
+      </p>
+      <p>
+        [Texto institucional — substituir por conteúdo definitivo: ano de fundação,
+        história, diferenciais competitivos e certificações da empresa.]
+      </p>
+
+      <div class="institucional-facts">
+        <div><strong>2700K–6500K</strong><span>faixa de temperatura de cor disponível</span></div>
+        <div><strong>Sob medida</strong><span>corte e projeto para cada ambiente</span></div>
+        <div><strong>Suporte técnico</strong><span>direto com projetistas e lojistas</span></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <script>
-    (function(){
-      var html = document.documentElement;
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<!-- ======================================================================
+     PRODUTOS — grid de categorias. Cards levam até o formulário de contato,
+     já preparados pra depois virarem páginas de detalhe por produto.
+     ====================================================================== -->
+<section class="produtos" id="produtos">
+  <div class="container">
+    <div class="produtos-head">
+      <h2>Nossos produtos</h2>
+      <p>Tudo que você precisa pra fechar um projeto de iluminação em LED do início ao fim.</p>
+    </div>
 
-      // JS ligado: tira o fallback "acende tudo no hover" e liga o modo lanterna
-      html.classList.remove('no-js');
-      if (reduced) html.classList.add('reduced-motion');
+    <div class="produtos-grid">
 
-      var hero = document.querySelector('.hero');
-      if (!hero) return;
+      <a class="produto-card" href="#contato" data-produto="Fitas LED">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
+            <path d="M2 12c1.5-3 3.5-3 5 0s3.5 3 5 0 3.5-3 5 0 3.5 3 5 0"/>
+          </svg>
+        </div>
+        <h3>Fitas LED</h3>
+        <p>Fitas flexíveis pra embutir em qualquer projeto, do quente ao frio.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
 
-      // ---------- controla o estado de luz geral: usado pelo interruptor E pelo toque na imagem ----------
-      var switchBtn = document.querySelector('.switch');
-      var isOn = false;
-      var clickSound = new Audio('switch-click.mp3');
-      clickSound.preload = 'auto';
-      clickSound.volume = 0.9;
+      <a class="produto-card" href="#contato" data-produto="Perfis de alumínio">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16v3H14a2 2 0 0 0-2 2v7H4z"/>
+          </svg>
+        </div>
+        <h3>Perfis de alumínio</h3>
+        <p>Pra embutir, sobrepor ou suspender a fita com acabamento profissional.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
 
-      function playClick(on){
-        try{
-          // clona o elemento a cada clique, assim da pra clicar rapido sem cortar o som anterior
-          var snd = clickSound.cloneNode(true);
-          snd.volume = 0.9;
-          snd.playbackRate = on ? 1 : 0.9; // leve diferenca de tom entre ligar/desligar
-          snd.play().catch(function(){ /* navegador bloqueou autoplay sem gesto, ignora */ });
-        } catch(e){ /* audio indisponivel, segue sem som */ }
-      }
+      <a class="produto-card" href="#contato" data-produto="Difusores">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
+            <rect x="4" y="9" width="16" height="6" rx="3"/>
+            <path d="M4 5.5h16M4 18.5h16"/>
+          </svg>
+        </div>
+        <h3>Difusores</h3>
+        <p>Espalham a luz e escondem os pontos de LED pra um brilho uniforme.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
 
-      function setLights(on){
-        isOn = on;
-        if (switchBtn){
-          switchBtn.classList.toggle('is-on', isOn);
-          switchBtn.setAttribute('aria-pressed', String(isOn));
-        }
-        hero.classList.toggle('lights-on', isOn);
-        playClick(isOn);
-      }
+      <a class="produto-card" href="#contato" data-produto="Fontes">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="7" width="14" height="10" rx="2"/>
+            <path d="M17 10h4M17 14h4M7 7V4M11 7V4"/>
+          </svg>
+        </div>
+        <h3>Fontes</h3>
+        <p>Dimensionadas pra cada metragem de instalação, sem sobrecarga.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
 
+      <a class="produto-card" href="#contato" data-produto="Sensores">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="12" cy="12" r="2.2"/>
+            <path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.8 6.8l1.5 1.5M15.7 15.7l1.5 1.5M17.2 6.8l-1.5 1.5M8.3 15.7l-1.5 1.5"/>
+          </svg>
+        </div>
+        <h3>Sensores</h3>
+        <p>Presença e toque pra acender a luz sem precisar de interruptor.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
+
+      <a class="produto-card" href="#contato" data-produto="Acessórios">
+        <div class="produto-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 6.5l3 3-8 8H6.5v-3z"/>
+            <path d="M4 20h5"/>
+          </svg>
+        </div>
+        <h3>Acessórios</h3>
+        <p>Conectores, clipes e emendas pra fechar a instalação com acabamento.</p>
+        <span class="produto-link">Falar sobre esse produto →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     "A DIFERENÇA ESTÁ NA LUZ" — perfil de alumínio interativo, reaproveita
+     o componente pimg/pframe do hero, com controles de cor e difusor.
+     ====================================================================== -->
+<section class="luz-demo" id="diferenca">
+  <div class="container">
+    <div class="luz-demo-head">
+      <div class="kicker">A diferença está na luz</div>
+      <h2>Mesmo perfil, luz diferente</h2>
+      <p>Toque ou passe o mouse pra acender. Depois brinque com a cor e o difusor — é o mesmo perfil em cada opção.</p>
+    </div>
+
+    <div class="luz-demo-body">
+      <div class="pframe" id="pframe">
+        <img class="pimg pimg-off" src="profile-off.jpg" alt="Perfil de LED de embutir apagado">
+        <img class="pimg pimg-on" id="pimgOn" src="profile-on.jpg" alt="Mesmo perfil de LED de embutir aceso">
+        <span class="ptag">
+          <span class="ptag-dot"></span>
+          toque para acender
+        </span>
+      </div>
+
+      <div class="luz-controls">
+        <div class="luz-control-group">
+          <div class="label">Temperatura de cor</div>
+          <div class="swatches" id="swatches">
+            <button type="button" class="swatch swatch-quente is-active" data-color="quente" aria-label="Branca quente"></button>
+            <button type="button" class="swatch swatch-neutro" data-color="neutro" aria-label="Branca neutra"></button>
+            <button type="button" class="swatch swatch-fria" data-color="fria" aria-label="Branca fria"></button>
+            <button type="button" class="swatch swatch-rgb" data-color="rgb" aria-label="Cor RGB"></button>
+          </div>
+        </div>
+
+        <div class="luz-control-group">
+          <div class="label">Acabamento</div>
+          <div class="toggle-pair" id="diffuserToggle">
+            <button type="button" class="is-active" data-diffuser="off">Sem difusor</button>
+            <button type="button" data-diffuser="on">Com difusor</button>
+          </div>
+        </div>
+
+        <p class="luz-note">
+          Simulação de cor e difusão sobre a mesma foto — as fotos reais de cada
+          combinação entram assim que a sessão de produto estiver pronta.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     LOCALIZAÇÃO — mapa embed (sem chave de API) + endereço.
+     ====================================================================== -->
+<section class="localizacao" id="localizacao">
+  <div class="container localizacao-grid">
+    <div class="localizacao-info">
+      <h2>Onde estamos</h2>
+      <p>Visita técnica, retirada de pedidos ou só pra conhecer a fábrica — combine um horário antes de vir.</p>
+      <ul>
+        <li><strong>Endereço</strong>Rua Exemplo, 000 — Bairro, Cidade/UF (placeholder)</li>
+        <li><strong>Horário</strong>Segunda a sexta, 8h às 18h</li>
+        <li><strong>Telefone</strong>(00) 0000-0000</li>
+      </ul>
+    </div>
+    <div class="map-frame">
+      <iframe
+        src="https://www.google.com/maps?q=S%C3%A3o+Paulo,SP&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Mapa de localização — endereço placeholder, substituir pelo real">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     CONTATO / CATÁLOGO
+     ====================================================================== -->
+<section class="contato" id="contato">
+  <div class="container contato-grid">
+    <div class="contato-form">
+      <div class="contato-head">
+        <h2>Fale com a gente</h2>
+        <p>Dúvida sobre produto, orçamento ou quer virar representante da Iluminium Brasil na sua região — é só mandar.</p>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="fName">Nome</label>
+            <input id="fName" name="nome" type="text" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="fPhone">Telefone</label>
+            <input id="fPhone" name="telefone" type="tel" autocomplete="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="fEmail">E-mail</label>
+          <input id="fEmail" name="email" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="fSubject">Assunto</label>
+          <select id="fSubject" name="assunto">
+            <option value="produto">Dúvida sobre produtos</option>
+            <option value="orcamento">Orçamento de projeto</option>
+            <option value="representante">Quero ser representante</option>
+            <option value="outro">Outro assunto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fMessage">Mensagem</label>
+          <textarea id="fMessage" name="mensagem" required></textarea>
+        </div>
+        <button class="btn-brand" type="submit">Enviar mensagem</button>
+        <p class="form-note" id="formNote">
+          Formulário ainda não conectado a um envio real — falta ligar num serviço de
+          e-mail (ex: Formspree, EmailJS) ou num backend próprio.
+        </p>
+      </form>
+    </div>
+
+    <aside class="catalogo-card">
+      <h3>Catálogo completo</h3>
+      <p>Todas as linhas, medidas e especificações técnicas num só PDF.</p>
+      <a class="btn-outline" href="catalogo.pdf" download>Baixar catálogo (PDF)</a>
+      <a class="catalogo-whats" href="https://wa.me/5500000000000" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 12a8 8 0 1 1-3.6-6.7M20 12l-7-2 2 7"/>
+        </svg>
+        Falar direto pelo WhatsApp
+      </a>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     FOOTER
+     ====================================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div class="footer-logo">
+          <span class="top">A ILUMINIUM</span>
+          <span class="bottom">BRASIL</span>
+        </div>
+        <p>Fitas de LED, perfis, difusores, fontes, sensores e acessórios pra projetos de iluminação do início ao fim.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+          </a>
+          <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 12l-7-2 2 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#institucional">Institucional</a></li>
+          <li><a href="#produtos">Produtos</a></li>
+          <li><a href="#diferenca">A diferença está na luz</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="#contato">Falar com a gente</a></li>
+          <li><a href="#contato">Ser representante</a></li>
+          <li><a href="catalogo.pdf" download>Baixar catálogo</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Fale direto</h4>
+        <ul>
+          <li>contato@iluminiumbrasil.com.br</li>
+          <li>(00) 0000-0000</li>
+          <li>Segunda a sexta, 8h–18h</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2026</span> A Iluminium Brasil — todos os direitos reservados.</span>
+      <span>Dados de contato e endereço são placeholder.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* =====================================================================
+     NAV — troca de transparente para verde sólido conforme a rolagem.
+     ===================================================================== */
+  (function(){
+    var nav = document.getElementById('siteNav');
+    if (!nav) return;
+    function onScroll(){
+      nav.classList.toggle('is-solid', window.scrollY > 60);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* =====================================================================
+     HERO — lanterna que segue o mouse, interruptor com som e toque pra
+     acender no celular. Reaproveitado do protótipo anterior.
+     ===================================================================== */
+  (function(){
+    var html = document.documentElement;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    html.classList.remove('no-js');
+    if (reduced) html.classList.add('reduced-motion');
+
+    var hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    // ---------- controla o estado de luz geral: interruptor E toque na imagem ----------
+    var switchBtn = document.querySelector('.switch');
+    var isOn = false;
+    var clickSound = new Audio('switch-click.mp3');
+    clickSound.preload = 'auto';
+    clickSound.volume = 0.9;
+
+    function playClick(on){
+      try{
+        var snd = clickSound.cloneNode(true);
+        snd.volume = 0.9;
+        snd.playbackRate = on ? 1 : 0.9;
+        snd.play().catch(function(){});
+      } catch(e){}
+    }
+
+    function setLights(on){
+      isOn = on;
       if (switchBtn){
-        switchBtn.addEventListener('click', function(e){
-          e.stopPropagation(); // nao deixa o clique "vazar" pro toque-na-imagem e alternar 2x
-          setLights(!isOn);
-        });
+        switchBtn.classList.toggle('is-on', isOn);
+        switchBtn.setAttribute('aria-pressed', String(isOn));
       }
+      hero.classList.toggle('lights-on', isOn);
+      playClick(isOn);
+    }
 
-      // tocar em qualquer ponto da imagem (fora do interruptor e do menu) tambem acende tudo —
-      // no celular nao existe "mousemove" parado sobre a tela, entao o toque vira o gatilho principal
-      hero.addEventListener('click', function(e){
-        if (e.target.closest('.switch-wrap')) return;
-        if (e.target.closest('.nav')) return;
+    if (switchBtn){
+      switchBtn.addEventListener('click', function(e){
+        e.stopPropagation();
         setLights(!isOn);
       });
+    }
 
-      // ---------- vitrine do perfil de LED: toque alterna aceso/apagado (hover ja cobre desktop via CSS) ----------
-      var pframe = document.querySelector('.pframe');
-      if (pframe){
-        pframe.addEventListener('click', function(){
-          pframe.classList.toggle('is-lit');
-        });
-      }
+    hero.addEventListener('click', function(e){
+      if (e.target.closest('.switch-wrap')) return;
+      if (e.target.closest('.hero-cta')) return;
+      setLights(!isOn);
+    });
 
-      if (reduced) return; // respeita "reduzir movimento": lanterna do mouse fica só no fallback CSS
+    if (reduced) return;
 
-      var REVEAL_R = 190;      // raio maximo do circulo de luz, em px (menor = lanterna mais discreta)
-      var EASE = 0.14;         // suavizacao do movimento (menor = mais "preguicoso"/organico)
+    var REVEAL_R = 190;
+    var EASE = 0.14;
+    var target = { x: 0, y: 0, r: 0 };
+    var current = { x: 0, y: 0, r: 0 };
+    var rafId = null;
+    var started = false;
+    var cursorGlow = document.querySelector('.cursor-glow');
 
-      var target = { x: 0, y: 0, r: 0 };
-      var current = { x: 0, y: 0, r: 0 };
-      var rafId = null;
-      var started = false;
-      var switchWrap = document.querySelector('.switch-wrap');
-      var overSwitch = false;
+    function apply(){
+      hero.style.setProperty('--mx', current.x + 'px');
+      hero.style.setProperty('--my', current.y + 'px');
+      hero.style.setProperty('--r', current.r + 'px');
+      if (cursorGlow) cursorGlow.style.opacity = Math.min(current.r / REVEAL_R, 1) * 0.85;
+    }
 
-      // enquanto o mouse estiver sobre o interruptor, a lanterna nao acende ali —
-      // evita a luz "pegando" o botao antes mesmo de clicar nele
-      if (switchWrap){
-        switchWrap.addEventListener('pointerenter', function(){ overSwitch = true; });
-        switchWrap.addEventListener('pointerleave', function(){ overSwitch = false; });
-      }
+    function tick(){
+      current.x += (target.x - current.x) * EASE;
+      current.y += (target.y - current.y) * EASE;
+      current.r += (target.r - current.r) * EASE;
+      apply();
+      var settled =
+        Math.abs(target.r - current.r) < 0.5 &&
+        Math.abs(target.x - current.x) < 0.5 &&
+        Math.abs(target.y - current.y) < 0.5;
+      if (!settled){ rafId = requestAnimationFrame(tick); } else { rafId = null; }
+    }
 
-      var cursorGlow = document.querySelector('.cursor-glow');
+    function ensureLoop(){ if (!rafId) rafId = requestAnimationFrame(tick); }
 
-      function apply(){
-        hero.style.setProperty('--mx', current.x + 'px');
-        hero.style.setProperty('--my', current.y + 'px');
-        hero.style.setProperty('--r', current.r + 'px');
-        if (cursorGlow) cursorGlow.style.opacity = Math.min(current.r / REVEAL_R, 1) * 0.85;
-      }
+    function moveTo(clientX, clientY){
+      var rect = hero.getBoundingClientRect();
+      target.x = clientX - rect.left;
+      target.y = clientY - rect.top;
+      target.r = REVEAL_R;
+      if (!started){ current.x = target.x; current.y = target.y; started = true; }
+      ensureLoop();
+    }
 
-      function tick(){
-        current.x += (target.x - current.x) * EASE;
-        current.y += (target.y - current.y) * EASE;
-        current.r += (target.r - current.r) * EASE;
-        apply();
+    hero.addEventListener('pointermove', function(e){ moveTo(e.clientX, e.clientY); });
+    hero.addEventListener('pointerdown', function(e){ moveTo(e.clientX, e.clientY); });
+    hero.addEventListener('pointerleave', function(){ target.r = 0; ensureLoop(); });
+  })();
 
-        var settled =
-          Math.abs(target.r - current.r) < 0.5 &&
-          Math.abs(target.x - current.x) < 0.5 &&
-          Math.abs(target.y - current.y) < 0.5;
+  /* =====================================================================
+     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — toque pra acender/apagar (o hover
+     já cobre desktop via CSS), mais os controles de cor e difusor, que
+     simulam variações sobre a mesma foto via filtros CSS.
+     ===================================================================== */
+  (function(){
+    var pframe = document.getElementById('pframe');
+    var pimgOn = document.getElementById('pimgOn');
+    if (!pframe || !pimgOn) return;
 
-        if (!settled){
-          rafId = requestAnimationFrame(tick);
-        } else {
-          rafId = null;
+    pframe.addEventListener('click', function(){
+      pframe.classList.toggle('is-lit');
+    });
+
+    // aproximações visuais de temperatura de cor sobre a foto quente original —
+    // combinações reais por cor entram depois, com fotos de produto proprias
+    var COLOR_FILTERS = {
+      quente: '',
+      neutro: 'grayscale(0.25) brightness(1.05)',
+      fria:   'grayscale(0.45) hue-rotate(150deg) saturate(1.4) brightness(1.08)',
+      rgb:    'hue-rotate(260deg) saturate(1.7)'
+    };
+    var DIFFUSER_FILTER = 'blur(1.4px) contrast(0.92) brightness(1.05)';
+
+    var currentColor = 'quente';
+    var diffuserOn = false;
+
+    function updateFilter(){
+      var parts = [];
+      if (COLOR_FILTERS[currentColor]) parts.push(COLOR_FILTERS[currentColor]);
+      if (diffuserOn) parts.push(DIFFUSER_FILTER);
+      pimgOn.style.filter = parts.join(' ');
+    }
+
+    var swatches = document.querySelectorAll('.swatch');
+    swatches.forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation(); // nao alterna o aceso/apagado ao clicar num swatch
+        swatches.forEach(function(s){ s.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        currentColor = btn.getAttribute('data-color');
+        updateFilter();
+      });
+    });
+
+    var diffuserBtns = document.querySelectorAll('#diffuserToggle button');
+    diffuserBtns.forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        diffuserBtns.forEach(function(b){ b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        diffuserOn = btn.getAttribute('data-diffuser') === 'on';
+        updateFilter();
+      });
+    });
+
+    updateFilter();
+  })();
+
+  /* =====================================================================
+     PRODUTOS → CONTATO — clicar num card pré-preenche o formulário com o
+     produto de interesse antes de rolar até a seção de contato.
+     ===================================================================== */
+  (function(){
+    var cards = document.querySelectorAll('.produto-card');
+    var subjectSelect = document.getElementById('fSubject');
+    var messageField = document.getElementById('fMessage');
+
+    cards.forEach(function(card){
+      card.addEventListener('click', function(){
+        var produto = card.getAttribute('data-produto');
+        if (subjectSelect) subjectSelect.value = 'produto';
+        if (messageField && !messageField.value){
+          messageField.value = 'Tenho interesse em: ' + produto + '. ';
         }
-      }
-
-      function ensureLoop(){
-        if (!rafId) rafId = requestAnimationFrame(tick);
-      }
-
-      function moveTo(clientX, clientY){
-        var rect = hero.getBoundingClientRect();
-        target.x = clientX - rect.left;
-        target.y = clientY - rect.top;
-        target.r = overSwitch ? 0 : REVEAL_R;
-        if (!started){
-          // primeiro toque/clique: comeca ja na posicao, sem "correr" de outro canto
-          current.x = target.x;
-          current.y = target.y;
-          started = true;
-        }
-        ensureLoop();
-      }
-
-      hero.addEventListener('pointermove', function(e){
-        moveTo(e.clientX, e.clientY);
       });
+    });
 
-      hero.addEventListener('pointerdown', function(e){
-        moveTo(e.clientX, e.clientY);
+    // menu "Representante" pré-seleciona o assunto certo no formulario
+    var navRep = document.getElementById('navRepresentante');
+    if (navRep){
+      navRep.addEventListener('click', function(){
+        if (subjectSelect) subjectSelect.value = 'representante';
       });
+    }
+  })();
 
-      hero.addEventListener('pointerleave', function(){
-        target.r = 0;
-        ensureLoop();
-      });
-    })();
-  </script>
+  /* =====================================================================
+     FORMULÁRIO DE CONTATO — ainda sem backend real. Isso só valida os
+     campos e mostra uma confirmação; falta ligar num serviço de envio.
+     ===================================================================== */
+  (function(){
+    var form = document.getElementById('contactForm');
+    var note = document.getElementById('formNote');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      if (note){
+        note.textContent = 'Recebido — mas o envio ainda não está conectado a um serviço real. Configure um backend ou serviço como Formspree/EmailJS pra receber isso de verdade.';
+        note.style.color = 'var(--brand)';
+      }
+      form.reset();
+    });
+  })();
+
+  /* footer: ano atual automático */
+  (function(){
+    var y = document.getElementById('footerYear');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+</script>
 
 </body>
 </html>
