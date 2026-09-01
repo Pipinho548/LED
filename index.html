@@ -103,6 +103,8 @@
   }
   .nav-logo-top{ font-family:'Fraunces', serif; font-size: 20px; letter-spacing: 0.02em; }
   .nav-logo-bottom{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--amber-warm); margin-top: 4px; }
+  /* quando a logo em PNG entrar, usar esta classe na tag <img> no lugar do texto */
+  .nav-logo-img{ height: 32px; width: auto; display:block; }
 
   .nav-links{
     display:flex;
@@ -258,11 +260,22 @@
     font-family:'Fraunces', serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(28px, 4.4vw, 54px);
-    line-height: 1.12;
+    font-size: clamp(30px, 4.6vw, 58px);
+    line-height: 1.1;
     color: var(--ink-onhero);
-    margin: 0 0 22px;
+    margin: 0 0 18px;
     text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+  }
+
+  .hero-copy .hero-sub{
+    font-family:'Inter', sans-serif;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted-onhero);
+    max-width: 40ch;
+    margin: 0 0 26px;
+    margin-left: auto;
   }
 
   .hero-copy .hero-cta{
@@ -286,6 +299,7 @@
   @media (max-width: 720px){
     .hero-copy{ right: 6%; left: 6%; bottom: 26%; text-align:left; max-width: none; }
     .hero-copy h1{ font-size: clamp(26px, 8vw, 38px); }
+    .hero-copy .hero-sub{ margin-left: 0; max-width: none; }
   }
 
   .hero.lights-on .img-on{
@@ -302,16 +316,12 @@
   .switch-wrap{
     position:absolute;
     z-index:9;
-    left: 6%;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 9%);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap: 11px;
+    left: 5%;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 7%);
   }
 
   @media (max-width: 720px){
-    .switch-wrap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 13%); }
+    .switch-wrap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 11%); }
   }
 
   .switch{
@@ -322,19 +332,24 @@
     padding:0;
     margin:0;
     cursor:pointer;
+    opacity: 0.72;
+    transition: opacity .25s ease;
   }
+  .switch:hover, .switch:focus-visible, .switch.is-on{ opacity: 1; }
 
+  /* discreto de propósito: pequeno, no canto, sem legenda — quem quiser acha,
+     mas ele nao compete com a mensagem principal do hero */
   .switch-plate{
     position:relative;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display:flex;
     align-items:center;
     justify-content:center;
     background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
     box-shadow:
-      0 10px 22px rgba(0,0,0,0.55),
+      0 8px 16px rgba(0,0,0,0.5),
       inset 0 1px 1px rgba(255,255,255,0.12),
       inset 0 -2px 4px rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.08);
@@ -343,53 +358,32 @@
 
   .switch.is-on .switch-plate{
     box-shadow:
-      0 10px 22px rgba(0,0,0,0.55),
+      0 8px 16px rgba(0,0,0,0.5),
       inset 0 1px 1px rgba(255,255,255,0.12),
       inset 0 -2px 4px rgba(0,0,0,0.6),
-      0 0 0 3px rgba(242,185,104,0.5),
-      0 0 20px 4px rgba(242,185,104,0.4);
+      0 0 0 2px rgba(242,185,104,0.45),
+      0 0 12px 2px rgba(242,185,104,0.32);
   }
 
   .switch-knob{
-    width: 42px;
-    height: 42px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 28%, #f4efe5, #cdc7bb 78%);
     box-shadow:
-      0 3px 6px rgba(0,0,0,0.4),
+      0 2px 4px rgba(0,0,0,0.4),
       inset 0 1px 1px rgba(255,255,255,0.65),
-      inset 0 -3px 5px rgba(0,0,0,0.18);
+      inset 0 -2px 3px rgba(0,0,0,0.18);
     transition: transform .12s ease, box-shadow .12s ease;
   }
 
   .switch:active .switch-knob{
-    transform: translateY(2px) scale(0.95);
+    transform: translateY(1px) scale(0.95);
     box-shadow:
       0 1px 2px rgba(0,0,0,0.4),
-      inset 0 2px 3px rgba(0,0,0,0.35),
+      inset 0 1px 2px rgba(0,0,0,0.35),
       inset 0 -1px 1px rgba(255,255,255,0.35);
   }
-
-  .switch-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted-onhero);
-  }
-
-  .scroll-dots{
-    position:absolute;
-    z-index:8;
-    left: 50%;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-    transform: translateX(-50%);
-    display:flex;
-    gap: 8px;
-    pointer-events: none;
-  }
-  .scroll-dots span{ width: 22px; height: 3px; border-radius: 2px; background: rgba(242,237,226,0.25); }
-  .scroll-dots span:first-child{ background: var(--ink-onhero); width: 28px; }
 
   @media (prefers-reduced-motion: reduce){
     .img-on, .cursor-glow, .switch-knob{ transition: opacity .2s linear, transform .01s linear !important; }
@@ -407,34 +401,32 @@
 
   .institucional .container{
     display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items:center;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 56px;
+    align-items:stretch;
   }
 
   .institucional-photo{
     position:relative;
-    aspect-ratio: 4 / 5;
+    min-height: 520px;
     border-radius: var(--radius);
     overflow:hidden;
-    background: linear-gradient(155deg, var(--brand) 0%, var(--brand-dark) 100%);
+    background: var(--brand-dark);
   }
 
-  /* padrão gráfico simples representando linhas de perfil de alumínio,
-     no lugar da foto real da fábrica (ainda não disponível) */
-  .institucional-photo svg{ position:absolute; inset:0; width:100%; height:100%; }
-
-  .institucional-photo-tag{
+  .institucional-photo img{
     position:absolute;
-    left: 18px; bottom: 18px;
-    z-index: 2;
-    font-size: 12px;
-    color: var(--ink-onhero);
-    background: rgba(0,0,0,0.35);
-    padding: 8px 13px;
-    border-radius: 999px;
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.14);
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .institucional-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
   }
 
   .institucional-text .kicker{
@@ -461,33 +453,12 @@
     margin: 0 0 16px;
   }
 
-  .institucional-text p:last-of-type{ margin-bottom: 28px; }
-
-  .institucional-facts{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line);
-  }
-
-  .institucional-facts div strong{
-    display:block;
-    font-family:'Fraunces', serif;
-    font-size: 26px;
-    color: var(--brand);
-    margin-bottom: 4px;
-  }
-  .institucional-facts div span{
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+  .institucional-text p:last-of-type{ margin-bottom: 0; }
 
   @media (max-width: 900px){
     .institucional{ padding: 72px 0; }
-    .institucional .container{ grid-template-columns: 1fr; gap: 36px; }
-    .institucional-photo{ aspect-ratio: 16/10; }
+    .institucional .container{ grid-template-columns: 1fr; gap: 32px; }
+    .institucional-photo{ min-height: 320px; }
   }
 
   /* =====================================================================
@@ -526,11 +497,10 @@
   .produto-card{
     display:flex;
     flex-direction:column;
-    gap: 18px;
     background: var(--paper);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 30px 26px;
+    overflow: hidden;
     text-decoration:none;
     color: inherit;
     transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
@@ -542,13 +512,51 @@
     border-color: rgba(24,60,50,0.25);
   }
 
-  .produto-icon{
-    width: 52px; height: 52px;
-    border-radius: 12px;
-    background: rgba(24,60,50,0.07);
-    display:flex; align-items:center; justify-content:center;
+  /* área da foto: fundo em degradê da marca + ícone grande servem de placeholder
+     enquanto a foto real do produto não chega. Basta soltar um <img class="produto-photo">
+     dentro do .produto-media com o nome de arquivo indicado no comentário de cada card —
+     se o arquivo não existir ainda, o onerror esconde a tag e o placeholder segue aparecendo. */
+  .produto-media{
+    position:relative;
+    aspect-ratio: 4 / 3;
+    overflow:hidden;
+    background: linear-gradient(150deg, var(--brand) 0%, var(--brand-dark) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .produto-icon svg{ width: 26px; height: 26px; stroke: var(--brand); }
+
+  .produto-media::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.28) 100%);
+    pointer-events:none;
+  }
+
+  .produto-media .produto-photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition: transform .5s ease;
+  }
+  .produto-card:hover .produto-photo{ transform: scale(1.06); }
+
+  .produto-media svg{
+    position:relative;
+    z-index:1;
+    width: 46px; height: 46px;
+    stroke: rgba(242,237,226,0.75);
+    opacity: 0.9;
+  }
+
+  .produto-body{
+    display:flex;
+    flex-direction:column;
+    gap: 8px;
+    padding: 22px 24px 26px;
+  }
 
   .produto-card h3{
     font-size: 19px;
@@ -556,14 +564,14 @@
   }
 
   .produto-card p{
-    font-size: 14.5px;
+    font-size: 14px;
     line-height: 1.6;
     color: var(--muted);
-    margin: -8px 0 0;
+    margin: 0;
   }
 
   .produto-card .produto-link{
-    margin-top: auto;
+    margin-top: 6px;
     font-size: 13px;
     font-weight: 600;
     color: var(--amber);
@@ -632,7 +640,6 @@
     border: 1px solid var(--line-dark);
     background: var(--panel-dark);
     box-shadow: 0 24px 60px rgba(0,0,0,0.45);
-    cursor: pointer;
   }
 
   .pimg{
@@ -652,30 +659,10 @@
     transition: opacity 1s ease, filter .5s ease;
   }
 
-  .pframe:hover .pimg-on{ opacity:1; }
   .pframe.is-lit .pimg-on{ opacity:1; }
 
-  .ptag{
-    position:absolute;
-    z-index:3;
-    left: 16px;
-    bottom: 16px;
-    display:flex;
-    align-items:center;
-    gap: 8px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    color: var(--ink-onhero);
-    background: rgba(10,10,11,0.55);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 7px 12px;
-    border-radius: 999px;
-    backdrop-filter: blur(6px);
-    transition: opacity .4s ease;
-  }
-  .ptag-dot{ width:6px; height:6px; border-radius:50%; background: var(--amber-warm); }
-  .pframe:hover .ptag, .pframe.is-lit .ptag{ opacity: 0; }
+  .pframe:hover .pimg-on{ opacity:1; }
+  .pframe.is-lit .pimg-on{ opacity:1; }
 
   .luz-controls{
     display:flex;
@@ -692,55 +679,103 @@
     margin-bottom: 12px;
   }
 
-  .swatches{ display:flex; flex-wrap:wrap; gap: 10px; }
+  /* interruptor mini, mesma peça do hero em tamanho reduzido — precisa ser
+     ligado pra revelar o perfil aceso e poder brincar com as cores */
+  .luz-switch-row{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
 
-  .swatch{
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    padding: 0;
-    position:relative;
-  }
-  .swatch.is-active{ border-color: var(--ink-onhero); }
-  .swatch::after{
-    content:"";
-    position:absolute; inset: 4px;
-    border-radius: 50%;
-  }
-  .swatch-quente{ background: rgba(255,255,255,0.06); }
-  .swatch-quente::after{ background: #f2b968; }
-  .swatch-neutro{ background: rgba(255,255,255,0.06); }
-  .swatch-neutro::after{ background: #ecdcc0; }
-  .swatch-fria{ background: rgba(255,255,255,0.06); }
-  .swatch-fria::after{ background: #bcd8e8; }
-  .swatch-rgb{ background: rgba(255,255,255,0.06); }
-  .swatch-rgb::after{ background: conic-gradient(from 0deg, #f2618a, #7c6df2, #56c2e8, #67d99b, #f2618a); }
-
-  .toggle-pair{
-    display:inline-flex;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--line-dark);
-    border-radius: 999px;
-    padding: 4px;
-  }
-  .toggle-pair button{
+  .luz-switch{
     appearance:none;
+    -webkit-appearance:none;
     border:none;
     background:none;
-    color: var(--muted-onhero);
-    font-family:'Inter', sans-serif;
-    font-size: 13px;
-    padding: 9px 16px;
-    border-radius: 999px;
+    padding:0;
+    margin:0;
     cursor:pointer;
+  }
+
+  .luz-switch-plate{
+    position:relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
+    box-shadow:
+      0 8px 16px rgba(0,0,0,0.5),
+      inset 0 1px 1px rgba(255,255,255,0.12),
+      inset 0 -2px 4px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: box-shadow .3s ease;
+  }
+  .luz-switch.is-on .luz-switch-plate{
+    box-shadow:
+      0 8px 16px rgba(0,0,0,0.5),
+      inset 0 1px 1px rgba(255,255,255,0.12),
+      inset 0 -2px 4px rgba(0,0,0,0.6),
+      0 0 0 2px rgba(242,185,104,0.45),
+      0 0 12px 2px rgba(242,185,104,0.32);
+  }
+
+  .luz-switch-knob{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #f4efe5, #cdc7bb 78%);
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.4),
+      inset 0 1px 1px rgba(255,255,255,0.65),
+      inset 0 -2px 3px rgba(0,0,0,0.18);
+    transition: transform .12s ease;
+  }
+  .luz-switch:active .luz-switch-knob{ transform: scale(0.92); }
+
+  .luz-switch-state{
+    font-size: 13px;
+    color: var(--muted-onhero);
+    transition: color .2s ease;
+  }
+  .luz-switch-state.is-on{ color: var(--ink-onhero); }
+
+  .swatches{ display:flex; flex-direction:column; gap: 6px; }
+
+  .swatch-item{
+    appearance:none;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    border:none;
+    background:none;
+    padding: 7px 8px;
+    border-radius: 10px;
+    cursor:pointer;
+    text-align:left;
+    color: var(--muted-onhero);
     transition: background .2s ease, color .2s ease;
   }
-  .toggle-pair button.is-active{
-    background: var(--ink-onhero);
-    color: var(--brand-dark);
-    font-weight: 600;
+  .swatch-item:hover{ background: rgba(255,255,255,0.05); }
+  .swatch-item.is-active{ background: rgba(255,255,255,0.08); color: var(--ink-onhero); }
+
+  .swatch-dot{
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    flex-shrink:0;
+    box-shadow: 0 0 0 2px transparent;
+    transition: box-shadow .2s ease, background .3s ease;
   }
+  .swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(242,237,226,0.5); }
+
+  .swatch-quente{ background: #f2b968; }
+  .swatch-neutro{ background: #ecdcc0; }
+  .swatch-fria{ background: #bcd8e8; }
+  .swatch-rgb{ background: conic-gradient(from 0deg, #f2618a, #7c6df2, #56c2e8, #67d99b, #f2618a); }
+
+  .swatch-name{ font-size: 14px; }
 
   .luz-note{
     font-size: 12.5px;
@@ -999,6 +1034,8 @@
      HEADER / NAV — logo + menu fixo (Produtos | Contato | Representante)
      ====================================================================== -->
 <nav class="site-nav" id="siteNav">
+  <!-- quando tiver o arquivo da logo, troca as duas linhas abaixo por:
+       <img class="nav-logo-img" src="logo.png" alt="A Iluminium Brasil"> -->
   <a class="nav-logo" href="#topo">
     <span class="nav-logo-top">A ILUMINIUM</span>
     <span class="nav-logo-bottom">BRASIL</span>
@@ -1029,9 +1066,10 @@
   <div class="scrim"></div>
 
   <div class="hero-copy">
-    <div class="eyebrow">Fitas e perfis de LED</div>
-    <h1>A luz que muda a<br>forma como você vive<br>o seu ambiente</h1>
-    <a class="hero-cta" href="#produtos">Conheça nossos produtos</a>
+    <div class="eyebrow">Soluções em LED para a indústria moveleira</div>
+    <h1>A luz que valoriza<br>cada projeto</h1>
+    <p class="hero-sub">Fitas LED, perfis de alumínio e soluções desenvolvidas para fabricantes de móveis.</p>
+    <a class="hero-cta" href="#produtos">Conheça nossas soluções</a>
   </div>
 
   <div class="switch-wrap">
@@ -1040,11 +1078,6 @@
         <span class="switch-knob"></span>
       </span>
     </button>
-    <span class="switch-label">interruptor</span>
-  </div>
-
-  <div class="scroll-dots">
-    <span></span><span></span><span></span><span></span>
   </div>
 </section>
 
@@ -1055,27 +1088,7 @@
 <section class="institucional" id="institucional">
   <div class="container">
     <div class="institucional-photo">
-      <svg viewBox="0 0 500 625" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="factoryFade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#EFB86B" stop-opacity="0.18"/>
-            <stop offset="100%" stop-color="#0E241D" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <rect width="500" height="625" fill="url(#factoryFade)"/>
-        <!-- linhas representando perfis de aluminio empilhados -->
-        <g stroke="#EFB86B" stroke-opacity="0.5" stroke-width="1.5">
-          <line x1="40" y1="120" x2="460" y2="120"/>
-          <line x1="40" y1="150" x2="460" y2="150"/>
-          <line x1="40" y1="180" x2="460" y2="180"/>
-          <line x1="40" y1="330" x2="460" y2="330"/>
-          <line x1="40" y1="360" x2="460" y2="360"/>
-          <line x1="40" y1="390" x2="460" y2="390"/>
-          <line x1="40" y1="480" x2="460" y2="480"/>
-          <line x1="40" y1="510" x2="460" y2="510"/>
-        </g>
-      </svg>
-      <span class="institucional-photo-tag">Foto da fábrica — placeholder</span>
+      <img src="fabrica.jpg" alt="Fachada da fábrica da Iluminium Brasil">
     </div>
 
     <div class="institucional-text">
@@ -1087,15 +1100,15 @@
         aparente e sem luz desigual.
       </p>
       <p>
-        [Texto institucional — substituir por conteúdo definitivo: ano de fundação,
-        história, diferenciais competitivos e certificações da empresa.]
+        Começamos atendendo marcenarias e pequenos projetos, e fomos crescendo junto com
+        os clientes que confiaram na gente — hoje temos estrutura própria de produção e
+        logística pra atender fabricantes de móveis e distribuidores em todo o Brasil,
+        do primeiro orçamento até a instalação final.
       </p>
-
-      <div class="institucional-facts">
-        <div><strong>2700K–6500K</strong><span>faixa de temperatura de cor disponível</span></div>
-        <div><strong>Sob medida</strong><span>corte e projeto para cada ambiente</span></div>
-        <div><strong>Suporte técnico</strong><span>direto com projetistas e lojistas</span></div>
-      </div>
+      <p>
+        [Texto institucional — substituir por conteúdo definitivo: ano de fundação,
+        história real, diferenciais competitivos e certificações da empresa.]
+      </p>
     </div>
   </div>
 </section>
@@ -1113,74 +1126,94 @@
 
     <div class="produtos-grid">
 
+      <!-- quando tiver a foto, adicionar dentro de .produto-media:
+           <img class="produto-photo" src="produto-fitas-led.jpg" alt="Fitas de LED" onerror="this.remove()"> -->
       <a class="produto-card" href="#contato" data-produto="Fitas LED">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-fitas-led.jpg" alt="Fitas de LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
             <path d="M2 12c1.5-3 3.5-3 5 0s3.5 3 5 0 3.5-3 5 0 3.5 3 5 0"/>
           </svg>
         </div>
-        <h3>Fitas LED</h3>
-        <p>Fitas flexíveis pra embutir em qualquer projeto, do quente ao frio.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Fitas LED</h3>
+          <p>Fitas flexíveis pra embutir em qualquer projeto, do quente ao frio.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
       <a class="produto-card" href="#contato" data-produto="Perfis de alumínio">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-perfis.jpg" alt="Perfis de alumínio para LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 6h16v3H14a2 2 0 0 0-2 2v7H4z"/>
           </svg>
         </div>
-        <h3>Perfis de alumínio</h3>
-        <p>Pra embutir, sobrepor ou suspender a fita com acabamento profissional.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Perfis de alumínio</h3>
+          <p>Pra embutir, sobrepor ou suspender a fita com acabamento profissional.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
       <a class="produto-card" href="#contato" data-produto="Difusores">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-difusores.jpg" alt="Difusores para perfil de LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
             <rect x="4" y="9" width="16" height="6" rx="3"/>
             <path d="M4 5.5h16M4 18.5h16"/>
           </svg>
         </div>
-        <h3>Difusores</h3>
-        <p>Espalham a luz e escondem os pontos de LED pra um brilho uniforme.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Difusores</h3>
+          <p>Espalham a luz e escondem os pontos de LED pra um brilho uniforme.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
       <a class="produto-card" href="#contato" data-produto="Fontes">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-fontes.jpg" alt="Fontes de alimentação para LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="7" width="14" height="10" rx="2"/>
             <path d="M17 10h4M17 14h4M7 7V4M11 7V4"/>
           </svg>
         </div>
-        <h3>Fontes</h3>
-        <p>Dimensionadas pra cada metragem de instalação, sem sobrecarga.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Fontes</h3>
+          <p>Dimensionadas pra cada metragem de instalação, sem sobrecarga.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
       <a class="produto-card" href="#contato" data-produto="Sensores">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-sensores.jpg" alt="Sensores para LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
             <circle cx="12" cy="12" r="2.2"/>
             <path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.8 6.8l1.5 1.5M15.7 15.7l1.5 1.5M17.2 6.8l-1.5 1.5M8.3 15.7l-1.5 1.5"/>
           </svg>
         </div>
-        <h3>Sensores</h3>
-        <p>Presença e toque pra acender a luz sem precisar de interruptor.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Sensores</h3>
+          <p>Presença e toque pra acender a luz sem precisar de interruptor.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
       <a class="produto-card" href="#contato" data-produto="Acessórios">
-        <div class="produto-icon">
+        <div class="produto-media">
+          <img class="produto-photo" src="produto-acessorios.jpg" alt="Acessórios para instalação de LED" onerror="this.remove()">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.5 6.5l3 3-8 8H6.5v-3z"/>
             <path d="M4 20h5"/>
           </svg>
         </div>
-        <h3>Acessórios</h3>
-        <p>Conectores, clipes e emendas pra fechar a instalação com acabamento.</p>
-        <span class="produto-link">Falar sobre esse produto →</span>
+        <div class="produto-body">
+          <h3>Acessórios</h3>
+          <p>Conectores, clipes e emendas pra fechar a instalação com acabamento.</p>
+          <span class="produto-link">Falar sobre esse produto →</span>
+        </div>
       </a>
 
     </div>
@@ -1196,41 +1229,53 @@
     <div class="luz-demo-head">
       <div class="kicker">A diferença está na luz</div>
       <h2>Mesmo perfil, luz diferente</h2>
-      <p>Toque ou passe o mouse pra acender. Depois brinque com a cor e o difusor — é o mesmo perfil em cada opção.</p>
+      <p>Ligue o interruptor pra acender o perfil. Depois brinque com a cor — é o mesmo perfil em cada opção.</p>
     </div>
 
     <div class="luz-demo-body">
       <div class="pframe" id="pframe">
         <img class="pimg pimg-off" src="profile-off.jpg" alt="Perfil de LED de embutir apagado">
         <img class="pimg pimg-on" id="pimgOn" src="profile-on.jpg" alt="Mesmo perfil de LED de embutir aceso">
-        <span class="ptag">
-          <span class="ptag-dot"></span>
-          toque para acender
-        </span>
       </div>
 
       <div class="luz-controls">
         <div class="luz-control-group">
-          <div class="label">Temperatura de cor</div>
-          <div class="swatches" id="swatches">
-            <button type="button" class="swatch swatch-quente is-active" data-color="quente" aria-label="Branca quente"></button>
-            <button type="button" class="swatch swatch-neutro" data-color="neutro" aria-label="Branca neutra"></button>
-            <button type="button" class="swatch swatch-fria" data-color="fria" aria-label="Branca fria"></button>
-            <button type="button" class="swatch swatch-rgb" data-color="rgb" aria-label="Cor RGB"></button>
+          <div class="label">Interruptor</div>
+          <div class="luz-switch-row">
+            <button type="button" class="luz-switch" id="luzSwitch" aria-pressed="false" aria-label="Ligar perfil de LED">
+              <span class="luz-switch-plate">
+                <span class="luz-switch-knob"></span>
+              </span>
+            </button>
+            <span class="luz-switch-state" id="luzSwitchState">Desligado</span>
           </div>
         </div>
 
         <div class="luz-control-group">
-          <div class="label">Acabamento</div>
-          <div class="toggle-pair" id="diffuserToggle">
-            <button type="button" class="is-active" data-diffuser="off">Sem difusor</button>
-            <button type="button" data-diffuser="on">Com difusor</button>
+          <div class="label">Temperatura de cor</div>
+          <div class="swatches" id="swatches">
+            <button type="button" class="swatch-item is-active" data-color="quente">
+              <span class="swatch-dot swatch-quente"></span>
+              <span class="swatch-name">Branco quente</span>
+            </button>
+            <button type="button" class="swatch-item" data-color="neutro">
+              <span class="swatch-dot swatch-neutro"></span>
+              <span class="swatch-name">Neutro</span>
+            </button>
+            <button type="button" class="swatch-item" data-color="fria">
+              <span class="swatch-dot swatch-fria"></span>
+              <span class="swatch-name">Branco frio</span>
+            </button>
+            <button type="button" class="swatch-item" data-color="rgb" id="swatchRgb">
+              <span class="swatch-dot swatch-rgb" id="swatchRgbDot"></span>
+              <span class="swatch-name" id="swatchRgbName">RGB — clique pra trocar</span>
+            </button>
           </div>
         </div>
 
         <p class="luz-note">
-          Simulação de cor e difusão sobre a mesma foto — as fotos reais de cada
-          combinação entram assim que a sessão de produto estiver pronta.
+          Simulação de cor sobre a mesma foto — as fotos reais de cada combinação
+          entram assim que a sessão de produto estiver pronta.
         </p>
       </div>
     </div>
@@ -1493,58 +1538,94 @@
   })();
 
   /* =====================================================================
-     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — toque pra acender/apagar (o hover
-     já cobre desktop via CSS), mais os controles de cor e difusor, que
-     simulam variações sobre a mesma foto via filtros CSS.
+     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — um interruptor de verdade liga o
+     perfil (com som, igual ao do hero), e as cores trocam por cima da
+     mesma foto via filtro CSS. O RGB é o mais divertido: cada clique
+     pula pra uma cor diferente (verde, rosa, vermelho, azul...).
      ===================================================================== */
   (function(){
     var pframe = document.getElementById('pframe');
     var pimgOn = document.getElementById('pimgOn');
-    if (!pframe || !pimgOn) return;
+    var luzSwitch = document.getElementById('luzSwitch');
+    var luzSwitchState = document.getElementById('luzSwitchState');
+    if (!pframe || !pimgOn || !luzSwitch) return;
 
-    pframe.addEventListener('click', function(){
-      pframe.classList.toggle('is-lit');
+    // ---------- interruptor liga/desliga o perfil, com o mesmo som do hero ----------
+    var isLit = false;
+    var clickSound2 = new Audio('switch-click.mp3');
+    clickSound2.preload = 'auto';
+    clickSound2.volume = 0.85;
+
+    function playClick2(on){
+      try{
+        var snd = clickSound2.cloneNode(true);
+        snd.volume = 0.85;
+        snd.playbackRate = on ? 1 : 0.9;
+        snd.play().catch(function(){});
+      } catch(e){}
+    }
+
+    luzSwitch.addEventListener('click', function(){
+      isLit = !isLit;
+      luzSwitch.classList.toggle('is-on', isLit);
+      luzSwitch.setAttribute('aria-pressed', String(isLit));
+      pframe.classList.toggle('is-lit', isLit);
+      if (luzSwitchState){
+        luzSwitchState.textContent = isLit ? 'Ligado' : 'Desligado';
+        luzSwitchState.classList.toggle('is-on', isLit);
+      }
+      playClick2(isLit);
     });
 
-    // aproximações visuais de temperatura de cor sobre a foto quente original —
-    // combinações reais por cor entram depois, com fotos de produto proprias
+    // ---------- cores: aproximações visuais sobre a foto quente original —
+    // combinações reais por cor entram depois, com fotos de produto proprias ----------
     var COLOR_FILTERS = {
       quente: '',
       neutro: 'grayscale(0.25) brightness(1.05)',
       fria:   'grayscale(0.45) hue-rotate(150deg) saturate(1.4) brightness(1.08)',
-      rgb:    'hue-rotate(260deg) saturate(1.7)'
+      rgb:    ''
     };
-    var DIFFUSER_FILTER = 'blur(1.4px) contrast(0.92) brightness(1.05)';
 
     var currentColor = 'quente';
-    var diffuserOn = false;
 
     function updateFilter(){
-      var parts = [];
-      if (COLOR_FILTERS[currentColor]) parts.push(COLOR_FILTERS[currentColor]);
-      if (diffuserOn) parts.push(DIFFUSER_FILTER);
-      pimgOn.style.filter = parts.join(' ');
+      pimgOn.style.filter = COLOR_FILTERS[currentColor] || '';
     }
 
-    var swatches = document.querySelectorAll('.swatch');
-    swatches.forEach(function(btn){
-      btn.addEventListener('click', function(e){
-        e.stopPropagation(); // nao alterna o aceso/apagado ao clicar num swatch
-        swatches.forEach(function(s){ s.classList.remove('is-active'); });
-        btn.classList.add('is-active');
-        currentColor = btn.getAttribute('data-color');
-        updateFilter();
-      });
-    });
+    var swatchItems = document.querySelectorAll('.swatch-item');
+    function selectColor(key, btn){
+      swatchItems.forEach(function(s){ s.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      currentColor = key;
+      updateFilter();
+    }
 
-    var diffuserBtns = document.querySelectorAll('#diffuserToggle button');
-    diffuserBtns.forEach(function(btn){
-      btn.addEventListener('click', function(e){
-        e.stopPropagation();
-        diffuserBtns.forEach(function(b){ b.classList.remove('is-active'); });
-        btn.classList.add('is-active');
-        diffuserOn = btn.getAttribute('data-diffuser') === 'on';
-        updateFilter();
+    // ---------- RGB: cada clique avança pra proxima cor da brincadeira ----------
+    var RGB_STEPS = [
+      { name: 'Verde',    dot: '#4CD97B', filter: 'hue-rotate(100deg) saturate(2.2) brightness(1.05)' },
+      { name: 'Rosa',     dot: '#F26FA8', filter: 'hue-rotate(300deg) saturate(2)   brightness(1.1)'  },
+      { name: 'Vermelho', dot: '#F2495C', filter: 'hue-rotate(330deg) saturate(2.4) brightness(1)'    },
+      { name: 'Azul',     dot: '#5B8CF2', filter: 'hue-rotate(200deg) saturate(2.2) brightness(1.05)' }
+    ];
+    var rgbIndex = -1;
+    var rgbDot = document.getElementById('swatchRgbDot');
+    var rgbName = document.getElementById('swatchRgbName');
+    var rgbBtn = document.getElementById('swatchRgb');
+
+    function cycleRgb(){
+      rgbIndex = (rgbIndex + 1) % RGB_STEPS.length;
+      var step = RGB_STEPS[rgbIndex];
+      COLOR_FILTERS.rgb = step.filter;
+      if (rgbDot) rgbDot.style.background = step.dot;
+      if (rgbName) rgbName.textContent = 'RGB — ' + step.name;
+      selectColor('rgb', rgbBtn);
+    }
+
+    swatchItems.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var key = btn.getAttribute('data-color');
+        if (key === 'rgb'){ cycleRgb(); return; }
+        selectColor(key, btn);
       });
     });
 
