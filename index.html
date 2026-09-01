@@ -99,6 +99,7 @@
   }
 
   .nav-logo{
+    grid-column: 1;
     justify-self: start;
     display:flex;
     align-items:center;
@@ -108,6 +109,7 @@
   .nav-logo-img{ height: 30px; width: auto; display:block; }
 
   .nav-links{
+    grid-column: 2;
     justify-self: center;
     display:flex;
     gap: 34px;
@@ -120,6 +122,7 @@
   .nav-links a:hover, .nav-links a:focus-visible{ color: var(--ink-onhero); }
 
   .nav-social{
+    grid-column: 3;
     justify-self: end;
     width: 36px; height: 36px;
     border-radius: 50%;
@@ -304,9 +307,11 @@
   }
 
   @media (max-width: 720px){
-    .hero-copy{ right: 6%; left: 6%; bottom: 26%; text-align:left; max-width: none; }
-    .hero-copy h1{ font-size: clamp(26px, 8vw, 38px); }
-    .hero-copy .hero-sub{ margin-left: 0; max-width: none; }
+    .hero-copy{ right: 6%; left: 6%; bottom: 21%; text-align:left; max-width: none; }
+    .hero-copy .eyebrow{ font-size: 10.5px; letter-spacing: 0.1em; margin-bottom: 14px; }
+    .hero-copy h1{ font-size: clamp(26px, 8vw, 36px); margin-bottom: 14px; }
+    .hero-copy .hero-sub{ margin-left: 0; max-width: none; font-size: 15px; margin-bottom: 0; }
+    .hero-copy .hero-cta{ display: none; }
   }
 
   .hero.lights-on .img-on{
