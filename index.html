@@ -1,9 +1,24 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="no-js">
+<html lang="pt-BR" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Iluminium Brasil — Iluminação em LED, perfis e acessórios</title>
+<meta name="description" content="Fitas de LED, perfis de alumínio, difusores, fontes, sensores e acessórios para fabricantes de móveis — do orçamento à instalação.">
+<!-- placeholder: trocar pela URL final do site assim que o domínio estiver no ar -->
+<link rel="canonical" href="https://iluminiumbrasil.com.br/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://iluminiumbrasil.com.br/">
+<meta property="og:site_name" content="Iluminium Brasil">
+<meta property="og:title" content="Iluminium Brasil — Iluminação em LED, perfis e acessórios">
+<meta property="og:description" content="Fitas de LED, perfis de alumínio, difusores, fontes, sensores e acessórios para fabricantes de móveis.">
+<!-- placeholder: imagem 1200x630 real da empresa/produto ainda precisa ser criada -->
+<meta property="og:image" content="https://iluminiumbrasil.com.br/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Iluminium Brasil — Iluminação em LED, perfis e acessórios">
+<meta name="twitter:description" content="Fitas de LED, perfis de alumínio, difusores, fontes, sensores e acessórios para fabricantes de móveis.">
+<meta name="twitter:image" content="https://iluminiumbrasil.com.br/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -23,6 +38,7 @@
     --muted: #5C6A64;        /* texto secundário sobre fundo claro */
     --line: rgba(20,35,32,0.12);
     --amber: #C9973B;        /* dourado/âmbar de destaque, luz quente */
+    --amber-ink: #8A6423;    /* mesmo âmbar, escurecido — usar em texto sobre fundo claro (contraste AA) */
     --amber-warm: #EFB86B;
     --ink-onhero: #F2EDE2;   /* texto claro sobre o hero escuro */
     --muted-onhero: rgba(242,237,226,0.7);
@@ -48,6 +64,18 @@
 
   a{ color:inherit; }
   img{ max-width:100%; display:block; }
+
+  /* esconde visualmente mas mantém acessível a leitor de tela —
+     usado pra headings que servem só de landmark/estrutura */
+  .visually-hidden{
+    position:absolute;
+    width:1px; height:1px;
+    padding:0; margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
 
   .container{
     max-width: 1180px;
@@ -122,8 +150,6 @@
   .nav-links a:hover, .nav-links a:focus-visible{ color: var(--ink-onhero); }
 
   .nav-social{
-    grid-column: 3;
-    justify-self: end;
     width: 36px; height: 36px;
     border-radius: 50%;
     border: 1px solid rgba(242,237,226,0.3);
@@ -141,33 +167,91 @@
 
   @media (max-width: 860px){ .nav-links{ display:none; } }
 
-  /* botão de menu simples pra telas pequenas (sem submenu — só ancoras pra secao de contato) */
+  /* botão de menu pra telas pequenas — abre um painel com os mesmos links de .nav-links */
+  .nav-right{
+    grid-column: 3;
+    justify-self: end;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
   .nav-burger{
     display:none;
+    position:relative;
     width: 40px; height: 40px;
     border-radius: 50%;
     border: 1px solid rgba(242,237,226,0.35);
     background: rgba(255,255,255,0.06);
-    color: var(--ink-onhero);
     align-items:center;
     justify-content:center;
-    font-size: 18px;
     cursor:pointer;
+    flex-shrink:0;
   }
-  /* botão de menu simples pra telas pequenas (sem submenu — só ancoras pra secao de contato) */
-  .nav-burger{
-    display:none;
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(242,237,226,0.35);
-    background: rgba(255,255,255,0.06);
-    color: var(--ink-onhero);
-    align-items:center;
-    justify-content:center;
-    font-size: 18px;
-    cursor:pointer;
+  .nav-burger-lines{
+    position:relative;
+    width: 16px; height: 12px;
   }
+  .nav-burger-lines span{
+    position:absolute;
+    left:0; right:0;
+    height: 1.5px;
+    background: var(--ink-onhero);
+    border-radius: 2px;
+    transition: transform .25s ease, opacity .2s ease, top .25s ease;
+  }
+  .nav-burger-lines span:nth-child(1){ top: 0; }
+  .nav-burger-lines span:nth-child(2){ top: 5px; }
+  .nav-burger-lines span:nth-child(3){ top: 10px; }
+
+  .nav-burger.is-open .nav-burger-lines span:nth-child(1){ top: 5px; transform: rotate(45deg); }
+  .nav-burger.is-open .nav-burger-lines span:nth-child(2){ opacity: 0; }
+  .nav-burger.is-open .nav-burger-lines span:nth-child(3){ top: 5px; transform: rotate(-45deg); }
+
   @media (max-width: 860px){ .nav-burger{ display:flex; } }
+
+  /* painel do menu mobile — só existe visualmente abaixo de 860px */
+  .nav-mobile-menu{ display:none; }
+
+  @media (max-width: 860px){
+    .nav-mobile-menu{
+      display:block;
+      position: fixed;
+      top: 0; left:0; right:0;
+      z-index: 190;
+      background: var(--brand);
+      padding: calc(env(safe-area-inset-top, 0px) + 84px) 24px 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transform: translateY(-8px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform .25s ease, opacity .2s ease, visibility 0s linear .25s;
+    }
+    .nav-mobile-menu.is-open{
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: transform .25s ease, opacity .2s ease;
+    }
+    .nav-mobile-links{
+      list-style:none;
+      margin:0; padding:0;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    .nav-mobile-links a{
+      display:block;
+      padding: 14px 4px;
+      font-family:'Fraunces', serif;
+      font-size: 20px;
+      color: var(--ink-onhero);
+      text-decoration:none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+  }
 
   /* =====================================================================
      HERO — reaproveitado do protótipo anterior: imagem cheia com lanterna
@@ -310,8 +394,8 @@
     .hero-copy{ right: 6%; left: 6%; bottom: 21%; text-align:left; max-width: none; }
     .hero-copy .eyebrow{ font-size: 10.5px; letter-spacing: 0.1em; margin-bottom: 14px; }
     .hero-copy h1{ font-size: clamp(26px, 8vw, 36px); margin-bottom: 14px; }
-    .hero-copy .hero-sub{ margin-left: 0; max-width: none; font-size: 15px; margin-bottom: 0; }
-    .hero-copy .hero-cta{ display: none; }
+    .hero-copy .hero-sub{ margin-left: 0; max-width: none; font-size: 15px; margin-bottom: 12px; }
+    .hero-copy .hero-cta{ display: inline-flex; padding: 12px 20px; font-size: 13.5px; }
   }
 
   .hero.lights-on .img-on{
@@ -330,10 +414,60 @@
     z-index:9;
     left: 5%;
     bottom: calc(env(safe-area-inset-bottom, 0px) + 7%);
+    display:flex;
+    align-items:center;
+    gap: 12px;
   }
 
   @media (max-width: 720px){
     .switch-wrap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 11%); }
+  }
+
+  /* dica pra chamar atenção pro interruptor antes do primeiro clique */
+  .switch-ring{
+    position:relative;
+    display:inline-flex;
+  }
+  .switch-ping{
+    position:absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1.5px solid var(--amber-warm);
+    animation: heroPing 1.8s ease-out infinite;
+    pointer-events:none;
+  }
+  @keyframes heroPing{
+    0%{ transform: scale(0.85); opacity: 0.9; }
+    100%{ transform: scale(1.6); opacity: 0; }
+  }
+
+  .switch-cta-hint{
+    display:flex;
+    align-items:center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--amber-warm);
+    white-space: nowrap;
+    transition: opacity .3s ease;
+  }
+  .switch-cta-hint svg{
+    width: 15px; height: 15px;
+    stroke: var(--amber-warm);
+    flex-shrink:0;
+    animation: heroHintArrow 1.4s ease-in-out infinite;
+  }
+  @keyframes heroHintArrow{
+    0%, 100%{ transform: translateX(0); }
+    50%{ transform: translateX(-3px); }
+  }
+  .switch-cta-hint.is-hidden{
+    opacity: 0;
+    pointer-events:none;
+  }
+
+  @media (max-width: 480px){
+    .switch-cta-hint span{ display:none; } /* no celular sobra só a seta, texto some pra não invadir a foto */
   }
 
   .switch{
@@ -444,7 +578,7 @@
   .institucional-text .kicker{
     font-family:'Fraunces', serif;
     font-style: italic;
-    color: var(--amber);
+    color: var(--amber-ink);
     font-size: 16px;
     margin-bottom: 10px;
   }
@@ -524,10 +658,8 @@
     border-color: rgba(24,60,50,0.25);
   }
 
-  /* área da foto: fundo em degradê da marca + ícone grande servem de placeholder
-     enquanto a foto real do produto não chega. Basta soltar um <img class="produto-photo">
-     dentro do .produto-media com o nome de arquivo indicado no comentário de cada card —
-     se o arquivo não existir ainda, o onerror esconde a tag e o placeholder segue aparecendo. */
+  /* área da foto: o degradê da marca fica só como fundo de segurança — se a
+     foto real não carregar (onerror remove a tag), some só a foto, sem ícone. */
   .produto-media{
     position:relative;
     aspect-ratio: 4 / 3;
@@ -555,14 +687,6 @@
   }
   .produto-card:hover .produto-photo{ transform: scale(1.06); }
 
-  .produto-media svg{
-    position:relative;
-    z-index:1;
-    width: 46px; height: 46px;
-    stroke: rgba(242,237,226,0.75);
-    opacity: 0.9;
-  }
-
   .produto-body{
     display:flex;
     flex-direction:column;
@@ -586,7 +710,7 @@
     margin-top: 6px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--amber);
+    color: var(--amber-ink);
   }
 
   @media (max-width: 900px){
@@ -643,6 +767,28 @@
     align-items:start;
   }
 
+  .pframe-col{ display:flex; flex-direction:column; gap: 14px; }
+
+  /* abas pra trocar de ambiente (cozinha/quarto) — mesmo padrão visual
+     dos outros toggles em pílula do site */
+  .ambiente-tabs{ display:flex; gap: 8px; }
+  .ambiente-tab{
+    appearance:none;
+    border: 1px solid var(--line-dark);
+    background: transparent;
+    color: var(--muted-onhero);
+    font-family:'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    cursor:pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .ambiente-tab:hover{ border-color: rgba(255,255,255,0.35); color: var(--ink-onhero); }
+  .ambiente-tab.is-active{ background: var(--amber-warm); border-color: var(--amber-warm); color: var(--brand-dark); }
+  .ambiente-tab:focus-visible{ outline: 2px solid var(--amber-warm); outline-offset: 2px; }
+
   .pframe{
     position: relative;
     width: 100%;
@@ -661,20 +807,16 @@
     height:100%;
     object-fit:cover;
     display:block;
+    opacity:0;
+    transition: opacity .6s ease;
   }
 
   .pimg-off{ z-index:1; }
+  .pimg-on{ z-index:2; }
 
-  .pimg-on{
-    z-index:2;
-    opacity:0;
-    transition: opacity 1s ease, filter .5s ease;
-  }
-
-  .pframe.is-lit .pimg-on{ opacity:1; }
-
-  .pframe:hover .pimg-on{ opacity:1; }
-  .pframe.is-lit .pimg-on{ opacity:1; }
+  /* visibilidade de cada foto (ambiente certo + cor certa + ligado/desligado)
+     é toda calculada em JS, que liga/desliga esta classe por imagem */
+  .pimg.is-shown{ opacity:1; }
 
   .luz-controls{
     display:flex;
@@ -785,17 +927,8 @@
   .swatch-quente{ background: #f2b968; }
   .swatch-neutro{ background: #ecdcc0; }
   .swatch-fria{ background: #bcd8e8; }
-  .swatch-rgb{ background: conic-gradient(from 0deg, #f2618a, #7c6df2, #56c2e8, #67d99b, #f2618a); }
 
   .swatch-name{ font-size: 14px; }
-
-  .luz-note{
-    font-size: 12.5px;
-    line-height: 1.6;
-    color: var(--muted-onhero);
-    border-top: 1px solid var(--line-dark);
-    padding-top: 16px;
-  }
 
   @media (max-width: 860px){
     .luz-demo{ padding: 72px 0; }
@@ -871,7 +1004,7 @@
   .representantes-head .kicker{
     font-family:'Fraunces', serif;
     font-style: italic;
-    color: var(--amber);
+    color: var(--amber-ink);
     font-size: 16px;
     margin-bottom: 10px;
   }
@@ -958,7 +1091,7 @@
     font-size: 10.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--amber);
+    color: var(--amber-ink);
   }
   .rep-panel h3{
     font-family:'Fraunces', serif;
@@ -1143,17 +1276,15 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
 
-  .footer-logo{
-    display:flex; flex-direction:column; line-height:1; margin-bottom: 14px;
-  }
-  .footer-logo .top{ font-family:'Fraunces', serif; font-size: 20px; color: var(--ink-onhero); }
-  .footer-logo .bottom{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--amber-warm); margin-top:4px; }
+  .footer-logo{ display:inline-block; margin-bottom: 14px; }
+  .footer-logo-img{ height: 34px; width: auto; display:block; }
 
   .footer-grid p{ font-size: 13.5px; line-height: 1.6; max-width: 32ch; margin: 0; }
 
-  .footer-col h4{
+  .footer-col h3{
     font-family:'Manrope', sans-serif;
     font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--ink-onhero);
@@ -1206,14 +1337,31 @@
     <li><a href="#contato">Contato</a></li>
     <li><a href="#representantes" id="navRepresentante">Representante</a></li>
   </ul>
-  <a class="nav-social" href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram da Iluminium Brasil">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
-      <rect x="3" y="3" width="18" height="18" rx="5"/>
-      <circle cx="12" cy="12" r="4"/>
-      <circle cx="17.2" cy="6.8" r="1"/>
-    </svg>
-  </a>
+  <div class="nav-right">
+    <a class="nav-social" href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram da Iluminium Brasil">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.2" cy="6.8" r="1"/>
+      </svg>
+    </a>
+    <button class="nav-burger" id="navBurger" type="button" aria-expanded="false" aria-controls="navMobileMenu" aria-label="Abrir menu">
+      <span class="nav-burger-lines"><span></span><span></span><span></span></span>
+    </button>
+  </div>
 </nav>
+
+<!-- painel do menu mobile — mesmos links do menu de desktop, some acima de 860px -->
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <ul class="nav-mobile-links">
+    <li><a href="#institucional">A Iluminium</a></li>
+    <li><a href="#produtos">Produtos</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#representantes">Representante</a></li>
+  </ul>
+</div>
+
+<main>
 
 <!-- ======================================================================
      HERO — foto de ambiente com fita de LED. A "lanterna" segue o mouse
@@ -1223,7 +1371,7 @@
 <section class="hero" id="topo">
   <picture class="img-off">
     <source media="(max-width: 700px)" srcset="sala-mobile-off.jpg">
-    <img src="sala-off.jpg" alt="Sala com painel de TV sem iluminação LED">
+    <img src="sala-off.jpg" alt="Sala com painel de TV sem iluminação LED" fetchpriority="high">
   </picture>
   <picture class="img-on">
     <source media="(max-width: 700px)" srcset="sala-mobile-on.jpg">
@@ -1240,11 +1388,18 @@
   </div>
 
   <div class="switch-wrap">
-    <button class="switch" type="button" aria-pressed="false" aria-label="Ligar luz do ambiente">
-      <span class="switch-plate">
-        <span class="switch-knob"></span>
-      </span>
-    </button>
+    <span class="switch-ring">
+      <span class="switch-ping" id="heroSwitchPing"></span>
+      <button class="switch" type="button" aria-pressed="false" aria-label="Ligar luz do ambiente">
+        <span class="switch-plate">
+          <span class="switch-knob"></span>
+        </span>
+      </button>
+    </span>
+    <p class="switch-cta-hint" id="heroCtaHint">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span>Clique e veja a luz acender</span>
+    </p>
   </div>
 </section>
 
@@ -1255,7 +1410,7 @@
 <section class="institucional" id="institucional">
   <div class="container">
     <div class="institucional-photo">
-      <img src="fabrica.jpg" alt="Fachada da fábrica da Iluminium Brasil">
+      <img src="fabrica.jpg" alt="Fachada da fábrica da Iluminium Brasil" loading="lazy">
     </div>
 
     <div class="institucional-text">
@@ -1293,14 +1448,9 @@
 
     <div class="produtos-grid">
 
-      <!-- quando tiver a foto, adicionar dentro de .produto-media:
-           <img class="produto-photo" src="produto-fitas-led.jpg" alt="Fitas de LED" onerror="this.remove()"> -->
       <a class="produto-card" href="#contato" data-produto="Fitas LED">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-fitas-led.jpg" alt="Fitas de LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
-            <path d="M2 12c1.5-3 3.5-3 5 0s3.5 3 5 0 3.5-3 5 0 3.5 3 5 0"/>
-          </svg>
+          <img class="produto-photo" src="produto-fitas-led.jpeg" alt="Fitas de LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Fitas LED</h3>
@@ -1311,10 +1461,7 @@
 
       <a class="produto-card" href="#contato" data-produto="Perfis de alumínio">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-perfis.jpg" alt="Perfis de alumínio para LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h16v3H14a2 2 0 0 0-2 2v7H4z"/>
-          </svg>
+          <img class="produto-photo" src="produto-perfis.jpeg" alt="Perfis de alumínio para LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Perfis de alumínio</h3>
@@ -1325,11 +1472,7 @@
 
       <a class="produto-card" href="#contato" data-produto="Difusores">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-difusores.jpg" alt="Difusores para perfil de LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
-            <rect x="4" y="9" width="16" height="6" rx="3"/>
-            <path d="M4 5.5h16M4 18.5h16"/>
-          </svg>
+          <img class="produto-photo" src="produto-difusores.jpeg" alt="Difusores para perfil de LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Difusores</h3>
@@ -1340,11 +1483,7 @@
 
       <a class="produto-card" href="#contato" data-produto="Fontes">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-fontes.jpg" alt="Fontes de alimentação para LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="7" width="14" height="10" rx="2"/>
-            <path d="M17 10h4M17 14h4M7 7V4M11 7V4"/>
-          </svg>
+          <img class="produto-photo" src="produto-fontes.jpeg" alt="Fontes de alimentação para LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Fontes</h3>
@@ -1355,11 +1494,7 @@
 
       <a class="produto-card" href="#contato" data-produto="Sensores">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-sensores.jpg" alt="Sensores para LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round">
-            <circle cx="12" cy="12" r="2.2"/>
-            <path d="M12 4.5v2.2M12 17.3v2.2M4.5 12h2.2M17.3 12h2.2M6.8 6.8l1.5 1.5M15.7 15.7l1.5 1.5M17.2 6.8l-1.5 1.5M8.3 15.7l-1.5 1.5"/>
-          </svg>
+          <img class="produto-photo" src="produto-sensores.jpeg" alt="Sensores para LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Sensores</h3>
@@ -1370,11 +1505,7 @@
 
       <a class="produto-card" href="#contato" data-produto="Acessórios">
         <div class="produto-media">
-          <img class="produto-photo" src="produto-acessorios.jpg" alt="Acessórios para instalação de LED" onerror="this.remove()">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.5 6.5l3 3-8 8H6.5v-3z"/>
-            <path d="M4 20h5"/>
-          </svg>
+          <img class="produto-photo" src="produto-acessorios.jpeg" alt="Acessórios para instalação de LED" loading="lazy" onerror="this.remove()">
         </div>
         <div class="produto-body">
           <h3>Acessórios</h3>
@@ -1388,28 +1519,44 @@
 </section>
 
 <!-- ======================================================================
-     "A DIFERENÇA ESTÁ NA LUZ" — perfil de alumínio interativo, reaproveita
-     o componente pimg/pframe do hero, com controles de cor e difusor.
+     "A DIFERENÇA ESTÁ NA LUZ" — dois ambientes reais (cozinha e quarto),
+     cada um fotografado nas 3 temperaturas de cor. Abas trocam o ambiente,
+     o interruptor liga a foto acesa e os swatches trocam a temperatura —
+     tudo com fotos reais, sem filtro e sem RGB.
      ====================================================================== -->
 <section class="luz-demo" id="diferenca">
   <div class="container">
     <div class="luz-demo-head">
       <div class="kicker">A diferença está na luz</div>
-      <h2>Mesmo perfil, luz diferente</h2>
-      <p>Ligue o interruptor pra acender o perfil. Depois brinque com a cor — é o mesmo perfil em cada opção.</p>
+      <h2>A mesma luz, ambientes diferentes</h2>
+      <p>Escolha o ambiente, ligue o interruptor e troque a temperatura de cor — veja como a luz muda o clima de cada cômodo.</p>
     </div>
 
     <div class="luz-demo-body">
-      <div class="pframe" id="pframe">
-        <img class="pimg pimg-off" src="profile-off.jpg" alt="Perfil de LED de embutir apagado">
-        <img class="pimg pimg-on" id="pimgOn" src="profile-on.jpg" alt="Mesmo perfil de LED de embutir aceso">
+      <div class="pframe-col">
+        <div class="ambiente-tabs" id="ambienteTabs">
+          <button type="button" class="ambiente-tab is-active" data-ambiente="cozinha" aria-pressed="true">Cozinha</button>
+          <button type="button" class="ambiente-tab" data-ambiente="quarto" aria-pressed="false">Quarto</button>
+        </div>
+
+        <div class="pframe" id="pframe">
+          <img class="pimg pimg-off is-shown" data-ambiente="cozinha" src="COZINHA APAGADA.jpeg" alt="Cozinha com perfil de LED embutido, luz apagada" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="quente" src="COZINHA BRANCO QUENTE 3000K.jpeg" alt="Cozinha com luz branco quente 3000K acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="neutro" src="COZINHA BRANCO NEUTRO 4000K.jpeg" alt="Cozinha com luz neutra 4000K acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="fria" src="COZINHA BRANCO FRIO 6000K.jpeg" alt="Cozinha com luz branco frio 6000K acesa" loading="lazy">
+
+          <img class="pimg pimg-off" data-ambiente="quarto" src="QUARTO APAGADO.jpeg" alt="Quarto com perfil de LED embutido, luz apagada" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="quente" src="QUARTO QUENTE.jpeg" alt="Quarto com luz branco quente acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="neutro" src="QUARTO NEUTRO.jpeg" alt="Quarto com luz neutra acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="fria" src="QUARTO FRIO.jpeg" alt="Quarto com luz branco frio acesa" loading="lazy">
+        </div>
       </div>
 
       <div class="luz-controls">
         <div class="luz-control-group">
           <div class="label">Interruptor</div>
           <div class="luz-switch-row">
-            <button type="button" class="luz-switch" id="luzSwitch" aria-pressed="false" aria-label="Ligar perfil de LED">
+            <button type="button" class="luz-switch" id="luzSwitch" aria-pressed="false" aria-label="Ligar luz do ambiente">
               <span class="luz-switch-plate">
                 <span class="luz-switch-knob"></span>
               </span>
@@ -1423,27 +1570,18 @@
           <div class="swatches" id="swatches">
             <button type="button" class="swatch-item is-active" data-color="quente">
               <span class="swatch-dot swatch-quente"></span>
-              <span class="swatch-name">Branco quente</span>
+              <span class="swatch-name">Branco quente — 3000K</span>
             </button>
             <button type="button" class="swatch-item" data-color="neutro">
               <span class="swatch-dot swatch-neutro"></span>
-              <span class="swatch-name">Neutro</span>
+              <span class="swatch-name">Neutro — 4000K</span>
             </button>
             <button type="button" class="swatch-item" data-color="fria">
               <span class="swatch-dot swatch-fria"></span>
-              <span class="swatch-name">Branco frio</span>
-            </button>
-            <button type="button" class="swatch-item" data-color="rgb" id="swatchRgb">
-              <span class="swatch-dot swatch-rgb" id="swatchRgbDot"></span>
-              <span class="swatch-name" id="swatchRgbName">RGB — clique pra trocar</span>
+              <span class="swatch-name">Branco frio — 6000K</span>
             </button>
           </div>
         </div>
-
-        <p class="luz-note">
-          Simulação de cor sobre a mesma foto — as fotos reais de cada combinação
-          entram assim que a sessão de produto estiver pronta.
-        </p>
       </div>
     </div>
   </div>
@@ -1879,17 +2017,19 @@
   </div>
 </section>
 
+</main>
+
 <!-- ======================================================================
      FOOTER
      ====================================================================== -->
 <footer class="site-footer">
   <div class="container">
+    <h2 class="visually-hidden">Rodapé</h2>
     <div class="footer-grid">
       <div class="footer-about">
-        <div class="footer-logo">
-          <span class="top">A ILUMINIUM</span>
-          <span class="bottom">BRASIL</span>
-        </div>
+        <a class="footer-logo" href="#topo">
+          <img class="footer-logo-img" src="logo.png" alt="A Iluminium Brasil">
+        </a>
         <p>Fitas de LED, perfis, difusores, fontes, sensores e acessórios pra projetos de iluminação do início ao fim.</p>
         <div class="footer-social">
           <a href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram">
@@ -1902,7 +2042,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Empresa</h4>
+        <h3>Empresa</h3>
         <ul>
           <li><a href="#institucional">Institucional</a></li>
           <li><a href="#produtos">Produtos</a></li>
@@ -1911,7 +2051,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Contato</h4>
+        <h3>Contato</h3>
         <ul>
           <li><a href="#contato">Falar com a gente</a></li>
           <li><a href="#representantes">Encontrar representante</a></li>
@@ -1920,7 +2060,7 @@
       </div>
 
       <div class="footer-col">
-        <h4>Fale direto</h4>
+        <h3>Fale direto</h3>
         <ul>
           <li>contato@iluminiumbrasil.com.br</li>
           <li>(00) 0000-0000</li>
@@ -1951,6 +2091,48 @@
   })();
 
   /* =====================================================================
+     MENU MOBILE — abre/fecha o painel com os links, fecha ao clicar num
+     link, ao rolar pra tela grande, ou ao apertar Esc.
+     ===================================================================== */
+  (function(){
+    var burger = document.getElementById('navBurger');
+    var menu = document.getElementById('navMobileMenu');
+    if (!burger || !menu) return;
+
+    function closeMenu(){
+      burger.classList.remove('is-open');
+      menu.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    function openMenu(){
+      burger.classList.add('is-open');
+      menu.classList.add('is-open');
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    burger.addEventListener('click', function(){
+      var isOpen = menu.classList.contains('is-open');
+      if (isOpen) closeMenu(); else openMenu();
+    });
+
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // se a pessoa girar o celular ou aumentar a janela pra desktop, fecha o painel
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 860) closeMenu();
+    });
+  })();
+
+  /* =====================================================================
      HERO — lanterna que segue o mouse, interruptor com som e toque pra
      acender no celular. Reaproveitado do protótipo anterior.
      ===================================================================== */
@@ -1966,9 +2148,11 @@
 
     // ---------- controla o estado de luz geral: interruptor E toque na imagem ----------
     var switchBtn = document.querySelector('.switch');
+    var heroCtaHint = document.getElementById('heroCtaHint');
+    var heroSwitchPing = document.getElementById('heroSwitchPing');
     var isOn = false;
-    var clickSound = new Audio('switch-click.mp3');
-    clickSound.preload = 'auto';
+    var clickSound = new Audio('switch-4.mp3');
+    clickSound.preload = 'none'; /* só busca o arquivo se a pessoa realmente clicar no interruptor */
     clickSound.volume = 0.9;
 
     function playClick(on){
@@ -1987,6 +2171,10 @@
         switchBtn.setAttribute('aria-pressed', String(isOn));
       }
       hero.classList.toggle('lights-on', isOn);
+      if (isOn){
+        if (heroCtaHint) heroCtaHint.classList.add('is-hidden');
+        if (heroSwitchPing) heroSwitchPing.remove();
+      }
       playClick(isOn);
     }
 
@@ -2049,22 +2237,46 @@
   })();
 
   /* =====================================================================
-     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — um interruptor de verdade liga o
-     perfil (com som, igual ao do hero), e as cores trocam por cima da
-     mesma foto via filtro CSS. O RGB é o mais divertido: cada clique
-     pula pra uma cor diferente (verde, rosa, vermelho, azul...).
+     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — dois ambientes reais (cozinha e
+     quarto), cada um fotografado nas 3 temperaturas de cor. A foto visível
+     em cada instante é sempre: ambiente escolhido + (apagada, ou acesa na
+     cor escolhida se o interruptor estiver ligado). Nada de filtro CSS.
      ===================================================================== */
   (function(){
     var pframe = document.getElementById('pframe');
-    var pimgOn = document.getElementById('pimgOn');
+    var allImgs = document.querySelectorAll('#pframe .pimg');
+    var ambienteTabs = document.querySelectorAll('.ambiente-tab');
     var luzSwitch = document.getElementById('luzSwitch');
     var luzSwitchState = document.getElementById('luzSwitchState');
-    if (!pframe || !pimgOn || !luzSwitch) return;
+    var swatchItems = document.querySelectorAll('.swatch-item');
+    if (!pframe || !allImgs.length || !luzSwitch) return;
 
-    // ---------- interruptor liga/desliga o perfil, com o mesmo som do hero ----------
-    var isLit = false;
-    var clickSound2 = new Audio('switch-click.mp3');
-    clickSound2.preload = 'auto';
+    var state = { ambiente: 'cozinha', color: 'quente', isLit: false };
+
+    function render(){
+      allImgs.forEach(function(img){
+        var isOff = img.classList.contains('pimg-off');
+        var sameAmbiente = img.getAttribute('data-ambiente') === state.ambiente;
+        var show = sameAmbiente && (isOff ? !state.isLit : (state.isLit && img.getAttribute('data-color') === state.color));
+        img.classList.toggle('is-shown', show);
+      });
+    }
+
+    // ---------- abas de ambiente ----------
+    ambienteTabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        state.ambiente = tab.getAttribute('data-ambiente');
+        ambienteTabs.forEach(function(t){
+          t.classList.toggle('is-active', t === tab);
+          t.setAttribute('aria-pressed', String(t === tab));
+        });
+        render();
+      });
+    });
+
+    // ---------- interruptor liga/desliga a foto acesa, com o mesmo som do hero ----------
+    var clickSound2 = new Audio('switch-4.mp3');
+    clickSound2.preload = 'none'; /* só busca o arquivo se a pessoa realmente clicar no interruptor */
     clickSound2.volume = 0.85;
 
     function playClick2(on){
@@ -2077,70 +2289,28 @@
     }
 
     luzSwitch.addEventListener('click', function(){
-      isLit = !isLit;
-      luzSwitch.classList.toggle('is-on', isLit);
-      luzSwitch.setAttribute('aria-pressed', String(isLit));
-      pframe.classList.toggle('is-lit', isLit);
+      state.isLit = !state.isLit;
+      luzSwitch.classList.toggle('is-on', state.isLit);
+      luzSwitch.setAttribute('aria-pressed', String(state.isLit));
       if (luzSwitchState){
-        luzSwitchState.textContent = isLit ? 'Ligado' : 'Desligado';
-        luzSwitchState.classList.toggle('is-on', isLit);
+        luzSwitchState.textContent = state.isLit ? 'Ligado' : 'Desligado';
+        luzSwitchState.classList.toggle('is-on', state.isLit);
       }
-      playClick2(isLit);
+      playClick2(state.isLit);
+      render();
     });
 
-    // ---------- cores: aproximações visuais sobre a foto quente original —
-    // combinações reais por cor entram depois, com fotos de produto proprias ----------
-    var COLOR_FILTERS = {
-      quente: '',
-      neutro: 'grayscale(0.25) brightness(1.05)',
-      fria:   'grayscale(0.45) hue-rotate(150deg) saturate(1.4) brightness(1.08)',
-      rgb:    ''
-    };
-
-    var currentColor = 'quente';
-
-    function updateFilter(){
-      pimgOn.style.filter = COLOR_FILTERS[currentColor] || '';
-    }
-
-    var swatchItems = document.querySelectorAll('.swatch-item');
-    function selectColor(key, btn){
-      swatchItems.forEach(function(s){ s.classList.remove('is-active'); });
-      btn.classList.add('is-active');
-      currentColor = key;
-      updateFilter();
-    }
-
-    // ---------- RGB: cada clique avança pra proxima cor da brincadeira ----------
-    var RGB_STEPS = [
-      { name: 'Verde',    dot: '#4CD97B', filter: 'hue-rotate(100deg) saturate(2.2) brightness(1.05)' },
-      { name: 'Rosa',     dot: '#F26FA8', filter: 'hue-rotate(300deg) saturate(2)   brightness(1.1)'  },
-      { name: 'Vermelho', dot: '#F2495C', filter: 'hue-rotate(330deg) saturate(2.4) brightness(1)'    },
-      { name: 'Azul',     dot: '#5B8CF2', filter: 'hue-rotate(200deg) saturate(2.2) brightness(1.05)' }
-    ];
-    var rgbIndex = -1;
-    var rgbDot = document.getElementById('swatchRgbDot');
-    var rgbName = document.getElementById('swatchRgbName');
-    var rgbBtn = document.getElementById('swatchRgb');
-
-    function cycleRgb(){
-      rgbIndex = (rgbIndex + 1) % RGB_STEPS.length;
-      var step = RGB_STEPS[rgbIndex];
-      COLOR_FILTERS.rgb = step.filter;
-      if (rgbDot) rgbDot.style.background = step.dot;
-      if (rgbName) rgbName.textContent = 'RGB — ' + step.name;
-      selectColor('rgb', rgbBtn);
-    }
-
+    // ---------- temperatura de cor: cada swatch mostra a foto real daquela cor ----------
     swatchItems.forEach(function(btn){
       btn.addEventListener('click', function(){
-        var key = btn.getAttribute('data-color');
-        if (key === 'rgb'){ cycleRgb(); return; }
-        selectColor(key, btn);
+        state.color = btn.getAttribute('data-color');
+        swatchItems.forEach(function(s){ s.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        render();
       });
     });
 
-    updateFilter();
+    render();
   })();
 
   /* =====================================================================
