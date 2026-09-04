@@ -1123,7 +1123,7 @@
 
     <div class="produtos-grid">
 
-      <a class="produto-card" href="#contato" data-produto="Fitas LED">
+      <a class="produto-card" href="produtos/fitas-led.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-fitas-led.jpeg" alt="Fitas de LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -1134,7 +1134,7 @@
         </div>
       </a>
 
-      <a class="produto-card" href="#contato" data-produto="Perfis de alumínio">
+      <a class="produto-card" href="produtos/perfis-de-aluminio.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-perfis.jpeg" alt="Perfis de alumínio para LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -1145,7 +1145,7 @@
         </div>
       </a>
 
-      <a class="produto-card" href="#contato" data-produto="Difusores">
+      <a class="produto-card" href="produtos/difusores.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-difusores.jpeg" alt="Difusores para perfil de LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -1156,7 +1156,7 @@
         </div>
       </a>
 
-      <a class="produto-card" href="#contato" data-produto="Fontes">
+      <a class="produto-card" href="produtos/fontes.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-fontes.jpeg" alt="Fontes de alimentação para LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -1167,7 +1167,7 @@
         </div>
       </a>
 
-      <a class="produto-card" href="#contato" data-produto="Sensores">
+      <a class="produto-card" href="produtos/sensores.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-sensores.jpeg" alt="Sensores para LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -1178,7 +1178,7 @@
         </div>
       </a>
 
-      <a class="produto-card" href="#contato" data-produto="Acessórios">
+      <a class="produto-card" href="produtos/acessorios.html">
         <div class="produto-media">
           <img class="produto-photo" src="images/produto-acessorios.jpeg" alt="Acessórios para instalação de LED" loading="lazy" onerror="this.remove()">
         </div>
@@ -2033,26 +2033,6 @@
         if (item) selectState(item.uf, item.name);
       });
     }
-  })();
-
-  /* =====================================================================
-     PRODUTOS → CONTATO — clicar num card pré-preenche o formulário com o
-     produto de interesse antes de rolar até a seção de contato.
-     ===================================================================== */
-  (function(){
-    var cards = document.querySelectorAll('.produto-card');
-    var subjectSelect = document.getElementById('fSubject');
-    var messageField = document.getElementById('fMessage');
-
-    cards.forEach(function(card){
-      card.addEventListener('click', function(){
-        var produto = card.getAttribute('data-produto');
-        if (subjectSelect) subjectSelect.value = 'produto';
-        if (messageField && !messageField.value){
-          messageField.value = 'Tenho interesse em: ' + produto + '. ';
-        }
-      });
-    });
   })();
 
   /* =====================================================================
