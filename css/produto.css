@@ -1,0 +1,116 @@
+/* =====================================================================
+   PÁGINA DE PRODUTO — usado pelas 6 páginas em produtos/*.html.
+   Depende dos tokens e classes base de css/style.css (nav, rodapé, botões).
+   ===================================================================== */
+
+.produto-hero{
+  padding: 132px 0 0;
+  background: var(--soft);
+}
+
+.produto-voltar{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration:none;
+  margin-bottom: 28px;
+  transition: color .2s ease;
+}
+.produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--brand); }
+.produto-voltar svg{ width: 15px; height: 15px; stroke: currentColor; flex-shrink:0; }
+
+.produto-detalhe{
+  padding: 0 0 100px;
+  background: var(--soft);
+}
+
+.produto-detalhe-grid{
+  display:grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  align-items:start;
+}
+
+.produto-detalhe-media{
+  position:relative;
+  border-radius: var(--radius);
+  overflow:hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--brand-dark);
+  border: 1px solid var(--line);
+}
+.produto-detalhe-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.produto-detalhe-info .kicker{
+  font-family:'Fraunces', serif;
+  font-style: italic;
+  color: var(--amber-ink);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.produto-detalhe-info h1{
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.15;
+  color: var(--brand);
+  margin-bottom: 18px;
+}
+.produto-detalhe-info .lead{
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 28px;
+  max-width: 52ch;
+}
+
+.produto-detalhe-cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.produto-specs{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+}
+.produto-specs h2{
+  font-family:'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+  margin: 0 0 18px;
+}
+.produto-specs dl{ margin:0; }
+.spec-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.spec-row:first-of-type{ padding-top: 0; }
+.spec-row:last-of-type{ border-bottom:none; padding-bottom: 0; }
+.spec-row dt{ color: var(--muted); }
+.spec-row dd{ margin:0; color: var(--ink); font-weight: 600; text-align:right; }
+.spec-todo{ color: var(--amber-ink); }
+
+.produto-specs-note{
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 18px 0 0;
+}
+
+@media (max-width: 860px){
+  .produto-hero{ padding-top: 108px; }
+  .produto-detalhe-grid{ grid-template-columns: 1fr; gap: 32px; }
+}
