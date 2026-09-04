@@ -110,7 +110,97 @@
   margin: 18px 0 0;
 }
 
+.kicker-link{ text-decoration:none; }
+.kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
+
+/* seletores de opção (medida, cor, temperatura) nas páginas de variante —
+   só marcam visualmente a escolha, não trocam foto nem preço */
+.produto-options{ margin-bottom: 24px; }
+.produto-options .label{
+  font-family:'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.option-pills{ display:flex; flex-wrap:wrap; gap: 8px; }
+.option-pill{
+  appearance:none;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-family:'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor:pointer;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+.option-pill:hover{ border-color: var(--brand); }
+.option-pill.is-active{ background: var(--brand); border-color: var(--brand); color: #fff; }
+.option-pill:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* =====================================================================
+   LOJA — grid de variações dentro de uma categoria (ex: Fita LED mostra
+   3mm/5mm/8mm × densidade; Perfil mostra as posições de instalação).
+   ===================================================================== */
+.loja-section{
+  padding: 0 0 100px;
+  background: var(--soft);
+}
+.loja-head{
+  font-family:'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+  margin-bottom: 18px;
+}
+.loja-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.loja-tile{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  text-decoration:none;
+  color: var(--ink);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.loja-tile:hover, .loja-tile:focus-visible{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(24,60,50,0.1);
+  border-color: rgba(24,60,50,0.25);
+}
+.loja-tile-text{ display:flex; flex-direction:column; gap: 4px; }
+.loja-tile-name{ font-weight: 600; font-size: 14.5px; }
+.loja-tile-badge{
+  align-self:flex-start;
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amber-ink);
+}
+.loja-tile-arrow{ color: var(--muted); flex-shrink:0; }
+.loja-tile-accent{ border-color: rgba(201,151,59,0.4); }
+
 @media (max-width: 860px){
   .produto-hero{ padding-top: 108px; }
   .produto-detalhe-grid{ grid-template-columns: 1fr; gap: 32px; }
+  .loja-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px){
+  .loja-grid{ grid-template-columns: 1fr; }
 }
