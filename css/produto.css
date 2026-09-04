@@ -27,27 +27,26 @@
 .kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
 
 /* =====================================================================
-   FOTO EM BANNER — grande, cheia largura, logo abaixo do "voltar".
+   FOTO EM FAIXA — fininha, cheia largura de ponta a ponta (sem container,
+   sem cantos), colada direto na nav fixa (por isso o padding-top aqui em
+   vez de na nav). Pensada pra fita/perfil: um produto comprido e fino,
+   não uma foto de ambiente grande.
    ===================================================================== */
 .produto-banner{
-  background: var(--soft);
-  padding: 0 0 48px;
-}
-.produto-banner-media{
-  position:relative;
   width: 100%;
-  height: clamp(280px, 42vw, 460px);
-  border-radius: var(--radius);
+  height: clamp(110px, 16vw, 220px);
+  padding-top: 76px; /* ~altura da nav fixa, pra colar sem espaço em branco */
   overflow:hidden;
   background: var(--brand-dark);
+  box-sizing: content-box;
 }
-.produto-banner-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.produto-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
 
 /* =====================================================================
    TÍTULO + CTA — abaixo da foto, largura de leitura confortável.
    ===================================================================== */
 .produto-detalhe{
-  padding: 0 0 60px;
+  padding: 40px 0 60px;
   background: var(--soft);
 }
 
