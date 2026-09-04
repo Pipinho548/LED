@@ -103,6 +103,15 @@ h1, h2, h3{
   box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
 
+/* nav-static: pra páginas sem hero escuro embaixo (ex: produtos/*.html) —
+   fica sempre com fundo sólido, sem depender do scroll pra ficar legível */
+.site-nav.nav-static{
+  background: var(--brand);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  padding-bottom: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
 @media (max-width: 800px){
   .site-nav{ padding: calc(env(safe-area-inset-top, 0px) + 20px) 24px 20px; }
   .site-nav.is-solid{ padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: 14px; }
