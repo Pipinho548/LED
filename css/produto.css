@@ -35,7 +35,7 @@
 .produto-banner{
   width: 100%;
   height: clamp(110px, 16vw, 220px);
-  padding-top: 76px; /* ~altura da nav fixa, pra colar sem espaço em branco */
+  padding-top: 68px; /* altura exata da nav fixa (nav-static), pra colar sem espaço em branco */
   overflow:hidden;
   background: var(--brand-dark);
   box-sizing: content-box;
