@@ -27,30 +27,31 @@
 .kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
 
 /* =====================================================================
-   TOPO DA PÁGINA DE VARIANTE — foto + título + CTA (sem specs aqui;
-   as specs viram uma seção própria, cheia largura, embaixo).
+   FOTO EM BANNER — grande, cheia largura, logo abaixo do "voltar".
+   ===================================================================== */
+.produto-banner{
+  background: var(--soft);
+  padding: 0 0 48px;
+}
+.produto-banner-media{
+  position:relative;
+  width: 100%;
+  height: clamp(280px, 42vw, 460px);
+  border-radius: var(--radius);
+  overflow:hidden;
+  background: var(--brand-dark);
+}
+.produto-banner-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* =====================================================================
+   TÍTULO + CTA — abaixo da foto, largura de leitura confortável.
    ===================================================================== */
 .produto-detalhe{
   padding: 0 0 60px;
   background: var(--soft);
 }
 
-.produto-detalhe-grid{
-  display:grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 56px;
-  align-items:start;
-}
-
-.produto-detalhe-media{
-  position:relative;
-  border-radius: var(--radius);
-  overflow:hidden;
-  aspect-ratio: 4 / 3;
-  background: var(--brand-dark);
-  border: 1px solid var(--line);
-}
-.produto-detalhe-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.produto-detalhe-info{ max-width: 640px; }
 
 .produto-detalhe-info .kicker{
   font-family:'Fraunces', serif;
@@ -80,20 +81,27 @@
 }
 
 /* =====================================================================
-   ATRIBUTOS — seção de especificações, cheia largura, em colunas com
-   linhas divisórias (inspirado na página de produto da Artetílica: sem
-   caixa, só as colunas separadas por espaço e cada linha com um traço).
+   ATRIBUTOS — cartões de especificação: fundo branco, borda e sombra
+   suave, destacando do fundo cinza-claro da página (--soft).
    ===================================================================== */
 .produto-attrs{
-  padding: 56px 0 100px;
-  background: var(--paper);
+  padding: 0 0 100px;
+  background: var(--soft);
 }
 
 .attrs-grid{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
+  gap: 24px;
   align-items:start;
+}
+
+.attrs-col{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  box-shadow: 0 10px 30px rgba(24,60,50,0.06);
 }
 
 .attrs-col h2{
@@ -147,9 +155,7 @@
   font-size: 12.5px;
   line-height: 1.6;
   color: var(--muted);
-  margin: 32px 0 0;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  margin: 28px 0 0;
 }
 
 /* =====================================================================
@@ -182,7 +188,6 @@
 }
 @media (max-width: 860px){
   .produto-hero{ padding-top: 108px; }
-  .produto-detalhe-grid{ grid-template-columns: 1fr; gap: 32px; }
 }
 @media (max-width: 560px){
   .attrs-grid{ grid-template-columns: 1fr; }
