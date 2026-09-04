@@ -1,6 +1,7 @@
 /* =====================================================================
-   PÁGINA DE PRODUTO — usado pelas 6 páginas em produtos/*.html.
-   Depende dos tokens e classes base de css/style.css (nav, rodapé, botões).
+   PÁGINA DE PRODUTO — usado pelas páginas em produtos/*.html.
+   Depende dos tokens e classes base de css/style.css (nav, rodapé, botões,
+   produtos-grid/produto-card).
    ===================================================================== */
 
 .produto-hero{
@@ -22,8 +23,15 @@
 .produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--brand); }
 .produto-voltar svg{ width: 15px; height: 15px; stroke: currentColor; flex-shrink:0; }
 
+.kicker-link{ text-decoration:none; }
+.kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
+
+/* =====================================================================
+   TOPO DA PÁGINA DE VARIANTE — foto + título + CTA (sem specs aqui;
+   as specs viram uma seção própria, cheia largura, embaixo).
+   ===================================================================== */
 .produto-detalhe{
-  padding: 0 0 100px;
+  padding: 0 0 60px;
   background: var(--soft);
 }
 
@@ -69,101 +77,113 @@
   display:flex;
   flex-wrap:wrap;
   gap: 12px;
-  margin-bottom: 40px;
 }
 
-.produto-specs{
+/* =====================================================================
+   ATRIBUTOS — seção de especificações, cheia largura, em colunas com
+   linhas divisórias (inspirado na página de produto da Artetílica: sem
+   caixa, só as colunas separadas por espaço e cada linha com um traço).
+   ===================================================================== */
+.produto-attrs{
+  padding: 56px 0 100px;
   background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 26px 28px;
 }
-.produto-specs h2{
+
+.attrs-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  align-items:start;
+}
+
+.attrs-col h2{
   font-family:'Manrope', sans-serif;
   font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--brand);
-  margin: 0 0 18px;
+  margin: 0 0 16px;
 }
-.produto-specs dl{ margin:0; }
-.spec-row{
+
+.attrs-col dl{ margin:0; }
+.attr-row{
   display:flex;
   justify-content:space-between;
   align-items:baseline;
   gap: 16px;
-  padding: 12px 0;
+  padding: 11px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 14px;
+  font-size: 13.5px;
 }
-.spec-row:first-of-type{ padding-top: 0; }
-.spec-row:last-of-type{ border-bottom:none; padding-bottom: 0; }
-.spec-row dt{ color: var(--muted); }
-.spec-row dd{ margin:0; color: var(--ink); font-weight: 600; text-align:right; }
-.spec-todo{ color: var(--amber-ink); }
+.attr-row:first-of-type{ padding-top: 0; }
+.attr-row:last-of-type{ border-bottom:none; padding-bottom: 0; }
+.attr-row dt{ color: var(--muted); }
+.attr-row dd{ margin:0; color: var(--ink); font-weight: 600; text-align:right; }
+.attr-todo{ color: var(--amber-ink); }
+
+.attr-list{ list-style:none; margin:0; padding:0; }
+.attr-list li{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.attr-list li:first-child{ padding-top: 0; }
+.attr-list li:last-child{ border-bottom:none; padding-bottom: 0; }
+
+.attr-swatch{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink:0;
+  box-shadow: inset 0 0 0 1px rgba(20,35,32,0.15);
+}
 
 .produto-specs-note{
   font-size: 12.5px;
   line-height: 1.6;
   color: var(--muted);
-  margin: 18px 0 0;
+  margin: 32px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
-
-.kicker-link{ text-decoration:none; }
-.kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
-
-/* seletores de opção (medida, cor, temperatura) nas páginas de variante —
-   só marcam visualmente a escolha, não trocam foto nem preço */
-.produto-options{ margin-bottom: 24px; }
-.produto-options .label{
-  font-family:'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.option-pills{ display:flex; flex-wrap:wrap; gap: 8px; }
-.option-pill{
-  appearance:none;
-  border: 1.5px solid var(--line);
-  background: var(--paper);
-  color: var(--ink);
-  font-family:'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  cursor:pointer;
-  transition: border-color .2s ease, background .2s ease, color .2s ease;
-}
-.option-pill:hover{ border-color: var(--brand); }
-.option-pill.is-active{ background: var(--brand); border-color: var(--brand); color: #fff; }
-.option-pill:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
 
 /* =====================================================================
    LOJA — grid de variações dentro de uma categoria (ex: Fita LED mostra
    3mm/5mm/8mm × densidade; Perfil mostra as posições de instalação).
+   Usa .produtos-grid/.produto-card de css/style.css.
    ===================================================================== */
-/* a loja usa .produtos-grid/.produto-card, que já vêm de css/style.css —
-   aqui só o espaçamento da seção e o título "Escolha a opção". */
+.loja-page-head{
+  padding: 0 0 32px;
+}
+.loja-page-head .kicker{
+  font-family:'Fraunces', serif;
+  font-style: italic;
+  color: var(--amber-ink);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.loja-page-head h1{
+  font-size: clamp(28px, 4vw, 40px);
+  color: var(--brand);
+}
+
 .loja-section{
   padding: 0 0 100px;
   background: var(--soft);
 }
-.loja-head{
-  font-family:'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--brand);
-  margin-bottom: 18px;
-}
 
+@media (max-width: 900px){
+  .attrs-grid{ grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 860px){
   .produto-hero{ padding-top: 108px; }
   .produto-detalhe-grid{ grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 560px){
+  .attrs-grid{ grid-template-columns: 1fr; }
 }
