@@ -1,0 +1,150 @@
+/* =====================================================================
+   REPRESENTANTES — mapa do Brasil clicável por estado (desktop) com
+   lista suspensa como alternativa no celular. Ao selecionar um estado,
+   o painel ao lado mostra o representante da região ou, se ainda não
+   tiver representante lá, os dados de contato da própria fábrica.
+   Usado só em representantes.html.
+   ===================================================================== */
+.representantes{
+  padding: 0 0 100px;
+  background: var(--paper);
+}
+
+.representantes-head{
+  max-width: 620px;
+  margin-bottom: 40px;
+}
+
+.representantes-head .kicker{
+  font-family:'Fraunces', serif;
+  font-style: italic;
+  color: var(--amber-ink);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.representantes-head h1{
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.15;
+  color: var(--brand);
+  margin-bottom: 14px;
+}
+
+.representantes-head p{
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0;
+  max-width: 56ch;
+}
+
+.representantes-body{
+  display:grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items:start;
+}
+
+/* mapa (desktop) */
+.map-wrap{
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.map-wrap svg{ width:100%; height:auto; display:block; }
+
+.map-wrap .estado path{
+  fill: var(--brand);
+  opacity: 0.82;
+  cursor: pointer;
+  stroke: var(--paper);
+  stroke-width: 1;
+  transition: fill .2s ease, opacity .2s ease;
+}
+.map-wrap .estado:hover path{ opacity: 1; fill: var(--brand-light); }
+.map-wrap .estado.is-selected path{ fill: var(--amber); opacity: 1; }
+.map-wrap .estado text{
+  fill: var(--paper);
+  font-size: 9px;
+  font-family: 'Manrope', sans-serif;
+  pointer-events: none;
+}
+
+/* lista suspensa (celular) — escondida no desktop */
+.rep-mobile-select{ display:none; margin-bottom: 22px; }
+.rep-mobile-select select{
+  width: 100%;
+  font-family:'Manrope', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+/* painel de contato */
+.rep-panel{
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  min-height: 300px;
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+}
+.rep-panel .rep-empty{
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.rep-panel .rep-eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber-ink);
+}
+.rep-panel h3{
+  font-family:'Fraunces', serif;
+  font-size: 21px;
+  color: var(--brand);
+  margin: 0;
+}
+.rep-panel .rep-city{
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: -8px;
+}
+.rep-panel .rep-fallback-note{
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--brand);
+  background: rgba(201,151,59,0.12);
+  border: 1px solid rgba(201,151,59,0.3);
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.rep-contacts{
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.rep-contact-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink);
+  text-decoration:none;
+}
+.rep-contact-row svg{ width:16px; height:16px; stroke: var(--brand); flex-shrink:0; }
+
+@media (max-width: 860px){
+  .representantes-body{ grid-template-columns: 1fr; }
+  .map-wrap{ display:none; }
+  .rep-mobile-select{ display:block; }
+}
