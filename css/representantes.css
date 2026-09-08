@@ -7,7 +7,7 @@
    ===================================================================== */
 .representantes{
   padding: 0 0 100px;
-  background: var(--paper);
+  background: var(--soft);
 }
 
 .representantes-head{
@@ -45,12 +45,14 @@
   align-items:start;
 }
 
-/* mapa (desktop) */
+/* mapa (desktop) — cartão branco, igual às caixas de dados técnicos
+   das páginas de produto, pra destacar do fundo cinza da seção */
 .map-wrap{
-  background: var(--soft);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 24px;
+  box-shadow: 0 10px 30px rgba(24,60,50,0.06);
 }
 .map-wrap svg{ width:100%; height:auto; display:block; }
 
@@ -78,15 +80,15 @@
   font-family:'Manrope', sans-serif;
   font-size: 15px;
   color: var(--ink);
-  background: var(--soft);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 14px 16px;
 }
 
-/* painel de contato */
+/* painel de contato — mesmo cartão branco do mapa */
 .rep-panel{
-  background: var(--soft);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 28px;
@@ -94,6 +96,7 @@
   display:flex;
   flex-direction:column;
   gap: 14px;
+  box-shadow: 0 10px 30px rgba(24,60,50,0.06);
 }
 .rep-panel .rep-empty{
   font-size: 14.5px;
