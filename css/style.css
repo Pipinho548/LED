@@ -125,7 +125,12 @@ h1, h2, h3{
   text-decoration:none;
   color: var(--ink-onhero);
 }
-.nav-logo-img{ height: 30px; width: auto; display:block; }
+.nav-logo-img{ height: 30px; width: auto; display:block; transition: height .3s ease; }
+
+/* na home, com o menu ainda transparente sobre o hero, a logo fica maior —
+   assim que solidifica (rolou, ou é página sem hero) ela volta ao tamanho
+   padrão, mais discreto */
+.site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 46px; }
 
 .nav-links{
   grid-column: 2;
