@@ -247,220 +247,6 @@
   }
 
   /* =====================================================================
-     "A DIFERENÇA ESTÁ NA LUZ" — vitrine interativa do perfil de alumínio,
-     reaproveitando o mesmo componente de aceso/apagado já usado no hero,
-     agora com controles extras de cor e difusor.
-     ===================================================================== */
-  .luz-demo{
-    padding: 100px 0;
-    background: var(--brand-dark);
-    color: var(--ink-onhero);
-  }
-
-  .luz-demo-head{
-    max-width: 620px;
-    margin-bottom: 44px;
-  }
-
-  .luz-demo-head .kicker{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--amber-warm);
-    margin-bottom: 16px;
-  }
-
-  .luz-demo-head h2{
-    font-size: clamp(28px, 3.6vw, 40px);
-    line-height: 1.15;
-    color: var(--ink-onhero);
-    margin-bottom: 14px;
-  }
-
-  .luz-demo-head p{
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--muted-onhero);
-    margin: 0;
-  }
-
-  .luz-demo-body{
-    display:grid;
-    grid-template-columns: 1fr 260px;
-    gap: 36px;
-    align-items:start;
-  }
-
-  .pframe-col{ display:flex; flex-direction:column; gap: 14px; }
-
-  /* abas pra trocar de ambiente (cozinha/quarto) — mesmo padrão visual
-     dos outros toggles em pílula do site */
-  .ambiente-tabs{ display:flex; gap: 8px; }
-  .ambiente-tab{
-    appearance:none;
-    border: 1px solid var(--line-dark);
-    background: transparent;
-    color: var(--muted-onhero);
-    font-family:'Manrope', sans-serif;
-    font-weight: 600;
-    font-size: 13.5px;
-    padding: 9px 20px;
-    border-radius: 999px;
-    cursor:pointer;
-    transition: background .2s ease, color .2s ease, border-color .2s ease;
-  }
-  .ambiente-tab:hover{ border-color: rgba(255,255,255,0.35); color: var(--ink-onhero); }
-  .ambiente-tab.is-active{ background: var(--amber-warm); border-color: var(--amber-warm); color: var(--brand-dark); }
-  .ambiente-tab:focus-visible{ outline: 2px solid var(--amber-warm); outline-offset: 2px; }
-
-  .pframe{
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--line-dark);
-    background: var(--panel-dark);
-    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
-  }
-
-  .pimg{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    opacity:0;
-    transition: opacity .6s ease;
-  }
-
-  .pimg-off{ z-index:1; }
-  .pimg-on{ z-index:2; }
-
-  /* visibilidade de cada foto (ambiente certo + cor certa + ligado/desligado)
-     é toda calculada em JS, que liga/desliga esta classe por imagem */
-  .pimg.is-shown{ opacity:1; }
-
-  .luz-controls{
-    display:flex;
-    flex-direction:column;
-    gap: 26px;
-  }
-
-  .luz-control-group .label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted-onhero);
-    margin-bottom: 12px;
-  }
-
-  /* interruptor mini, mesma peça do hero em tamanho reduzido — precisa ser
-     ligado pra revelar o perfil aceso e poder brincar com as cores */
-  .luz-switch-row{
-    display:flex;
-    align-items:center;
-    gap: 12px;
-  }
-
-  .luz-switch{
-    appearance:none;
-    -webkit-appearance:none;
-    border:none;
-    background:none;
-    padding:0;
-    margin:0;
-    cursor:pointer;
-  }
-
-  .luz-switch-plate{
-    position:relative;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
-    box-shadow:
-      0 8px 16px rgba(0,0,0,0.5),
-      inset 0 1px 1px rgba(255,255,255,0.12),
-      inset 0 -2px 4px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.08);
-    transition: box-shadow .3s ease;
-  }
-  .luz-switch.is-on .luz-switch-plate{
-    box-shadow:
-      0 8px 16px rgba(0,0,0,0.5),
-      inset 0 1px 1px rgba(255,255,255,0.12),
-      inset 0 -2px 4px rgba(0,0,0,0.6),
-      0 0 0 2px rgba(242,185,104,0.45),
-      0 0 12px 2px rgba(242,185,104,0.32);
-  }
-
-  .luz-switch-knob{
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 28%, #f4efe5, #cdc7bb 78%);
-    box-shadow:
-      0 2px 4px rgba(0,0,0,0.4),
-      inset 0 1px 1px rgba(255,255,255,0.65),
-      inset 0 -2px 3px rgba(0,0,0,0.18);
-    transition: transform .12s ease;
-  }
-  .luz-switch:active .luz-switch-knob{ transform: scale(0.92); }
-
-  .luz-switch-state{
-    font-size: 13px;
-    color: var(--muted-onhero);
-    transition: color .2s ease;
-  }
-  .luz-switch-state.is-on{ color: var(--ink-onhero); }
-
-  .swatches{ display:flex; flex-direction:column; gap: 6px; }
-
-  .swatch-item{
-    appearance:none;
-    display:flex;
-    align-items:center;
-    gap: 12px;
-    border:none;
-    background:none;
-    padding: 7px 8px;
-    border-radius: 10px;
-    cursor:pointer;
-    text-align:left;
-    color: var(--muted-onhero);
-    transition: background .2s ease, color .2s ease;
-  }
-  .swatch-item:hover{ background: rgba(255,255,255,0.05); }
-  .swatch-item.is-active{ background: rgba(255,255,255,0.08); color: var(--ink-onhero); }
-
-  .swatch-dot{
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    flex-shrink:0;
-    box-shadow: 0 0 0 2px transparent;
-    transition: box-shadow .2s ease, background .3s ease;
-  }
-  .swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(242,237,226,0.5); }
-
-  .swatch-quente{ background: #f2b968; }
-  .swatch-neutro{ background: #ecdcc0; }
-  .swatch-fria{ background: #bcd8e8; }
-
-  .swatch-name{ font-size: 14px; }
-
-  @media (max-width: 860px){
-    .luz-demo{ padding: 72px 0; }
-    .luz-demo-body{ grid-template-columns: 1fr; }
-  }
-
-  /* =====================================================================
      LOCALIZAÇÃO — mapa embed + endereço.
      ===================================================================== */
   .localizacao{
@@ -613,6 +399,7 @@
   <ul class="nav-links">
     <li><a href="#institucional">A Iluminium</a></li>
     <li><a href="#produtos">Produtos</a></li>
+    <li><a href="solucoes.html">Soluções</a></li>
     <li><a href="#contato">Contato</a></li>
     <li><a href="representantes.html" id="navRepresentante">Representante</a></li>
   </ul>
@@ -635,6 +422,7 @@
   <ul class="nav-mobile-links">
     <li><a href="#institucional">A Iluminium</a></li>
     <li><a href="#produtos">Produtos</a></li>
+    <li><a href="solucoes.html">Soluções</a></li>
     <li><a href="#contato">Contato</a></li>
     <li><a href="representantes.html">Representante</a></li>
   </ul>
@@ -657,7 +445,7 @@
     <p class="hero-sub">Fitas LED, perfis de alumínio e soluções desenvolvidas para fabricantes de móveis.</p>
     <div class="hero-ctas">
       <a class="hero-cta" href="#contato">Solicitar orçamento</a>
-      <a class="hero-cta-secondary" href="#produtos">Conheça nossas soluções</a>
+      <a class="hero-cta-secondary" href="#produtos">Ver nossos produtos</a>
     </div>
   </div>
 </section>
@@ -778,75 +566,6 @@
 </section>
 
 <!-- ======================================================================
-     "A DIFERENÇA ESTÁ NA LUZ" — dois ambientes reais (cozinha e quarto),
-     cada um fotografado nas 3 temperaturas de cor. Abas trocam o ambiente,
-     o interruptor liga a foto acesa e os swatches trocam a temperatura —
-     tudo com fotos reais, sem filtro e sem RGB.
-     ====================================================================== -->
-<section class="luz-demo" id="diferenca">
-  <div class="container">
-    <div class="luz-demo-head">
-      <div class="kicker">A diferença está na luz</div>
-      <h2>A mesma luz, ambientes diferentes</h2>
-      <p>Escolha o ambiente, ligue o interruptor e troque a temperatura de cor — veja como a luz muda o clima de cada cômodo.</p>
-    </div>
-
-    <div class="luz-demo-body">
-      <div class="pframe-col">
-        <div class="ambiente-tabs" id="ambienteTabs">
-          <button type="button" class="ambiente-tab is-active" data-ambiente="cozinha" aria-pressed="true">Cozinha</button>
-          <button type="button" class="ambiente-tab" data-ambiente="quarto" aria-pressed="false">Quarto</button>
-        </div>
-
-        <div class="pframe" id="pframe">
-          <img class="pimg pimg-off is-shown" data-ambiente="cozinha" src="images/cozinha-apagada.jpeg" alt="Cozinha com perfil de LED embutido, luz apagada" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="quente" src="images/cozinha-branco-quente-3000k.jpeg" alt="Cozinha com luz branco quente 3000K acesa" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="neutro" src="images/cozinha-branco-neutro-4000k.jpeg" alt="Cozinha com luz neutra 4000K acesa" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="fria" src="images/cozinha-branco-frio-6000k.jpeg" alt="Cozinha com luz branco frio 6000K acesa" loading="lazy">
-
-          <img class="pimg pimg-off" data-ambiente="quarto" src="images/quarto-apagado.jpeg" alt="Quarto com perfil de LED embutido, luz apagada" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="quarto" data-color="quente" src="images/quarto-quente.jpeg" alt="Quarto com luz branco quente acesa" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="quarto" data-color="neutro" src="images/quarto-neutro.jpeg" alt="Quarto com luz neutra acesa" loading="lazy">
-          <img class="pimg pimg-on" data-ambiente="quarto" data-color="fria" src="images/quarto-frio.jpeg" alt="Quarto com luz branco frio acesa" loading="lazy">
-        </div>
-      </div>
-
-      <div class="luz-controls">
-        <div class="luz-control-group">
-          <div class="label">Interruptor</div>
-          <div class="luz-switch-row">
-            <button type="button" class="luz-switch" id="luzSwitch" aria-pressed="false" aria-label="Ligar luz do ambiente">
-              <span class="luz-switch-plate">
-                <span class="luz-switch-knob"></span>
-              </span>
-            </button>
-            <span class="luz-switch-state" id="luzSwitchState">Desligado</span>
-          </div>
-        </div>
-
-        <div class="luz-control-group">
-          <div class="label">Temperatura de cor</div>
-          <div class="swatches" id="swatches">
-            <button type="button" class="swatch-item is-active" data-color="quente">
-              <span class="swatch-dot swatch-quente"></span>
-              <span class="swatch-name">Branco quente — 3000K</span>
-            </button>
-            <button type="button" class="swatch-item" data-color="neutro">
-              <span class="swatch-dot swatch-neutro"></span>
-              <span class="swatch-name">Neutro — 4000K</span>
-            </button>
-            <button type="button" class="swatch-item" data-color="fria">
-              <span class="swatch-dot swatch-fria"></span>
-              <span class="swatch-name">Branco frio — 6000K</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================================================================
      LOCALIZAÇÃO — mapa embed (sem chave de API) + endereço.
      ====================================================================== -->
 <section class="localizacao" id="localizacao">
@@ -961,7 +680,7 @@
         <ul>
           <li><a href="#institucional">Institucional</a></li>
           <li><a href="#produtos">Produtos</a></li>
-          <li><a href="#diferenca">A diferença está na luz</a></li>
+          <li><a href="solucoes.html">Soluções</a></li>
         </ul>
       </div>
 
@@ -996,83 +715,6 @@
   /* Nav (troca de fundo ao rolar), menu mobile e ano do rodapé agora ficam
      em js/main.js (compartilhado com as páginas de produto). Aqui só entra
      o comportamento específico desta página. */
-
-  /* =====================================================================
-     VITRINE "A DIFERENÇA ESTÁ NA LUZ" — dois ambientes reais (cozinha e
-     quarto), cada um fotografado nas 3 temperaturas de cor. A foto visível
-     em cada instante é sempre: ambiente escolhido + (apagada, ou acesa na
-     cor escolhida se o interruptor estiver ligado). Nada de filtro CSS.
-     ===================================================================== */
-  (function(){
-    var pframe = document.getElementById('pframe');
-    var allImgs = document.querySelectorAll('#pframe .pimg');
-    var ambienteTabs = document.querySelectorAll('.ambiente-tab');
-    var luzSwitch = document.getElementById('luzSwitch');
-    var luzSwitchState = document.getElementById('luzSwitchState');
-    var swatchItems = document.querySelectorAll('.swatch-item');
-    if (!pframe || !allImgs.length || !luzSwitch) return;
-
-    var state = { ambiente: 'cozinha', color: 'quente', isLit: false };
-
-    function render(){
-      allImgs.forEach(function(img){
-        var isOff = img.classList.contains('pimg-off');
-        var sameAmbiente = img.getAttribute('data-ambiente') === state.ambiente;
-        var show = sameAmbiente && (isOff ? !state.isLit : (state.isLit && img.getAttribute('data-color') === state.color));
-        img.classList.toggle('is-shown', show);
-      });
-    }
-
-    // ---------- abas de ambiente ----------
-    ambienteTabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        state.ambiente = tab.getAttribute('data-ambiente');
-        ambienteTabs.forEach(function(t){
-          t.classList.toggle('is-active', t === tab);
-          t.setAttribute('aria-pressed', String(t === tab));
-        });
-        render();
-      });
-    });
-
-    // ---------- interruptor liga/desliga a foto acesa, com o mesmo som do hero ----------
-    var clickSound2 = new Audio('audio/switch-4.mp3');
-    clickSound2.preload = 'none'; /* só busca o arquivo se a pessoa realmente clicar no interruptor */
-    clickSound2.volume = 0.85;
-
-    function playClick2(on){
-      try{
-        var snd = clickSound2.cloneNode(true);
-        snd.volume = 0.85;
-        snd.playbackRate = on ? 1 : 0.9;
-        snd.play().catch(function(){});
-      } catch(e){}
-    }
-
-    luzSwitch.addEventListener('click', function(){
-      state.isLit = !state.isLit;
-      luzSwitch.classList.toggle('is-on', state.isLit);
-      luzSwitch.setAttribute('aria-pressed', String(state.isLit));
-      if (luzSwitchState){
-        luzSwitchState.textContent = state.isLit ? 'Ligado' : 'Desligado';
-        luzSwitchState.classList.toggle('is-on', state.isLit);
-      }
-      playClick2(state.isLit);
-      render();
-    });
-
-    // ---------- temperatura de cor: cada swatch mostra a foto real daquela cor ----------
-    swatchItems.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        state.color = btn.getAttribute('data-color');
-        swatchItems.forEach(function(s){ s.classList.remove('is-active'); });
-        btn.classList.add('is-active');
-        render();
-      });
-    });
-
-    render();
-  })();
 
   /* =====================================================================
      FORMULÁRIO DE CONTATO — ainda sem backend real. Isso só valida os

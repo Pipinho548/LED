@@ -1,0 +1,213 @@
+/* =====================================================================
+   SOLUÇÕES — "a diferença está na luz". Vitrine interativa de dois
+   ambientes reais (cozinha e quarto), cada um fotografado nas 3
+   temperaturas de cor. Usado só em solucoes.html.
+   ===================================================================== */
+.luz-demo{
+  padding: 100px 0;
+  background: var(--brand-dark);
+  color: var(--ink-onhero);
+}
+
+.luz-demo-head{
+  max-width: 620px;
+  margin-bottom: 44px;
+}
+
+.luz-demo-head .kicker{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber-warm);
+  margin-bottom: 16px;
+}
+
+.luz-demo-head h2{
+  font-size: clamp(28px, 3.6vw, 40px);
+  line-height: 1.15;
+  color: var(--ink-onhero);
+  margin-bottom: 14px;
+}
+
+.luz-demo-head p{
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted-onhero);
+  margin: 0;
+}
+
+.luz-demo-body{
+  display:grid;
+  grid-template-columns: 1fr 260px;
+  gap: 36px;
+  align-items:start;
+}
+
+.pframe-col{ display:flex; flex-direction:column; gap: 14px; }
+
+/* abas pra trocar de ambiente (cozinha/quarto) — mesmo padrão visual
+   dos outros toggles em pílula do site */
+.ambiente-tabs{ display:flex; gap: 8px; }
+.ambiente-tab{
+  appearance:none;
+  border: 1px solid var(--line-dark);
+  background: transparent;
+  color: var(--muted-onhero);
+  font-family:'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  cursor:pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.ambiente-tab:hover{ border-color: rgba(255,255,255,0.35); color: var(--ink-onhero); }
+.ambiente-tab.is-active{ background: var(--amber-warm); border-color: var(--amber-warm); color: var(--brand-dark); }
+.ambiente-tab:focus-visible{ outline: 2px solid var(--amber-warm); outline-offset: 2px; }
+
+.pframe{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line-dark);
+  background: var(--panel-dark);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+}
+
+.pimg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  opacity:0;
+  transition: opacity .6s ease;
+}
+
+.pimg-off{ z-index:1; }
+.pimg-on{ z-index:2; }
+
+/* visibilidade de cada foto (ambiente certo + cor certa + ligado/desligado)
+   é toda calculada em JS, que liga/desliga esta classe por imagem */
+.pimg.is-shown{ opacity:1; }
+
+.luz-controls{
+  display:flex;
+  flex-direction:column;
+  gap: 26px;
+}
+
+.luz-control-group .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-onhero);
+  margin-bottom: 12px;
+}
+
+/* interruptor mini — precisa ser ligado pra revelar o perfil aceso e
+   poder brincar com as cores */
+.luz-switch-row{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+
+.luz-switch{
+  appearance:none;
+  -webkit-appearance:none;
+  border:none;
+  background:none;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+}
+
+.luz-switch-plate{
+  position:relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
+  box-shadow:
+    0 8px 16px rgba(0,0,0,0.5),
+    inset 0 1px 1px rgba(255,255,255,0.12),
+    inset 0 -2px 4px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: box-shadow .3s ease;
+}
+.luz-switch.is-on .luz-switch-plate{
+  box-shadow:
+    0 8px 16px rgba(0,0,0,0.5),
+    inset 0 1px 1px rgba(255,255,255,0.12),
+    inset 0 -2px 4px rgba(0,0,0,0.6),
+    0 0 0 2px rgba(242,185,104,0.45),
+    0 0 12px 2px rgba(242,185,104,0.32);
+}
+
+.luz-switch-knob{
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #f4efe5, #cdc7bb 78%);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.4),
+    inset 0 1px 1px rgba(255,255,255,0.65),
+    inset 0 -2px 3px rgba(0,0,0,0.18);
+  transition: transform .12s ease;
+}
+.luz-switch:active .luz-switch-knob{ transform: scale(0.92); }
+
+.luz-switch-state{
+  font-size: 13px;
+  color: var(--muted-onhero);
+  transition: color .2s ease;
+}
+.luz-switch-state.is-on{ color: var(--ink-onhero); }
+
+.swatches{ display:flex; flex-direction:column; gap: 6px; }
+
+.swatch-item{
+  appearance:none;
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  border:none;
+  background:none;
+  padding: 7px 8px;
+  border-radius: 10px;
+  cursor:pointer;
+  text-align:left;
+  color: var(--muted-onhero);
+  transition: background .2s ease, color .2s ease;
+}
+.swatch-item:hover{ background: rgba(255,255,255,0.05); }
+.swatch-item.is-active{ background: rgba(255,255,255,0.08); color: var(--ink-onhero); }
+
+.swatch-dot{
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  flex-shrink:0;
+  box-shadow: 0 0 0 2px transparent;
+  transition: box-shadow .2s ease, background .3s ease;
+}
+.swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(242,237,226,0.5); }
+
+.swatch-quente{ background: #f2b968; }
+.swatch-neutro{ background: #ecdcc0; }
+.swatch-fria{ background: #bcd8e8; }
+
+.swatch-name{ font-size: 14px; }
+
+@media (max-width: 860px){
+  .luz-demo{ padding: 72px 0; }
+  .luz-demo-body{ grid-template-columns: 1fr; }
+}

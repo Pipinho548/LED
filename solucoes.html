@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Soluções — Iluminium Brasil</title>
+<meta name="description" content="Veja como a temperatura de cor certa muda o clima de cozinhas e quartos — a mesma luz, ambientes diferentes.">
+<!-- placeholder: trocar pela URL final do site assim que o domínio estiver no ar -->
+<link rel="canonical" href="https://iluminiumbrasil.com.br/solucoes.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://iluminiumbrasil.com.br/solucoes.html">
+<meta property="og:site_name" content="Iluminium Brasil">
+<meta property="og:title" content="Soluções — Iluminium Brasil">
+<meta property="og:description" content="Veja como a temperatura de cor certa muda o clima de cozinhas e quartos — a mesma luz, ambientes diferentes.">
+<meta property="og:image" content="https://iluminiumbrasil.com.br/images/cozinha-branco-quente-3000k.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/produto.css">
+<link rel="stylesheet" href="css/solucoes.css">
+</head>
+<body>
+
+<nav class="site-nav nav-static" id="siteNav">
+  <a class="nav-logo" href="index.html">
+    <img class="nav-logo-img" src="images/logo.png" alt="A Iluminium Brasil">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#institucional">A Iluminium</a></li>
+    <li><a href="index.html#produtos">Produtos</a></li>
+    <li><a href="solucoes.html" id="navSolucoes">Soluções</a></li>
+    <li><a href="index.html#contato">Contato</a></li>
+    <li><a href="representantes.html">Representante</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-social" href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram da Iluminium Brasil">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.2" cy="6.8" r="1"/>
+      </svg>
+    </a>
+    <button class="nav-burger" id="navBurger" type="button" aria-expanded="false" aria-controls="navMobileMenu" aria-label="Abrir menu">
+      <span class="nav-burger-lines"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <ul class="nav-mobile-links">
+    <li><a href="index.html#institucional">A Iluminium</a></li>
+    <li><a href="index.html#produtos">Produtos</a></li>
+    <li><a href="solucoes.html">Soluções</a></li>
+    <li><a href="index.html#contato">Contato</a></li>
+    <li><a href="representantes.html">Representante</a></li>
+  </ul>
+</div>
+
+<main>
+<section class="produto-hero">
+  <div class="container">
+    <a class="produto-voltar" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Voltar pro site
+    </a>
+  </div>
+</section>
+
+<!-- ======================================================================
+     "A DIFERENÇA ESTÁ NA LUZ" — dois ambientes reais (cozinha e quarto),
+     cada um fotografado nas 3 temperaturas de cor. Abas trocam o ambiente,
+     o interruptor liga a foto acesa e os swatches trocam a temperatura —
+     tudo com fotos reais, sem filtro e sem RGB.
+     ====================================================================== -->
+<section class="luz-demo" id="diferenca">
+  <div class="container">
+    <div class="luz-demo-head">
+      <div class="kicker">A diferença está na luz</div>
+      <h2>A mesma luz, ambientes diferentes</h2>
+      <p>Escolha o ambiente, ligue o interruptor e troque a temperatura de cor — veja como a luz muda o clima de cada cômodo.</p>
+    </div>
+
+    <div class="luz-demo-body">
+      <div class="pframe-col">
+        <div class="ambiente-tabs" id="ambienteTabs">
+          <button type="button" class="ambiente-tab is-active" data-ambiente="cozinha" aria-pressed="true">Cozinha</button>
+          <button type="button" class="ambiente-tab" data-ambiente="quarto" aria-pressed="false">Quarto</button>
+        </div>
+
+        <div class="pframe" id="pframe">
+          <img class="pimg pimg-off is-shown" data-ambiente="cozinha" src="images/cozinha-apagada.jpeg" alt="Cozinha com perfil de LED embutido, luz apagada" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="quente" src="images/cozinha-branco-quente-3000k.jpeg" alt="Cozinha com luz branco quente 3000K acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="neutro" src="images/cozinha-branco-neutro-4000k.jpeg" alt="Cozinha com luz neutra 4000K acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="cozinha" data-color="fria" src="images/cozinha-branco-frio-6000k.jpeg" alt="Cozinha com luz branco frio 6000K acesa" loading="lazy">
+
+          <img class="pimg pimg-off" data-ambiente="quarto" src="images/quarto-apagado.jpeg" alt="Quarto com perfil de LED embutido, luz apagada" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="quente" src="images/quarto-quente.jpeg" alt="Quarto com luz branco quente acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="neutro" src="images/quarto-neutro.jpeg" alt="Quarto com luz neutra acesa" loading="lazy">
+          <img class="pimg pimg-on" data-ambiente="quarto" data-color="fria" src="images/quarto-frio.jpeg" alt="Quarto com luz branco frio acesa" loading="lazy">
+        </div>
+      </div>
+
+      <div class="luz-controls">
+        <div class="luz-control-group">
+          <div class="label">Interruptor</div>
+          <div class="luz-switch-row">
+            <button type="button" class="luz-switch" id="luzSwitch" aria-pressed="false" aria-label="Ligar luz do ambiente">
+              <span class="luz-switch-plate">
+                <span class="luz-switch-knob"></span>
+              </span>
+            </button>
+            <span class="luz-switch-state" id="luzSwitchState">Desligado</span>
+          </div>
+        </div>
+
+        <div class="luz-control-group">
+          <div class="label">Temperatura de cor</div>
+          <div class="swatches" id="swatches">
+            <button type="button" class="swatch-item is-active" data-color="quente">
+              <span class="swatch-dot swatch-quente"></span>
+              <span class="swatch-name">Branco quente — 3000K</span>
+            </button>
+            <button type="button" class="swatch-item" data-color="neutro">
+              <span class="swatch-dot swatch-neutro"></span>
+              <span class="swatch-name">Neutro — 4000K</span>
+            </button>
+            <button type="button" class="swatch-item" data-color="fria">
+              <span class="swatch-dot swatch-fria"></span>
+              <span class="swatch-name">Branco frio — 6000K</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <h2 class="visually-hidden">Rodapé</h2>
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a class="footer-logo" href="index.html">
+          <img class="footer-logo-img" src="images/logo.png" alt="A Iluminium Brasil">
+        </a>
+        <p>Fitas de LED, perfis, difusores, fontes, sensores e acessórios pra projetos de iluminação do início ao fim.</p>
+        <div class="footer-social">
+          <a href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+          </a>
+          <a href="https://wa.me/5500000000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3.6-6.7M20 12l-7-2 2 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Empresa</h3>
+        <ul>
+          <li><a href="index.html#institucional">Institucional</a></li>
+          <li><a href="index.html#produtos">Produtos</a></li>
+          <li><a href="solucoes.html">Soluções</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Contato</h3>
+        <ul>
+          <li><a href="index.html#contato">Falar com a gente</a></li>
+          <li><a href="representantes.html">Encontrar representante</a></li>
+          <li><a href="catalogo.pdf" download>Baixar catálogo</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Fale direto</h3>
+        <ul>
+          <li>contato@iluminiumbrasil.com.br</li>
+          <li>(00) 0000-0000</li>
+          <li>Segunda a sexta, 8h–18h</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2026</span> A Iluminium Brasil — todos os direitos reservados.</span>
+      <span>Dados de contato e endereço são placeholder.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/solucoes.js"></script>
+</body>
+</html>
