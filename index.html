@@ -208,6 +208,21 @@
 
   .institucional-text p:last-of-type{ margin-bottom: 0; }
 
+  /* transição de entrada ao rolar: a foto vem da esquerda, o texto vem
+     da direita, cada um só uma vez quando entra na tela */
+  .reveal{
+    transition: transform .8s cubic-bezier(.16,.8,.24,1), opacity .8s ease;
+    will-change: transform, opacity;
+  }
+  .reveal-left{ transform: translateX(-64px); opacity: 0; }
+  .reveal-right{ transform: translateX(64px); opacity: 0; }
+  .reveal.is-revealed{ transform: translateX(0); opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ transition: none; }
+    .reveal-left, .reveal-right{ transform:none; opacity:1; }
+  }
+
   @media (max-width: 900px){
     .institucional{ padding: 72px 0; }
     .institucional .container{ grid-template-columns: 1fr; gap: 32px; }
@@ -458,11 +473,11 @@
      ====================================================================== -->
 <section class="institucional" id="institucional">
   <div class="container">
-    <div class="institucional-photo">
+    <div class="institucional-photo reveal reveal-left">
       <img src="images/fabrica.jpg" alt="Fachada da fábrica da Iluminium Brasil" loading="lazy">
     </div>
 
-    <div class="institucional-text">
+    <div class="institucional-text reveal reveal-right">
       <div class="kicker">Quem somos</div>
       <h2>Feita pra quem projeta luz de verdade</h2>
       <p>
@@ -717,6 +732,31 @@
   /* Nav (troca de fundo ao rolar), menu mobile e ano do rodapé agora ficam
      em js/main.js (compartilhado com as páginas de produto). Aqui só entra
      o comportamento específico desta página. */
+
+  /* =====================================================================
+     REVEAL AO ROLAR — seção institucional: a foto entra da esquerda, o
+     texto entra da direita, cada elemento revela só uma vez.
+     ===================================================================== */
+  (function(){
+    var reveals = document.querySelectorAll('.reveal');
+    if (!reveals.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)){
+      reveals.forEach(function(el){ el.classList.add('is-revealed'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    reveals.forEach(function(el){ io.observe(el); });
+  })();
 
   /* =====================================================================
      FORMULÁRIO DE CONTATO — ainda sem backend real. Isso só valida os
