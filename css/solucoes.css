@@ -3,6 +3,16 @@
    ambientes reais (cozinha e quarto), cada um fotografado nas 3
    temperaturas de cor. Usado só em solucoes.html.
    ===================================================================== */
+
+/* a faixa "Voltar pro site" (.produto-hero, compartilhada com as páginas
+   de produto) normalmente é clara — aqui ela cola direto no .luz-demo
+   escuro, então vira escura também pra não ter corte de cor entre as duas */
+.produto-hero{
+  background: var(--brand-dark);
+}
+.produto-voltar{ color: var(--muted-onhero); }
+.produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--ink-onhero); }
+
 .luz-demo{
   padding: 100px 0;
   background: var(--brand-dark);
