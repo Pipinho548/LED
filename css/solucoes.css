@@ -4,28 +4,24 @@
    temperaturas de cor. Usado só em solucoes.html.
    ===================================================================== */
 
-/* a faixa "Voltar pro site" (.produto-hero, compartilhada com as páginas
-   de produto) normalmente é clara — aqui ela cola direto no .luz-demo
-   escuro, então vira escura também pra não ter corte de cor entre as duas */
+/* faixa "Voltar pro site" — só aperta o respiro de cima (a nav já cobre
+   o resto), mantém o fundo claro padrão pra bater com o resto da página */
 .produto-hero{
-  background: var(--brand-dark);
   padding-top: 100px;
   padding-bottom: 0;
 }
-.produto-voltar{ color: var(--muted-onhero); margin-bottom: 0; }
-.produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--ink-onhero); }
 
 @media (max-width: 800px){
   .produto-hero{ padding-top: 90px; }
 }
 
-/* .luz-demo normalmente tem 100px de respiro em cima porque costuma abrir
-   a página — aqui ela vem colada no .produto-hero, que já deu esse respiro
-   (clearance da nav fixa), então o topo fica bem mais enxuto pra não dobrar */
+/* seção fica clara igual o resto do site (pra terminar em branco antes do
+   rodapé, igual todas as outras páginas) — só o quadro da foto (.pframe)
+   continua escuro, feito uma TV na parede, é onde a "vitrine" acontece */
 .luz-demo{
   padding: 16px 0 100px;
-  background: var(--brand-dark);
-  color: var(--ink-onhero);
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .luz-demo-head{
@@ -38,21 +34,21 @@
   font-size: 11.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--amber-warm);
+  color: var(--amber-ink);
   margin-bottom: 16px;
 }
 
 .luz-demo-head h2{
   font-size: clamp(28px, 3.6vw, 40px);
   line-height: 1.15;
-  color: var(--ink-onhero);
+  color: var(--brand);
   margin-bottom: 14px;
 }
 
 .luz-demo-head p{
   font-size: 16px;
   line-height: 1.6;
-  color: var(--muted-onhero);
+  color: var(--muted);
   margin: 0;
 }
 
@@ -65,14 +61,14 @@
 
 .pframe-col{ display:flex; flex-direction:column; gap: 14px; }
 
-/* abas pra trocar de ambiente (cozinha/quarto) — mesmo padrão visual
-   dos outros toggles em pílula do site */
+/* abas pra trocar de ambiente (cozinha/quarto/sala) — mesmo padrão visual
+   dos outros toggles em pílula do site, agora sobre fundo claro */
 .ambiente-tabs{ display:flex; gap: 8px; }
 .ambiente-tab{
   appearance:none;
-  border: 1px solid var(--line-dark);
+  border: 1px solid var(--line);
   background: transparent;
-  color: var(--muted-onhero);
+  color: var(--muted);
   font-family:'Manrope', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
@@ -81,10 +77,12 @@
   cursor:pointer;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
-.ambiente-tab:hover{ border-color: rgba(255,255,255,0.35); color: var(--ink-onhero); }
+.ambiente-tab:hover{ border-color: var(--brand); color: var(--brand); }
 .ambiente-tab.is-active{ background: var(--amber-warm); border-color: var(--amber-warm); color: var(--brand-dark); }
 .ambiente-tab:focus-visible{ outline: 2px solid var(--amber-warm); outline-offset: 2px; }
 
+/* o "quadro" continua escuro de propósito — é onde a foto acesa/apagada
+   precisa ter contraste dramático, feito uma TV embutida na parede branca */
 .pframe{
   position: relative;
   width: 100%;
@@ -93,7 +91,7 @@
   overflow: hidden;
   border: 1px solid var(--line-dark);
   background: var(--panel-dark);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+  box-shadow: 0 24px 60px rgba(24,60,50,0.18);
 }
 
 .pimg{
@@ -125,12 +123,13 @@
   font-size: 10.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted-onhero);
+  color: var(--muted);
   margin-bottom: 12px;
 }
 
 /* interruptor mini — precisa ser ligado pra revelar o perfil aceso e
-   poder brincar com as cores */
+   poder brincar com as cores. O corpo do interruptor continua escuro
+   (metal), funciona bem tanto em fundo claro quanto escuro */
 .luz-switch-row{
   display:flex;
   align-items:center;
@@ -157,7 +156,7 @@
   justify-content:center;
   background: radial-gradient(circle at 38% 32%, #46484e, #1d1f23 72%);
   box-shadow:
-    0 8px 16px rgba(0,0,0,0.5),
+    0 8px 16px rgba(20,35,32,0.25),
     inset 0 1px 1px rgba(255,255,255,0.12),
     inset 0 -2px 4px rgba(0,0,0,0.6);
   border: 1px solid rgba(255,255,255,0.08);
@@ -165,11 +164,11 @@
 }
 .luz-switch.is-on .luz-switch-plate{
   box-shadow:
-    0 8px 16px rgba(0,0,0,0.5),
+    0 8px 16px rgba(20,35,32,0.25),
     inset 0 1px 1px rgba(255,255,255,0.12),
     inset 0 -2px 4px rgba(0,0,0,0.6),
-    0 0 0 2px rgba(242,185,104,0.45),
-    0 0 12px 2px rgba(242,185,104,0.32);
+    0 0 0 2px rgba(201,151,59,0.45),
+    0 0 12px 2px rgba(201,151,59,0.32);
 }
 
 .luz-switch-knob{
@@ -187,10 +186,10 @@
 
 .luz-switch-state{
   font-size: 13px;
-  color: var(--muted-onhero);
+  color: var(--muted);
   transition: color .2s ease;
 }
-.luz-switch-state.is-on{ color: var(--ink-onhero); }
+.luz-switch-state.is-on{ color: var(--ink); }
 
 .swatches{ display:flex; flex-direction:column; gap: 6px; }
 
@@ -205,11 +204,11 @@
   border-radius: 10px;
   cursor:pointer;
   text-align:left;
-  color: var(--muted-onhero);
+  color: var(--muted);
   transition: background .2s ease, color .2s ease;
 }
-.swatch-item:hover{ background: rgba(255,255,255,0.05); }
-.swatch-item.is-active{ background: rgba(255,255,255,0.08); color: var(--ink-onhero); }
+.swatch-item:hover{ background: var(--soft); }
+.swatch-item.is-active{ background: var(--soft); color: var(--ink); }
 
 .swatch-dot{
   width: 22px; height: 22px;
@@ -218,7 +217,7 @@
   box-shadow: 0 0 0 2px transparent;
   transition: box-shadow .2s ease, background .3s ease;
 }
-.swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(242,237,226,0.5); }
+.swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(20,35,32,0.3); }
 
 .swatch-quente{ background: #f2b968; }
 .swatch-neutro{ background: #ecdcc0; }
@@ -227,6 +226,6 @@
 .swatch-name{ font-size: 14px; }
 
 @media (max-width: 860px){
-  .luz-demo{ padding: 72px 0; }
+  .luz-demo{ padding: 24px 0 72px; }
   .luz-demo-body{ grid-template-columns: 1fr; }
 }
