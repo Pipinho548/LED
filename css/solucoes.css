@@ -66,9 +66,9 @@
 .ambiente-tabs{ display:flex; gap: 8px; }
 .ambiente-tab{
   appearance:none;
-  border: 1px solid var(--line);
+  border: 1.5px solid rgba(24,60,50,0.22);
   background: transparent;
-  color: var(--muted);
+  color: var(--ink);
   font-family:'Manrope', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
@@ -123,7 +123,8 @@
   font-size: 10.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--amber-ink);
+  font-weight: 700;
   margin-bottom: 12px;
 }
 
@@ -186,10 +187,11 @@
 
 .luz-switch-state{
   font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
   transition: color .2s ease;
 }
-.luz-switch-state.is-on{ color: var(--ink); }
+.luz-switch-state.is-on{ color: var(--brand); }
 
 .swatches{ display:flex; flex-direction:column; gap: 6px; }
 
@@ -198,17 +200,23 @@
   display:flex;
   align-items:center;
   gap: 12px;
-  border:none;
+  border: 1.5px solid transparent;
   background:none;
   padding: 7px 8px;
   border-radius: 10px;
   cursor:pointer;
   text-align:left;
-  color: var(--muted);
-  transition: background .2s ease, color .2s ease;
+  color: var(--ink);
+  font-weight: 500;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .swatch-item:hover{ background: var(--soft); }
-.swatch-item.is-active{ background: var(--soft); color: var(--ink); }
+.swatch-item.is-active{
+  background: rgba(201,151,59,0.12);
+  border-color: rgba(201,151,59,0.35);
+  color: var(--brand);
+  font-weight: 700;
+}
 
 .swatch-dot{
   width: 22px; height: 22px;
@@ -217,7 +225,7 @@
   box-shadow: 0 0 0 2px transparent;
   transition: box-shadow .2s ease, background .3s ease;
 }
-.swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(20,35,32,0.3); }
+.swatch-item.is-active .swatch-dot{ box-shadow: 0 0 0 2px rgba(201,151,59,0.55); }
 
 .swatch-quente{ background: #f2b968; }
 .swatch-neutro{ background: #ecdcc0; }
