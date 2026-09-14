@@ -9,19 +9,23 @@
    escuro, então vira escura também pra não ter corte de cor entre as duas */
 .produto-hero{
   background: var(--brand-dark);
+  padding-bottom: 8px;
 }
-.produto-voltar{ color: var(--muted-onhero); }
+.produto-voltar{ color: var(--muted-onhero); margin-bottom: 0; }
 .produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--ink-onhero); }
 
+/* .luz-demo normalmente tem 100px de respiro em cima porque costuma abrir
+   a página — aqui ela vem colada no .produto-hero, que já deu esse respiro
+   (clearance da nav fixa), então o topo fica bem mais enxuto pra não dobrar */
 .luz-demo{
-  padding: 100px 0;
+  padding: 32px 0 100px;
   background: var(--brand-dark);
   color: var(--ink-onhero);
 }
 
 .luz-demo-head{
   max-width: 620px;
-  margin-bottom: 44px;
+  margin-bottom: 32px;
 }
 
 .luz-demo-head .kicker{
