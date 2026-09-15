@@ -28,39 +28,38 @@
      com as páginas de produto). Aqui só entra o que é específico desta página. */
 
   /* =====================================================================
-     HERO — foto de still de produto (fundo claro) ao lado do texto, num
-     painel da MESMA cor da parede da foto — a parede "continua" pro
-     painel de texto sem emenda visível. Fundo claro = nav com texto
-     escuro nessa página (ver overrides logo abaixo).
+     HERO — still de produto com bastante espaço vazio já embutido na
+     própria foto (parede branca à esquerda), então é só uma imagem
+     cheia com o texto por cima, sem precisar de painel/emenda.
+     Fundo claro = nav com texto escuro nessa página (overrides abaixo).
      ===================================================================== */
   .hero{
     position: relative;
-    display:grid;
-    grid-template-columns: 1fr 1.2fr;
-    align-items:stretch;
-    min-height: 620px;
-    background: #EFEEF0; /* cor exata da parede na foto — sem essa cor bater, volta a emenda */
+    width: 100%;
+    height: 100vh;   /* fallback pra navegadores sem suporte a dvh */
+    height: 100dvh;  /* altura real da tela, sem "pular" com a barra do navegador mobile */
+    min-height: 520px;
+    max-height: 760px;
     overflow: hidden;
   }
 
-  .hero-photo-col{ position:relative; overflow:hidden; }
-  .hero-photo-col img{
+  .hero img{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
-    object-position: 62% center;
+    object-position: 32% center;
     display:block;
   }
 
   .hero-copy{
-    position:relative;
+    position:absolute;
     z-index:3;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding: calc(env(safe-area-inset-top, 0px) + 130px) 6% 70px;
+    left: 6%;
+    bottom: 14%;
+    max-width: 480px;
+    text-align:left;
   }
 
   .hero-copy .eyebrow{
@@ -135,12 +134,11 @@
   .site-nav:not(.is-solid) .nav-social:hover{ background: rgba(20,35,32,0.06); border-color: var(--brand); }
   .site-nav:not(.is-solid) .nav-burger-lines span{ background: var(--ink); }
 
-  @media (max-width: 860px){
-    .hero{ grid-template-columns: 1fr; grid-template-rows: auto auto; min-height: 0; }
-    .hero-photo-col{ order: -1; height: 42vh; min-height: 260px; }
-    .hero-photo-col img{ object-position: 68% center; }
-    .hero-copy{ padding: 32px 6% 52px; }
-    .site-nav:not(.is-solid) .nav-logo-img{ height: 30px; }
+  @media (max-width: 720px){
+    .hero{ min-height: 460px; max-height: 620px; }
+    .hero img{ object-position: 15% center; }
+    .hero-copy{ right: 6%; left: 6%; bottom: 8%; max-width: none; }
+    .hero-copy .hero-sub{ text-shadow: 0 1px 12px rgba(255,255,255,0.7); }
     .hero-copy .eyebrow{ font-size: 10.5px; letter-spacing: 0.1em; margin-bottom: 14px; }
     .hero-copy h1{ font-size: clamp(26px, 8vw, 36px); margin-bottom: 14px; }
     .hero-copy .hero-sub{ max-width: none; font-size: 15px; margin-bottom: 18px; }
@@ -458,6 +456,8 @@
      comunica "empresa de iluminação" sem depender de clique.
      ====================================================================== -->
 <section class="hero" id="topo">
+  <img src="images/hero-fita-mao.jpeg" alt="Mão desenrolando fitas de LED acesas sobre uma mesa de madeira" fetchpriority="high">
+
   <div class="hero-copy">
     <div class="eyebrow">Fornecedor de LED para a indústria moveleira</div>
     <h1>A luz que valoriza<br>cada projeto</h1>
@@ -466,9 +466,6 @@
       <a class="hero-cta" href="#contato">Solicitar orçamento</a>
       <a class="hero-cta-secondary" href="#produtos">Ver nossos produtos</a>
     </div>
-  </div>
-  <div class="hero-photo-col">
-    <img src="images/hero-fita-mao.jpeg" alt="Mão desenrolando fitas de LED acesas sobre uma mesa de madeira" fetchpriority="high">
   </div>
 </section>
 
