@@ -28,46 +28,39 @@
      com as páginas de produto). Aqui só entra o que é específico desta página. */
 
   /* =====================================================================
-     HERO — foto real de ambiente com a fita de LED acesa. Estático de
-     propósito (sem interação que possa parecer quebrada): a luz já
-     acesa na própria foto é a mensagem.
+     HERO — foto de still de produto (fundo claro) ao lado do texto, num
+     painel da MESMA cor da parede da foto — a parede "continua" pro
+     painel de texto sem emenda visível. Fundo claro = nav com texto
+     escuro nessa página (ver overrides logo abaixo).
      ===================================================================== */
   .hero{
     position: relative;
-    width: 100%;
-    height: 100vh;   /* fallback pra navegadores sem suporte a dvh */
-    height: 100dvh;  /* altura real da tela, sem "pular" com a barra do navegador mobile */
-    min-height: 560px;
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items:stretch;
+    min-height: 620px;
+    background: #EFEEF0; /* cor exata da parede na foto — sem essa cor bater, volta a emenda */
     overflow: hidden;
   }
 
-  .hero img{
+  .hero-photo-col{ position:relative; overflow:hidden; }
+  .hero-photo-col img{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
-    object-position: 30% center;
+    object-position: 62% center;
     display:block;
   }
 
-  .hero .scrim{
-    position:absolute;
-    inset:0;
-    z-index:2;
-    pointer-events:none;
-    background:
-      linear-gradient(180deg, rgba(14,20,17,0.65) 0%, rgba(14,20,17,0.3) 7%, rgba(14,20,17,0) 15%),
-      linear-gradient(100deg, rgba(18,16,12,0.6) 0%, rgba(18,16,12,0.32) 30%, rgba(18,16,12,0) 58%);
-  }
-
   .hero-copy{
-    position:absolute;
+    position:relative;
     z-index:3;
-    left: 6%;
-    bottom: 16%;
-    max-width: 520px;
-    text-align:left;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: calc(env(safe-area-inset-top, 0px) + 130px) 6% 70px;
   }
 
   .hero-copy .eyebrow{
@@ -75,7 +68,7 @@
     font-size: 11.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--amber-warm);
+    color: var(--amber-ink);
     margin-bottom: 18px;
   }
 
@@ -83,11 +76,10 @@
     font-family:'Fraunces', serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(30px, 4.6vw, 54px);
+    font-size: clamp(30px, 3.4vw, 48px);
     line-height: 1.1;
-    color: var(--ink-onhero);
+    color: var(--brand);
     margin: 0 0 18px;
-    text-shadow: 0 2px 30px rgba(0,0,0,0.5);
   }
 
   .hero-copy .hero-sub{
@@ -95,8 +87,8 @@
     font-style: normal;
     font-size: 16px;
     line-height: 1.6;
-    color: var(--muted-onhero);
-    max-width: 40ch;
+    color: var(--muted);
+    max-width: 36ch;
     margin: 0 0 26px;
   }
 
@@ -121,21 +113,34 @@
     transition: background .2s ease, transform .2s ease;
   }
   .hero-copy .hero-cta:hover, .hero-copy .hero-cta:focus-visible{
-    background: var(--ink-onhero); transform: translateY(-1px);
+    background: var(--brand); color: var(--ink-onhero); transform: translateY(-1px);
   }
 
   .hero-copy .hero-cta-secondary{
     font-weight: 600;
     font-size: 14px;
-    color: var(--ink-onhero);
+    color: var(--ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  @media (max-width: 720px){
-    .hero img{ object-position: 24% center; }
-    .hero .scrim{ background: linear-gradient(180deg, rgba(18,16,12,0.35) 0%, rgba(18,16,12,0.2) 40%, rgba(18,16,12,0.72) 100%); }
-    .hero-copy{ right: 6%; left: 6%; bottom: 10%; max-width: none; }
+  /* nav sobre fundo claro (só nesta página) — troca texto/ícone pra
+     versão escura enquanto não rolou (.is-solid continua verde/claro
+     normalmente, isso aqui não mexe nesse estado) */
+  .site-nav:not(.is-solid) .nav-logo-img{ filter: drop-shadow(0 1px 2px rgba(20,35,32,0.18)); }
+  .site-nav:not(.is-solid) .nav-links{ color: var(--muted); }
+  .site-nav:not(.is-solid) .nav-links a:hover, .site-nav:not(.is-solid) .nav-links a:focus-visible{ color: var(--brand); }
+  .site-nav:not(.is-solid) .nav-social{ border-color: rgba(20,35,32,0.22); }
+  .site-nav:not(.is-solid) .nav-social svg{ stroke: var(--brand); }
+  .site-nav:not(.is-solid) .nav-social:hover{ background: rgba(20,35,32,0.06); border-color: var(--brand); }
+  .site-nav:not(.is-solid) .nav-burger-lines span{ background: var(--ink); }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns: 1fr; grid-template-rows: auto auto; min-height: 0; }
+    .hero-photo-col{ order: -1; height: 42vh; min-height: 260px; }
+    .hero-photo-col img{ object-position: 68% center; }
+    .hero-copy{ padding: 32px 6% 52px; }
+    .site-nav:not(.is-solid) .nav-logo-img{ height: 30px; }
     .hero-copy .eyebrow{ font-size: 10.5px; letter-spacing: 0.1em; margin-bottom: 14px; }
     .hero-copy h1{ font-size: clamp(26px, 8vw, 36px); margin-bottom: 14px; }
     .hero-copy .hero-sub{ max-width: none; font-size: 15px; margin-bottom: 18px; }
@@ -453,9 +458,6 @@
      comunica "empresa de iluminação" sem depender de clique.
      ====================================================================== -->
 <section class="hero" id="topo">
-  <img src="images/hero-ambiente-iluminado.jpeg" alt="Estante de madeira com fita de LED acesa embaixo da prateleira, ambiente claro" fetchpriority="high">
-  <div class="scrim"></div>
-
   <div class="hero-copy">
     <div class="eyebrow">Fornecedor de LED para a indústria moveleira</div>
     <h1>A luz que valoriza<br>cada projeto</h1>
@@ -464,6 +466,9 @@
       <a class="hero-cta" href="#contato">Solicitar orçamento</a>
       <a class="hero-cta-secondary" href="#produtos">Ver nossos produtos</a>
     </div>
+  </div>
+  <div class="hero-photo-col">
+    <img src="images/hero-fita-mao.jpeg" alt="Mão desenrolando fitas de LED acesas sobre uma mesa de madeira" fetchpriority="high">
   </div>
 </section>
 
