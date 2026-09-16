@@ -401,6 +401,68 @@ h1, h2, h3{
   .produtos-grid{ grid-template-columns: 1fr; }
 }
 
+/* faixa compacta pra componentes/acessórios — produtos que todo mundo já
+   reconhece de cara, não precisam de foto grande pra se explicar. Fica
+   visualmente mais discreta de propósito, separada dos 3 produtos
+   principais (que têm foto). */
+.produtos-compact-head{ margin: 40px 0 16px; }
+.produtos-compact-head .kicker{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber-ink);
+}
+
+.produtos-compact{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.produto-compact{
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+  padding: 18px 20px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration:none;
+  color: inherit;
+  transition: border-color .2s ease, background .2s ease;
+}
+.produto-compact:hover, .produto-compact:focus-visible{
+  border-color: rgba(24,60,50,0.3);
+  background: var(--paper);
+}
+
+.produto-compact h3{
+  font-size: 16px;
+  color: var(--brand);
+}
+
+.produto-compact p{
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+}
+
+.produto-compact .produto-link{
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--amber-ink);
+}
+
+@media (max-width: 900px){
+  .produtos-compact{ grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+@media (max-width: 560px){
+  .produtos-compact{ grid-template-columns: 1fr; }
+}
+
 /* =====================================================================
    FOOTER
    ===================================================================== */
