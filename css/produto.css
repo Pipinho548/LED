@@ -74,8 +74,19 @@
   object-fit: contain;
   display:block;
 }
-.produto-detalhe-quadrada .produto-detalhe-info{ flex:1 1 320px; }
+.produto-detalhe-quadrada .produto-detalhe-info{ flex:1 1 320px; max-width: 480px; }
 .produto-detalhe-quadrada .produto-voltar{ margin-bottom: 20px; }
+
+/* dados técnicos + atributos, empilhados dentro da coluna de texto
+   (em vez de numa seção separada embaixo, como no layout de banner) */
+.produto-specs-stack{
+  display:flex;
+  flex-direction:column;
+  gap: 14px;
+  margin: 4px 0 28px;
+}
+.produto-specs-stack .attrs-col{ padding: 20px 22px; }
+.produto-detalhe-quadrada .produto-specs-note{ margin-top: 18px; }
 
 @media (max-width: 860px){
   .produto-detalhe-quadrada{ padding-top: 108px; }
@@ -83,7 +94,9 @@
 @media (max-width: 640px){
   .produto-foto-quadrada{ width: 100%; max-width: 320px; margin: 0 auto; }
   .produto-detalhe-split{ flex-direction:column; align-items:center; text-align:center; }
+  .produto-detalhe-quadrada .produto-detalhe-info{ max-width: 100%; }
   .produto-detalhe-quadrada .produto-detalhe-cta{ justify-content:center; }
+  .produto-specs-stack .attr-row{ text-align:left; }
 }
 
 /* =====================================================================
