@@ -15,7 +15,7 @@
   height: 100dvh;
   min-height: 620px;
   overflow: hidden;
-  background: var(--grafite-3);
+  background: var(--verde-3);
   color: var(--tinta-inv);
 }
 
@@ -35,8 +35,8 @@
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(23,27,31,.55) 0, rgba(23,27,31,.15) 120px, rgba(23,27,31,0) 200px),
-    linear-gradient(0deg, rgba(23,27,31,.86) 0%, rgba(23,27,31,.5) 36%, rgba(23,27,31,0) 64%);
+    linear-gradient(180deg, rgba(14,20,17,.55) 0, rgba(14,20,17,.15) 120px, rgba(14,20,17,0) 200px),
+    linear-gradient(0deg, rgba(14,20,17,.86) 0%, rgba(14,20,17,.5) 36%, rgba(14,20,17,0) 64%);
 }
 
 .hero-copy{
@@ -101,7 +101,7 @@
   gap: 12px;
   padding: 0 30px 0 24px;
   background: linear-gradient(180deg, var(--luz-clara) 0%, var(--luz) 100%);
-  color: var(--grafite);
+  color: var(--verde);
   font-weight: 700;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(120,70,0,.2), var(--brilho);
   transition: transform var(--t-rapido) var(--ease), box-shadow var(--t-medio) var(--ease), filter var(--t-medio) var(--ease);
@@ -138,14 +138,13 @@
   .hero img{ object-position: 30% center; }
   .hero .scrim{
     background:
-      linear-gradient(180deg, rgba(23,27,31,.55) 0, rgba(23,27,31,.15) 120px, rgba(23,27,31,0) 200px),
-      radial-gradient(120% 90% at 0% 100%, rgba(23,27,31,.74) 0%, rgba(23,27,31,.42) 34%, rgba(23,27,31,0) 62%);
+      linear-gradient(180deg, rgba(14,20,17,.55) 0, rgba(14,20,17,.15) 120px, rgba(14,20,17,0) 200px),
+      radial-gradient(120% 90% at 0% 100%, rgba(14,20,17,.74) 0%, rgba(14,20,17,.42) 34%, rgba(14,20,17,0) 62%);
   }
 }
 
 /* =====================================================================
-   INSTITUCIONAL — foto da fábrica grande e o texto num cartão que
-   avança por cima dela.
+   INSTITUCIONAL — foto da fábrica à esquerda, texto à direita.
    ===================================================================== */
 .institucional{
   padding: var(--secao) 0;
@@ -154,14 +153,17 @@
   overflow-x: clip;
 }
 
-.institucional .container{ display: grid; }
+.institucional .container{
+  display: grid;
+  gap: var(--s-5);
+}
 
 .institucional-photo{
   position: relative;
   aspect-ratio: 4 / 3;
   border-radius: var(--r-lg);
   overflow: hidden;
-  background: var(--grafite);
+  background: var(--verde);
   box-shadow: var(--sombra-2);
 }
 .institucional-photo img{
@@ -174,13 +176,9 @@
 }
 
 .institucional-text{
-  position: relative;
-  z-index: 2;
-  margin: calc(-1 * var(--s-8)) var(--s-2) 0;
-  padding: var(--s-4) var(--s-3);
-  background: var(--papel);
-  border-radius: var(--r-md);
-  box-shadow: 0 0 0 1px var(--linha), var(--sombra-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .institucional-text h2{
@@ -207,28 +205,19 @@
 }
 .institucional-text p:last-of-type{ margin-bottom: 0; }
 
-/* a foto estica até a altura do cartão + respiro, e o cartão flutua no meio */
 @media (min-width: 960px){
-  .institucional .container{ grid-template-columns: repeat(12, 1fr); }
+  .institucional .container{
+    grid-template-columns: 1.3fr 1fr;
+    gap: var(--s-8);
+    align-items: stretch;
+  }
   .institucional-photo{
-    grid-column: 1 / 9;
-    grid-row: 1;
     aspect-ratio: auto;
-    min-height: 560px;
+    min-height: 540px;
   }
-  .institucional-text{
-    grid-column: 6 / 13;
-    grid-row: 1;
-    align-self: center;
-    margin: var(--s-8) 0;
-    padding: var(--s-7) var(--s-6);
-  }
-}
-@media (min-width: 1200px){
-  .institucional-text{ grid-column: 7 / 13; }
 }
 
-/* entrada ao rolar: a foto vem da esquerda, o cartão da direita */
+/* entrada ao rolar: a foto vem da esquerda, o texto da direita */
 .reveal{
   transition: transform .9s var(--ease), opacity .9s ease;
   will-change: transform, opacity;
@@ -414,13 +403,13 @@
 }
 .field input:hover,
 .field select:hover,
-.field textarea:hover{ border-color: rgba(30,35,40,.34); }
+.field textarea:hover{ border-color: rgba(20,35,32,.34); }
 .field input:focus,
 .field select:focus,
 .field textarea:focus{
   outline: none;
-  border-color: var(--safira);
-  box-shadow: 0 0 0 4px rgba(47,86,200,.16);
+  border-color: var(--verde);
+  box-shadow: 0 0 0 4px rgba(24,60,50,.14);
 }
 .field textarea{ resize: vertical; min-height: 140px; }
 
@@ -440,7 +429,7 @@
   align-items: flex-start;
   gap: var(--s-2);
   padding: var(--s-5) var(--s-4);
-  background: var(--grafite);
+  background: var(--verde);
   color: var(--tinta-inv-2);
   border-radius: var(--r-lg);
   box-shadow: var(--sombra-3);
@@ -450,7 +439,7 @@
 .catalogo-card p{ font-size: 15.5px; line-height: 1.65; margin: 0 0 var(--s-1); }
 .catalogo-card .btn-outline{ border-color: rgba(255,255,255,.3); color: #fff; }
 .catalogo-card .btn-outline:hover,
-.catalogo-card .btn-outline:focus-visible{ background: #fff; border-color: #fff; color: var(--grafite); }
+.catalogo-card .btn-outline:focus-visible{ background: #fff; border-color: #fff; color: var(--verde); }
 
 .catalogo-whats{
   display: inline-flex;
@@ -464,7 +453,7 @@
   transition: color var(--t-rapido) var(--ease);
 }
 .catalogo-whats:hover{ color: #fff; }
-.catalogo-whats svg{ width: 20px; height: 20px; stroke: var(--ouro-claro); flex-shrink: 0; }
+.catalogo-whats svg{ width: 20px; height: 20px; stroke: var(--ouro-claro); color: var(--ouro-claro); flex-shrink: 0; }
 
 @media (min-width: 960px){
   .contato-grid{

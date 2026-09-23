@@ -40,7 +40,7 @@
   height: clamp(120px, 18vw, 260px);
   padding-top: var(--nav-h);
   overflow: hidden;
-  background: var(--grafite);
+  background: var(--verde);
   box-sizing: content-box;
 }
 .produto-banner img{ width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -201,7 +201,7 @@
   width: 20px; height: 20px;
   border-radius: 50%;
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px rgba(30,35,40,.16), inset 0 1px 1px rgba(255,255,255,.5);
+  box-shadow: inset 0 0 0 1px rgba(20,35,32,.16), inset 0 1px 1px rgba(255,255,255,.5);
 }
 
 .produto-specs-note{

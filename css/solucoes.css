@@ -54,7 +54,7 @@
   padding: 4px;
   background: var(--aluminio-2);
   border-radius: var(--r-pill);
-  box-shadow: inset 0 1px 2px rgba(30,35,40,.14), inset 0 -1px 0 rgba(255,255,255,.6);
+  box-shadow: inset 0 1px 2px rgba(20,35,32,.14), inset 0 -1px 0 rgba(255,255,255,.6);
 }
 .ambiente-tab{
   appearance: none;
@@ -74,7 +74,7 @@
 .ambiente-tab.is-active{
   background: var(--papel);
   color: var(--tinta);
-  box-shadow: 0 1px 2px rgba(30,35,40,.16), 0 4px 12px -4px rgba(30,35,40,.24);
+  box-shadow: 0 1px 2px rgba(20,35,32,.16), 0 4px 12px -4px rgba(20,35,32,.24);
 }
 
 /* o quadro fica escuro de propósito, feito uma TV na parede */
@@ -84,8 +84,8 @@
   aspect-ratio: 16 / 9;
   border-radius: var(--r-lg);
   overflow: hidden;
-  background: var(--grafite-3);
-  box-shadow: 0 0 0 1px rgba(30,35,40,.22), var(--sombra-3);
+  background: var(--verde-3);
+  box-shadow: 0 0 0 1px rgba(20,35,32,.22), var(--sombra-3);
 }
 
 .pimg{
@@ -112,8 +112,8 @@
   padding: var(--s-4) var(--s-3);
   border-radius: var(--r-lg);
   background:
-    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 2px, rgba(255,255,255,.14) 2px 3px, rgba(30,35,40,.01) 3px 4px),
-    linear-gradient(170deg, #FAFBFB 0%, #ECEFF1 55%, #E1E5E8 100%);
+    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 2px, rgba(255,255,255,.14) 2px 3px, rgba(20,35,32,.01) 3px 4px),
+    linear-gradient(170deg, #FCFBF8 0%, #F0EEE8 55%, #E6E3DA 100%);
   box-shadow: inset 0 1px 0 #fff, 0 0 0 1px var(--linha), var(--sombra-2);
 }
 
@@ -143,7 +143,7 @@
   border-radius: 20px;
   -webkit-tap-highlight-color: transparent;
 }
-.luz-switch:focus-visible{ outline: 2px solid var(--safira); outline-offset: 4px; }
+.luz-switch:focus-visible{ outline: 2px solid var(--verde); outline-offset: 4px; }
 
 .luz-switch-plate{
   position: relative;
@@ -153,14 +153,14 @@
   height: 112px;
   border-radius: 18px;
   background:
-    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 1px, rgba(255,255,255,.2) 1px 2px, rgba(30,35,40,.025) 2px 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 1px, rgba(255,255,255,.2) 1px 2px, rgba(20,35,32,.025) 2px 3px),
     linear-gradient(165deg, #F7F8F9 0%, #DDE1E5 50%, #C9CED4 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -1px 0 rgba(30,35,40,.10),
-    0 0 0 1px rgba(30,35,40,.14),
-    0 2px 3px rgba(30,35,40,.14),
-    0 16px 30px -12px rgba(30,35,40,.45);
+    inset 0 -1px 0 rgba(20,35,32,.10),
+    0 0 0 1px rgba(20,35,32,.14),
+    0 2px 3px rgba(20,35,32,.14),
+    0 16px 30px -12px rgba(20,35,32,.45);
 }
 
 /* LED indicador — o pingo aceso do "i" do logo */
@@ -189,9 +189,9 @@
   background: linear-gradient(180deg, #FFFFFF 0%, #F2F4F5 44%, #D3D8DD 56%, #E3E7EA 100%);
   box-shadow:
     inset 0 1px 0 #fff,
-    inset 0 -2px 3px rgba(30,35,40,.10),
-    0 0 0 1px rgba(30,35,40,.16),
-    0 6px 8px -4px rgba(30,35,40,.35);
+    inset 0 -2px 3px rgba(20,35,32,.10),
+    0 0 0 1px rgba(20,35,32,.16),
+    0 6px 8px -4px rgba(20,35,32,.35);
   transform: perspective(240px) rotateX(-14deg);
   transition: transform .16s cubic-bezier(.3,.7,.2,1.3), background .16s ease, box-shadow .16s ease;
 }
@@ -199,9 +199,9 @@
   background: linear-gradient(180deg, #D3D8DD 0%, #E3E7EA 44%, #F2F4F5 56%, #FFFFFF 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.7),
-    inset 0 2px 3px rgba(30,35,40,.10),
-    0 0 0 1px rgba(30,35,40,.16),
-    0 -2px 6px -3px rgba(30,35,40,.25);
+    inset 0 2px 3px rgba(20,35,32,.10),
+    0 0 0 1px rgba(20,35,32,.16),
+    0 -2px 6px -3px rgba(20,35,32,.25);
   transform: perspective(240px) rotateX(14deg);
 }
 .luz-switch:active .luz-switch-knob{ filter: brightness(.97); }
@@ -249,9 +249,9 @@
   background: var(--amostra);
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.6),
-    inset 0 -6px 12px rgba(30,35,40,.08),
-    0 0 0 1px rgba(30,35,40,.12),
-    0 2px 4px rgba(30,35,40,.12);
+    inset 0 -6px 12px rgba(20,35,32,.08),
+    0 0 0 1px rgba(20,35,32,.12),
+    0 2px 4px rgba(20,35,32,.12);
   transition: box-shadow var(--t-medio) var(--ease);
 }
 /* a fita acesa por trás do acrílico */
@@ -281,9 +281,9 @@
 .swatch-item.is-active .swatch-dot{
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.75),
-    0 0 0 1px rgba(30,35,40,.12),
+    0 0 0 1px rgba(20,35,32,.12),
     0 0 20px 2px var(--amostra-brilho),
-    0 2px 4px rgba(30,35,40,.12);
+    0 2px 4px rgba(20,35,32,.12);
 }
 .swatch-item.is-active .swatch-dot::after{ opacity: 1; }
 
