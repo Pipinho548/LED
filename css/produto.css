@@ -1,251 +1,262 @@
 /* =====================================================================
-   PÁGINA DE PRODUTO — usado pelas páginas em produtos/*.html.
-   Depende dos tokens e classes base de css/style.css (nav, rodapé, botões,
-   produtos-grid/produto-card).
+   PÁGINAS DE PRODUTO — loja (produtos/<categoria>.html) e detalhe
+   (produtos/<categoria>/<item>.html). Soluções e representantes também
+   usam .produto-hero e .produto-voltar daqui.
+   Depende dos tokens e classes base de css/style.css.
    ===================================================================== */
 
 .produto-hero{
-  padding: 132px 0 0;
-  background: var(--soft);
+  padding: calc(var(--nav-h) + var(--s-5)) 0 0;
+  background: var(--aluminio);
 }
 
 .produto-voltar{
-  display:inline-flex;
-  align-items:center;
-  gap: 6px;
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  padding: 6px 0;
+  margin-bottom: var(--s-4);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--muted);
-  text-decoration:none;
-  margin-bottom: 28px;
-  transition: color .2s ease;
+  color: var(--tinta-2);
+  text-decoration: none;
+  border-radius: var(--r-xs);
+  transition: color var(--t-rapido) var(--ease), gap var(--t-medio) var(--ease);
 }
-.produto-voltar:hover, .produto-voltar:focus-visible{ color: var(--brand); }
-.produto-voltar svg{ width: 15px; height: 15px; stroke: currentColor; flex-shrink:0; }
+.produto-voltar:hover,
+.produto-voltar:focus-visible{ color: var(--tinta); gap: 12px; }
+.produto-voltar svg{ width: 16px; height: 16px; stroke: currentColor; flex-shrink: 0; }
 
-.kicker-link{ text-decoration:none; }
-.kicker-link:hover, .kicker-link:focus-visible{ text-decoration:underline; }
+.kicker-link{ text-decoration: none; }
+.kicker-link:hover,
+.kicker-link:focus-visible{ text-decoration: underline; text-underline-offset: 3px; }
 
 /* =====================================================================
-   FOTO EM FAIXA — fininha, cheia largura de ponta a ponta (sem container,
-   sem cantos), colada direto na nav fixa (por isso o padding-top aqui em
-   vez de na nav). Pensada pra fita/perfil: um produto comprido e fino,
-   não uma foto de ambiente grande.
+   FOTO EM FAIXA — fita e perfil: produto comprido e fino, a foto corre
+   de ponta a ponta colada na nav.
    ===================================================================== */
 .produto-banner{
   width: 100%;
-  height: clamp(110px, 16vw, 220px);
-  padding-top: 68px; /* altura exata da nav fixa (nav-static), pra colar sem espaço em branco */
-  overflow:hidden;
-  background: var(--brand-dark);
+  height: clamp(120px, 18vw, 260px);
+  padding-top: var(--nav-h);
+  overflow: hidden;
+  background: var(--grafite);
   box-sizing: content-box;
 }
-.produto-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
+.produto-banner img{ width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* =====================================================================
-   FOTO QUADRADA À ESQUERDA — pra produtos pequenos fotografados em fundo
-   branco com bastante respiro ao redor (fontes, sensores, acessórios).
-   A faixa fina (.produto-banner) corta esse tipo de foto; aqui a imagem
-   fica inteira, num quadro quadrado ao lado do texto.
-   ===================================================================== */
-.produto-detalhe-quadrada{
-  padding: 132px 0 60px;
-  background: var(--soft);
-}
-.produto-detalhe-split{
-  display:flex;
-  gap: 48px;
-  align-items:flex-start;
-  flex-wrap: wrap;
-}
-.produto-foto-quadrada{
-  width: min(340px, 100%);
-  aspect-ratio: 1 / 1;
-  border-radius: var(--radius);
-  overflow:hidden;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgba(24,60,50,0.06);
-  flex-shrink:0;
-}
-.produto-foto-quadrada img{
-  width:100%;
-  height:100%;
-  object-fit: contain;
-  display:block;
-}
-.produto-detalhe-quadrada .produto-detalhe-info{ flex:1 1 320px; max-width: 480px; }
-.produto-detalhe-quadrada .produto-voltar{ margin-bottom: 20px; }
-
-/* dados técnicos + atributos, empilhados dentro da coluna de texto
-   (em vez de numa seção separada embaixo, como no layout de banner) */
-.produto-specs-stack{
-  display:flex;
-  flex-direction:column;
-  gap: 14px;
-  margin: 4px 0 28px;
-}
-.produto-specs-stack .attrs-col{ padding: 20px 22px; }
-.produto-detalhe-quadrada .produto-specs-note{ margin-top: 18px; }
-
-@media (max-width: 860px){
-  .produto-detalhe-quadrada{ padding-top: 108px; }
-}
-@media (max-width: 640px){
-  .produto-foto-quadrada{ width: 100%; max-width: 320px; margin: 0 auto; }
-  .produto-detalhe-split{ flex-direction:column; align-items:center; text-align:center; }
-  .produto-detalhe-quadrada .produto-detalhe-info{ max-width: 100%; }
-  .produto-detalhe-quadrada .produto-detalhe-cta{ justify-content:center; }
-  .produto-specs-stack .attr-row{ text-align:left; }
-}
-
-/* =====================================================================
-   TÍTULO + CTA — abaixo da foto, largura de leitura confortável.
-   ===================================================================== */
 .produto-detalhe{
-  padding: 40px 0 60px;
-  background: var(--soft);
+  padding: var(--s-6) 0 var(--s-8);
+  background: var(--aluminio);
 }
 
 .produto-detalhe-info{ max-width: 640px; }
-
-.produto-detalhe-info .kicker{
-  display: block;
-  font-family:'Fraunces', serif;
-  font-style: italic;
-  color: var(--amber-ink);
-  font-size: 16px;
-  margin-bottom: 10px;
-}
+.produto-detalhe-info .kicker{ margin-bottom: var(--s-1); }
 .produto-detalhe-info h1{
-  font-size: clamp(28px, 4vw, 42px);
-  line-height: 1.15;
-  color: var(--brand);
-  margin-bottom: 18px;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 380;
+  line-height: 1.02;
+  letter-spacing: -.025em;
+  margin-bottom: var(--s-3);
 }
 .produto-detalhe-info .lead{
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--muted);
-  margin: 0 0 28px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--tinta);
   max-width: 52ch;
+  margin: 0 0 var(--s-4);
 }
 
 .produto-detalhe-cta{
-  display:flex;
-  flex-wrap:wrap;
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
 /* =====================================================================
-   ATRIBUTOS — cartões de especificação: fundo branco, borda e sombra
-   suave, destacando do fundo cinza-claro da página (--soft).
+   FOTO QUADRADA — produtos pequenos fotografados em fundo branco
+   (fontes, sensores, acessórios): a foto fica inteira ao lado do texto
+   e dos dados técnicos.
+   ===================================================================== */
+.produto-detalhe-quadrada{
+  padding: calc(var(--nav-h) + var(--s-5)) 0 var(--s-10);
+  background: var(--aluminio);
+}
+
+.produto-detalhe-split{
+  display: grid;
+  gap: var(--s-5);
+}
+
+.produto-foto-quadrada{
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--papel);
+  box-shadow: 0 0 0 1px var(--linha), var(--sombra-2);
+}
+.produto-foto-quadrada img{ width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.produto-detalhe-quadrada .produto-voltar{ margin-bottom: var(--s-3); }
+
+.produto-specs-stack{
+  display: grid;
+  gap: var(--s-2);
+  margin: 0 0 var(--s-4);
+}
+.produto-specs-stack .attrs-col{ padding: var(--s-3); }
+.produto-detalhe-quadrada .produto-specs-note{ margin-top: var(--s-3); }
+
+@media (min-width: 860px){
+  .produto-detalhe-quadrada{ padding-top: calc(var(--nav-h) + var(--s-8)); }
+  .produto-detalhe-split{
+    grid-template-columns: minmax(280px, 440px) minmax(0, 540px);
+    gap: var(--s-8);
+    align-items: start;
+  }
+  .produto-foto-quadrada{
+    position: sticky;
+    top: calc(var(--nav-h) + var(--s-4));
+  }
+}
+
+/* =====================================================================
+   DADOS TÉCNICOS E ATRIBUTOS
    ===================================================================== */
 .produto-attrs{
-  padding: 0 0 100px;
-  background: var(--soft);
+  padding: 0 0 var(--s-12);
+  background: var(--aluminio);
 }
 
 .attrs-grid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  align-items:start;
+  display: grid;
+  gap: var(--s-3);
+  align-items: start;
+}
+@media (min-width: 640px){ .attrs-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px){ .attrs-grid{ grid-template-columns: repeat(3, 1fr); } }
+
+.attrs-col,
+.produto-specs{
+  background: var(--papel);
+  border-radius: var(--r-md);
+  padding: var(--s-3) var(--s-4);
+  box-shadow: 0 0 0 1px var(--linha), var(--sombra-1);
 }
 
-.attrs-col{
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 26px 28px;
-  box-shadow: 0 10px 30px rgba(24,60,50,0.06);
+.attrs-col h2,
+.produto-specs h2{
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--tinta);
+  margin: 0 0 var(--s-1);
 }
 
-.attrs-col h2{
-  font-family:'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--brand);
-  margin: 0 0 16px;
-}
+.attrs-col dl,
+.produto-specs dl{ margin: 0; }
 
-.attrs-col dl{ margin:0; }
-.attr-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap: 16px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 13.5px;
+.attr-row,
+.spec-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--linha);
+  font-size: 14.5px;
 }
-.attr-row:first-of-type{ padding-top: 0; }
-.attr-row:last-of-type{ border-bottom:none; padding-bottom: 0; }
-.attr-row dt{ color: var(--muted); }
-.attr-row dd{ margin:0; color: var(--ink); font-weight: 600; text-align:right; }
-.attr-todo{ color: var(--amber-ink); }
+.attr-row:last-of-type,
+.spec-row:last-of-type{ border-bottom: none; padding-bottom: 0; }
+.attr-row dt,
+.spec-row dt{ color: var(--tinta-2); }
+.attr-row dd,
+.spec-row dd{
+  margin: 0;
+  color: var(--tinta);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.attr-todo,
+.spec-todo{ color: var(--ouro); font-weight: 500; }
 
-.attr-list{ list-style:none; margin:0; padding:0; }
+.attr-list{ list-style: none; margin: 0; padding: 0; }
 .attr-list li{
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   gap: 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 13.5px;
-  color: var(--ink);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--linha);
+  font-size: 14.5px;
+  color: var(--tinta);
 }
-.attr-list li:first-child{ padding-top: 0; }
-.attr-list li:last-child{ border-bottom:none; padding-bottom: 0; }
+.attr-list li:last-child{ border-bottom: none; padding-bottom: 0; }
 
 .attr-swatch{
-  width: 20px;
-  height: 20px;
+  width: 20px; height: 20px;
   border-radius: 50%;
-  flex-shrink:0;
-  box-shadow: inset 0 0 0 1px rgba(20,35,32,0.15);
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(30,35,40,.16), inset 0 1px 1px rgba(255,255,255,.5);
 }
 
 .produto-specs-note{
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.6;
-  color: var(--muted);
-  margin: 28px 0 0;
+  color: var(--tinta-2);
+  margin: var(--s-4) 0 0;
 }
 
 /* =====================================================================
-   LOJA — grid de variações dentro de uma categoria (ex: Fita LED mostra
-   3mm/5mm/8mm × densidade; Perfil mostra as posições de instalação).
-   Usa .produtos-grid/.produto-card de css/style.css.
+   DETALHE ANTIGO (produtos/difusores.html, escrito à mão) — mesma cara
+   do layout de foto ao lado.
    ===================================================================== */
-.loja-page-head{
-  padding: 0 0 32px;
+.produto-hero + .produto-detalhe{ padding-top: 0; }
+
+.produto-detalhe-grid{
+  display: grid;
+  gap: var(--s-5);
 }
-.loja-page-head .kicker{
-  font-family:'Fraunces', serif;
-  font-style: italic;
-  color: var(--amber-ink);
-  font-size: 16px;
-  margin-bottom: 8px;
+.produto-detalhe-media{
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--papel);
+  box-shadow: 0 0 0 1px var(--linha), var(--sombra-2);
 }
+.produto-detalhe-media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.produto-specs{ margin-top: var(--s-5); }
+
+@media (min-width: 860px){
+  .produto-detalhe-grid{
+    grid-template-columns: minmax(280px, 520px) minmax(0, 560px);
+    gap: var(--s-8);
+    align-items: start;
+  }
+}
+
+/* =====================================================================
+   LOJA — grid de opções dentro de uma categoria. Usa .produtos-grid e
+   .produto-card de style.css.
+   ===================================================================== */
+.loja-page-head{ padding: 0 0 var(--s-6); }
+.loja-page-head .kicker{ margin-bottom: var(--s-1); }
 .loja-page-head h1{
-  font-size: clamp(28px, 4vw, 40px);
-  color: var(--brand);
+  font-size: var(--fs-h2);
+  font-weight: 380;
+  line-height: 1.02;
+  letter-spacing: -.025em;
 }
 
 .loja-section{
-  padding: 0 0 100px;
-  background: var(--soft);
+  padding: 0 0 var(--s-12);
+  background: var(--aluminio);
 }
 
-@media (max-width: 900px){
-  .attrs-grid{ grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 860px){
-  .produto-hero{ padding-top: 108px; }
-}
-@media (max-width: 560px){
-  .attrs-grid{ grid-template-columns: 1fr; }
+@media (min-width: 861px){
+  .produto-hero{ padding-top: calc(var(--nav-h) + var(--s-8)); }
 }
