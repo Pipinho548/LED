@@ -99,6 +99,8 @@
   box-shadow: 0 0 0 1px var(--linha), var(--sombra-2);
 }
 .produto-foto-quadrada img{ width: 100%; height: 100%; object-fit: contain; display: block; }
+/* fotos de ambiente/estúdio (perfis) preenchem o quadro inteiro */
+.produto-foto-quadrada.is-cover img{ object-fit: cover; }
 
 .produto-detalhe-quadrada .produto-voltar{ margin-bottom: var(--s-3); }
 
@@ -202,6 +204,46 @@
   border-radius: 50%;
   flex-shrink: 0;
   box-shadow: inset 0 0 0 1px rgba(20,35,32,.16), inset 0 1px 1px rgba(255,255,255,.5);
+}
+
+/* =====================================================================
+   DESENHO TÉCNICO (perfis) — corte do perfil em verde da marca sobre
+   grade de 5 mm, cotas em milímetros. Todos na mesma escala.
+   ===================================================================== */
+.desenho-tecnico figure{ margin: var(--s-2) 0 0; }
+.dt-folha{
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--papel);
+  border-radius: var(--r-sm);
+  box-shadow: 0 0 0 1px var(--linha);
+}
+.dt-grade line{ stroke: rgba(24,60,50,.08); stroke-width: 1; }
+.dt-perfil{ fill: var(--verde); }
+.dt-serrilha{
+  fill: none;
+  stroke: var(--verde);
+  stroke-width: .3;
+  stroke-dasharray: 0 .5;
+  stroke-linecap: round;
+}
+.dt-linha{ stroke: var(--tinta-2); stroke-width: 1; }
+.dt-seta{ fill: var(--tinta-2); }
+.dt-texto{
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  fill: var(--tinta);
+}
+/* no celular o desenho encolhe (~65%); a cota cresce pra continuar legível */
+@media (max-width: 560px){ .dt-texto{ font-size: 19px; } }
+.desenho-tecnico figcaption{
+  margin-top: var(--s-1);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--tinta-2);
 }
 
 .produto-specs-note{
