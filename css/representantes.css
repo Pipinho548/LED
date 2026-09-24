@@ -41,8 +41,10 @@
 .map-wrap svg{ width: 100%; height: auto; display: block; overflow: visible; }
 
 .map-wrap .estado{ outline: none; }
+/* verde sólido (não opacidade): alguns estados do SVG se sobrepõem nas
+   bordas e a transparência somada deixava manchas escuras */
 .map-wrap .estado path{
-  fill: #D5D8CF;
+  fill: #3A5950;
   stroke: var(--papel);
   stroke-width: 1.2;
   stroke-linejoin: round;
@@ -50,15 +52,15 @@
   transition: fill var(--t-rapido) var(--ease), filter var(--t-medio) var(--ease);
 }
 .map-wrap .estado:hover path,
-.map-wrap .estado:focus-visible path{ fill: #A2B3AA; }
-.map-wrap .estado:focus-visible path{ stroke: var(--verde); stroke-width: 2; }
+.map-wrap .estado:focus-visible path{ fill: var(--verde); }
+.map-wrap .estado:focus-visible path{ stroke: var(--luz); stroke-width: 2; }
 .map-wrap .estado.is-selected path{
   fill: var(--luz);
   filter: drop-shadow(0 0 6px rgba(246,176,79,.9));
 }
 
 .map-wrap .estado text{
-  fill: var(--tinta-2);
+  fill: var(--papel);
   font-family: var(--sans);
   font-size: 8.5px;
   font-weight: 700;
@@ -66,7 +68,6 @@
   pointer-events: none;
   transition: fill var(--t-rapido) var(--ease);
 }
-.map-wrap .estado:hover text{ fill: var(--tinta); }
 .map-wrap .estado.is-selected text{ fill: var(--verde); }
 
 /* ---------- lista suspensa (celular) ---------- */
