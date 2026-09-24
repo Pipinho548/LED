@@ -27,15 +27,35 @@
 .produto-voltar:focus-visible{ color: var(--tinta); gap: 12px; }
 .produto-voltar svg{ width: 16px; height: 16px; stroke: currentColor; flex-shrink: 0; }
 
+/* nas páginas de produto o "Voltar" é uma etiqueta no canto da foto */
+.produto-voltar.is-foto{
+  margin: 0;
+  padding: 7px 14px 7px 11px;
+  font-size: 13.5px;
+  color: var(--tinta);
+  background: rgba(255,255,255,.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r-pill);
+  box-shadow: 0 0 0 1px rgba(20,35,32,.07), 0 2px 8px rgba(20,35,32,.12);
+  transition: background var(--t-rapido) var(--ease), gap var(--t-medio) var(--ease);
+}
+.produto-voltar.is-foto:hover,
+.produto-voltar.is-foto:focus-visible{ background: var(--papel); color: var(--tinta); }
+
 .kicker-link{ text-decoration: none; }
 .kicker-link:hover,
 .kicker-link:focus-visible{ text-decoration: underline; text-underline-offset: 3px; }
 
 /* =====================================================================
-   FOTO EM FAIXA — fita e perfil: produto comprido e fino, a foto corre
-   de ponta a ponta colada na nav.
+   FOTO EM FAIXA — fitas: produto comprido e fino, a foto corre de ponta
+   a ponta colada na nav e fica PRESA no topo; o conteúdo (.produto-sobe)
+   sobe por cima dela no scroll, entrando com um degradê.
    ===================================================================== */
 .produto-banner{
+  position: sticky;
+  top: 0;
+  z-index: 0;
   width: 100%;
   height: clamp(120px, 18vw, 260px);
   padding-top: var(--nav-h);
@@ -44,11 +64,38 @@
   box-sizing: content-box;
 }
 .produto-banner img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.produto-banner-topo{
+  position: absolute;
+  top: calc(var(--nav-h) + var(--s-2));
+  left: 0;
+  right: 0;
+}
+/* no celular a faixa é baixa: etiqueta mais perto do topo, longe da fita */
+@media (max-width: 640px){ .produto-banner-topo{ top: calc(var(--nav-h) + var(--s-1)); } }
+
+.produto-sobe{
+  position: relative;
+  z-index: 1;
+  background: var(--aluminio);
+}
+/* borda de entrada: a foto se desfaz na cor da página. Curta o bastante
+   pra não encostar na fita, que fica no meio da faixa. */
+.produto-sobe::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: clamp(40px, 5vw, 72px);
+  background: linear-gradient(to bottom, rgba(243,242,237,0), var(--aluminio));
+  pointer-events: none;
+}
 
 .produto-detalhe{
   padding: var(--s-6) 0 var(--s-8);
   background: var(--aluminio);
 }
+.produto-sobe .produto-detalhe{ padding-top: var(--s-3); }
 
 .produto-detalhe-info{ max-width: 640px; }
 .produto-detalhe-info .kicker{ margin-bottom: var(--s-1); }
@@ -90,6 +137,7 @@
 }
 
 .produto-foto-quadrada{
+  position: relative;
   width: 100%;
   max-width: 440px;
   aspect-ratio: 1 / 1;
@@ -102,7 +150,43 @@
 /* fotos de ambiente/estúdio (perfis) preenchem o quadro inteiro */
 .produto-foto-quadrada.is-cover img{ object-fit: cover; }
 
-.produto-detalhe-quadrada .produto-voltar{ margin-bottom: var(--s-3); }
+.produto-foto-quadrada .produto-voltar.is-foto{
+  position: absolute;
+  top: var(--s-2);
+  left: var(--s-2);
+  z-index: 1;
+}
+
+/* celular: a foto fica presa em cima e o texto sobe por cima dela,
+   igual à faixa das fitas */
+@media (max-width: 859px){
+  .produto-detalhe-quadrada{ padding-top: calc(var(--nav-h) + var(--s-2)); }
+  .produto-detalhe-split{ gap: var(--s-3); }
+  .produto-foto-quadrada{
+    position: sticky;
+    top: calc(var(--nav-h) + var(--s-2));
+    z-index: 0;
+  }
+  /* o fundo vai até a borda da tela (cobre a margem lateral), senão a
+     borda e a sombra da foto aparecem dos lados do texto */
+  .produto-detalhe-quadrada .produto-detalhe-info{
+    position: relative;
+    z-index: 1;
+    background: var(--aluminio);
+    margin-inline: calc(-1 * clamp(20px, 5vw, 56px));
+    padding-inline: clamp(20px, 5vw, 56px);
+  }
+  .produto-detalhe-quadrada .produto-detalhe-info::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 56px;
+    background: linear-gradient(to bottom, rgba(243,242,237,0), var(--aluminio));
+    pointer-events: none;
+  }
+}
 
 .produto-specs-stack{
   display: grid;
