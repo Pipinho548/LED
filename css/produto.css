@@ -312,6 +312,22 @@
   stroke-dasharray: 0 .5;
   stroke-linecap: round;
 }
+/* fita vista de cima: placa verde clara, LEDs/linha COB na cor da luz */
+.dt-fita{
+  fill: rgba(24,60,50,.1);
+  stroke: var(--verde);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.dt-led,
+.dt-cob{
+  fill: var(--luz);
+  stroke: var(--ouro);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.dt-cob{ stroke: none; }
 .dt-linha{ stroke: var(--tinta-2); stroke-width: 1; }
 .dt-seta{ fill: var(--tinta-2); }
 .dt-texto{
@@ -321,8 +337,20 @@
   font-variant-numeric: tabular-nums;
   fill: var(--tinta);
 }
-/* no celular o desenho encolhe (~65%); a cota cresce pra continuar legível */
-@media (max-width: 560px){ .dt-texto{ font-size: 19px; } }
+/* quando o quadro do desenho é estreito (celular, coluna das fitas) a
+   folha encolhe; a cota cresce pra continuar legível */
+.desenho-tecnico{ container-type: inline-size; }
+@container (max-width: 420px){ .dt-texto{ font-size: 19px; } }
+/* celular: quadro do desenho com borda interna menor, folha maior */
+@media (max-width: 560px){ .attrs-col.desenho-tecnico{ padding-inline: var(--s-2); } }
+/* quadro largo (fitas, duas colunas): a folha amplia ~45%, a cota diminui */
+@container (min-width: 600px){ .dt-texto{ font-size: 10.5px; } }
+
+/* fitas: o desenho ocupa duas colunas da grade de dados técnicos */
+@media (min-width: 640px){
+  .attrs-grid{ grid-auto-flow: row dense; }
+  .attrs-grid .desenho-tecnico{ grid-column: span 2; }
+}
 .desenho-tecnico figcaption{
   margin-top: var(--s-1);
   font-size: 13px;
