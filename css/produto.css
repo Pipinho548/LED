@@ -410,36 +410,6 @@
   padding: 0 0 var(--s-12);
   background: var(--aluminio);
 }
-
-/* loja em grupos (fitas por densidade de LED): título + uma linha que diz
-   o que muda naquele grupo, depois a grade */
-.loja-grupo + .loja-grupo{
-  margin-top: var(--s-8);
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--linha);
-}
-.loja-grupo-head{
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px var(--s-3);
-  margin-bottom: var(--s-3);
-}
-.loja-grupo-head h2{
-  font-size: clamp(24px, 2.6vw, 32px);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -.015em;
-  margin: 0;
-}
-.loja-grupo-head p{
-  margin: 0;
-  max-width: 60ch;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--tinta-2);
-}
-
 @media (min-width: 861px){
   .produto-hero{ padding-top: calc(var(--nav-h) + var(--s-8)); }
 }
