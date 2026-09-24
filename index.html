@@ -24,6 +24,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
+<script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
@@ -74,7 +75,8 @@
      comunica "empresa de iluminação" sem depender de clique.
      ====================================================================== -->
 <section class="hero" id="topo">
-  <img src="images/hero-ambiente-iluminado.jpeg" alt="Estante de madeira com fita de LED acesa embaixo da prateleira, ambiente claro" fetchpriority="high">
+  <img class="hero-off" src="images/hero-ambiente-apagado.jpeg" alt="" fetchpriority="high">
+  <img class="hero-on" src="images/hero-ambiente-iluminado.jpeg" alt="Estante de madeira com fita de LED acesa embaixo da prateleira, ambiente claro" fetchpriority="high">
   <div class="scrim"></div>
 
   <div class="hero-copy">
@@ -352,6 +354,29 @@
   /* Nav (troca de fundo ao rolar), menu mobile e ano do rodapé agora ficam
      em js/main.js (compartilhado com as páginas de produto). Aqui só entra
      o comportamento específico desta página. */
+
+  /* =====================================================================
+     HERO — espera as duas fotos carregarem e acende a fita.
+     ===================================================================== */
+  (function(){
+    var hero = document.querySelector(".hero");
+    if (!hero) return;
+    var on = hero.querySelector(".hero-on"), off = hero.querySelector(".hero-off");
+    if (!on || !off) return;
+    function pronta(img){
+      return new Promise(function(ok){
+        if (img.complete) return ok();
+        img.addEventListener("load", ok, { once: true });
+        img.addEventListener("error", ok, { once: true });
+      });
+    }
+    Promise.all([pronta(on), pronta(off)]).then(function(){
+      setTimeout(function(){
+        hero.classList.add("is-lit", "is-acendendo");
+        setTimeout(function(){ hero.classList.remove("is-acendendo"); }, 2000);
+      }, 700);
+    });
+  })();
 
   /* =====================================================================
      REVEAL AO ROLAR — seção institucional: a foto entra da esquerda, o

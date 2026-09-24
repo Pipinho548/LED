@@ -29,6 +29,21 @@
   display: block;
 }
 
+/* a página abre com a fita apagada e a luz acende sozinha: a foto acesa
+   fica por cima da apagada e aparece aos poucos. Só com JS ligado (.js),
+   senão a foto acesa aparece direto. */
+.js .hero img.hero-on{ opacity: 0; transition: opacity 1.8s cubic-bezier(.4,0,.2,1); }
+.js .hero.is-lit img.hero-on{ opacity: 1; }
+.js .hero:not(.is-lit) .hero-copy .hero-cta{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(120,70,0,.2);
+}
+.hero.is-acendendo .hero-copy .hero-cta{
+  transition: transform var(--t-rapido) var(--ease), filter var(--t-medio) var(--ease), box-shadow 1.8s cubic-bezier(.4,0,.2,1);
+}
+@media (prefers-reduced-motion: reduce){
+  .js .hero img.hero-on{ transition: none; opacity: 1; }
+}
+
 .hero .scrim{
   position: absolute;
   inset: 0;
