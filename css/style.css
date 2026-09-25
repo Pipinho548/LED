@@ -212,6 +212,8 @@ h1, h2, h3{
   transition: background var(--t-rapido) var(--ease), border-color var(--t-rapido) var(--ease);
 }
 .nav-social svg{ width: 17px; height: 17px; stroke: currentColor; }
+/* botão do catálogo: no celular só o ícone; no computador ganha o texto */
+.nav-catalogo-txt{ display: none; }
 /* celular: catálogo + Instagram + WhatsApp + menu cabem ao lado da logo */
 @media (max-width: 480px){
   .nav-right{ gap: 6px; }
@@ -319,8 +321,28 @@ h1, h2, h3{
 
   .nav-right{ grid-column: 3; }
   .nav-burger{ display: none; }
-  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px; }
   .nav-mobile-menu{ display: none; }
+}
+
+/* telas largas: logo ainda maior na hero e o catálogo ganha o texto
+   (entre 861 e 1119px não cabe junto com os links do meio) */
+@media (min-width: 1120px){
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px; }
+
+  .nav-catalogo{
+    width: auto;
+    gap: 8px;
+    padding: 0 16px 0 13px;
+    border-radius: var(--r-pill);
+    border-color: rgba(246,176,79,.55);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    text-decoration: none;
+  }
+  .nav-catalogo:hover,
+  .nav-catalogo:focus-visible{ border-color: var(--luz); background: rgba(246,176,79,.14); }
+  .nav-catalogo-txt{ display: inline; }
 }
 
 /* =====================================================================

@@ -48,8 +48,9 @@
     <li><a href="representantes.html" id="navRepresentante">Representante</a></li>
   </ul>
   <div class="nav-right">
-    <a class="nav-social" href="#catalogo" aria-label="Ver catálogo" title="Catálogo">
+    <a class="nav-social nav-catalogo" href="#catalogo" aria-label="Ver catálogo">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.6C10.2 5.4 7.8 4.9 4 5.1v12.8c3.8-.2 6.2.3 8 1.5 1.8-1.2 4.2-1.7 8-1.5V5.1c-3.8-.2-6.2.3-8 1.5z"/><path d="M12 6.6v12.8"/></svg>
+      <span class="nav-catalogo-txt">Catálogo</span>
     </a>
     <a class="nav-social" href="https://instagram.com/iluminiumbrasil" target="_blank" rel="noopener" aria-label="Instagram da Iluminium Brasil">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
@@ -216,6 +217,29 @@
 </section>
 
 <!-- ======================================================================
+     CATÁLOGO — faixa própria logo depois dos produtos, pra quem quer tudo
+     num PDF. O botão "Catálogo" do menu (todas as páginas) leva pra cá.
+     ====================================================================== -->
+<section class="catalogo-faixa" id="catalogo" aria-labelledby="catalogoTitulo">
+  <div class="container catalogo-faixa-grid">
+    <div class="catalogo-faixa-texto">
+      <h2 id="catalogoTitulo">Catálogo completo</h2>
+      <p>Todas as linhas, medidas e especificações técnicas num só PDF.</p>
+    </div>
+    <div class="catalogo-faixa-acoes">
+      <a class="faixa-cta" href="catalogo.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>
+        Baixar catálogo (PDF)
+      </a>
+      <a class="faixa-cta-2" href="https://wa.me/5500000000000?text=Ol%C3%A1%2C%20quero%20receber%20o%20cat%C3%A1logo%20da%20Iluminium%20Brasil." target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89a11.82 11.82 0 0 0-3.48-8.41z"/></svg>
+        Pedir pelo WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
      LOCALIZAÇÃO — mapa embed (sem chave de API) + endereço.
      ====================================================================== -->
 <section class="localizacao" id="localizacao">
@@ -287,7 +311,7 @@
       </form>
     </div>
 
-    <aside class="catalogo-card" id="catalogo">
+    <aside class="catalogo-card">
       <h3>Catálogo completo</h3>
       <p>Todas as linhas, medidas e especificações técnicas num só PDF.</p>
       <a class="btn-outline" href="catalogo.pdf" download>Baixar catálogo (PDF)</a>

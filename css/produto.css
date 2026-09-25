@@ -397,7 +397,29 @@
    LOJA — grid de opções dentro de uma categoria. Usa .produtos-grid e
    .produto-card de style.css.
    ===================================================================== */
-.loja-page-head{ padding: 0 0 var(--s-6); }
+.loja-page-head{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  padding: 0 0 var(--s-6);
+}
+/* link discreto pro catálogo em PDF, no topo de cada lista */
+.loja-catalogo{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--tinta-2);
+  text-decoration: none;
+  transition: color var(--t-rapido) var(--ease);
+}
+.loja-catalogo svg{ width: 17px; height: 17px; stroke: var(--verde); flex-shrink: 0; }
+.loja-catalogo:hover,
+.loja-catalogo:focus-visible{ color: var(--verde); text-decoration: underline; text-underline-offset: 3px; }
 .loja-page-head .kicker{ margin-bottom: var(--s-1); }
 .loja-page-head h1{
   font-size: var(--fs-h2);
