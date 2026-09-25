@@ -215,13 +215,33 @@ h1, h2, h3{
 .nav-social svg{ width: 17px; height: 17px; stroke: currentColor; }
 /* botão do catálogo: no celular só o ícone; no computador ganha o texto */
 .nav-catalogo-txt{ display: none; }
-/* celular: catálogo + Instagram + WhatsApp + menu cabem ao lado da logo */
-@media (max-width: 480px){
-  .nav-right{ gap: 6px; }
-  .nav-social,
-  .nav-burger{ width: 36px; height: 36px; }
-  .nav-social svg{ width: 16px; height: 16px; }
+/* celular: no topo só catálogo + menu; Instagram e WhatsApp ficam dentro
+   do menu (.nav-mobile-social) */
+@media (max-width: 860px){
+  .nav-right .nav-social:not(.nav-catalogo){ display: none; }
 }
+.nav-mobile-social{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: var(--s-3);
+}
+.nav-mobile-social a{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px 0 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255,255,255,.28);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--tinta-inv);
+  text-decoration: none;
+  transition: background var(--t-rapido) var(--ease), border-color var(--t-rapido) var(--ease);
+}
+.nav-mobile-social a:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.5); }
+.nav-mobile-social svg{ width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
 .nav-social:hover,
 .nav-burger:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.45); }
 
