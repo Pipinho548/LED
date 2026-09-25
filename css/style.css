@@ -187,7 +187,8 @@ h1, h2, h3{
   border-radius: var(--r-xs);
 }
 .nav-logo-img{ height: 30px; width: auto; display: block; transition: height var(--t-medio) var(--ease); }
-.site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 44px; }
+/* na hero (menu transparente) a logo é maior; ao rolar volta pros 30px */
+.site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 48px; }
 
 .nav-links{ display: none; }
 
@@ -211,6 +212,13 @@ h1, h2, h3{
   transition: background var(--t-rapido) var(--ease), border-color var(--t-rapido) var(--ease);
 }
 .nav-social svg{ width: 17px; height: 17px; stroke: currentColor; }
+/* celular: catálogo + Instagram + WhatsApp + menu cabem ao lado da logo */
+@media (max-width: 480px){
+  .nav-right{ gap: 6px; }
+  .nav-social,
+  .nav-burger{ width: 36px; height: 36px; }
+  .nav-social svg{ width: 16px; height: 16px; }
+}
 .nav-social:hover,
 .nav-burger:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.45); }
 
@@ -311,6 +319,7 @@ h1, h2, h3{
 
   .nav-right{ grid-column: 3; }
   .nav-burger{ display: none; }
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px; }
   .nav-mobile-menu{ display: none; }
 }
 
