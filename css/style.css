@@ -174,8 +174,9 @@ h1, h2, h3{
   -webkit-backdrop-filter: saturate(1.4) blur(14px);
   backdrop-filter: saturate(1.4) blur(14px);
   box-shadow: 0 1px 0 var(--linha-inv), 0 16px 40px -20px rgba(0,0,0,.6);
-  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
-  padding-bottom: 14px;
+  /* 11 + logo 46 + 11 = 68px (--nav-h): a logo ocupa quase toda a barra */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 11px);
+  padding-bottom: 11px;
 }
 
 .nav-logo{
@@ -186,7 +187,7 @@ h1, h2, h3{
   text-decoration: none;
   border-radius: var(--r-xs);
 }
-.nav-logo-img{ height: 30px; width: auto; display: block; transition: height var(--t-medio) var(--ease); }
+.nav-logo-img{ height: 46px; width: auto; display: block; transition: height var(--t-medio) var(--ease); }
 /* na hero (menu transparente) a logo é maior; ao rolar volta pros 30px */
 .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 48px; }
 
@@ -316,6 +317,11 @@ h1, h2, h3{
   }
   .nav-links a:hover,
   .nav-links a:focus-visible{ color: var(--tinta-inv); }
+  /* em cima da foto da hero (menu transparente): texto mais forte com uma
+     sombra leve, pra não sumir na parede clara */
+  .site-nav:not(.is-solid):not(.nav-static) .nav-links{ color: rgba(255,255,255,.92); }
+  .site-nav:not(.is-solid):not(.nav-static) .nav-links a,
+  .site-nav:not(.is-solid):not(.nav-static) .nav-catalogo{ text-shadow: 0 1px 10px rgba(0,0,0,.45); }
   .nav-links a:hover::after,
   .nav-links a:focus-visible::after{ transform: scaleX(1); }
 
