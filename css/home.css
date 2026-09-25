@@ -80,6 +80,8 @@
   letter-spacing: -.03em;
   color: #fff;
   margin: 0 0 var(--s-3);
+  max-width: 14ch;       /* título longo: quebra em linhas equilibradas */
+  text-wrap: balance;
   text-shadow: 0 2px 24px rgba(0,0,0,.35);
 }
 
