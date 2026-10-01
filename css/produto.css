@@ -305,6 +305,8 @@
 }
 .dt-grade line{ stroke: rgba(24,60,50,.08); stroke-width: 1; }
 .dt-perfil{ fill: var(--verde); }
+/* partes de material flexível (ex.: aletas do difusor para MDF) */
+.dt-perfil .dt-macio{ fill: #8DB3A2; }
 .dt-serrilha{
   fill: none;
   stroke: var(--verde);
