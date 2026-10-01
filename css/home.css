@@ -576,3 +576,6 @@
     padding: var(--s-6) var(--s-5);
   }
 }
+
+/* campo-isca do formulário (anti-robô): fora da tela, sem ocupar espaço */
+.campo-isca{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

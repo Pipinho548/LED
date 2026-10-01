@@ -1,0 +1,47 @@
+# =====================================================================
+# SEGURANÇA DO SERVIDOR — vale na hospedagem Locaweb (Apache).
+# No GitHub Pages este arquivo é ignorado (arquivos com ponto não são
+# publicados) e não tem efeito. Testar depois de subir na Locaweb:
+#   curl -sI https://iluminiumbrasil.com.br | grep -iE "strict|content-security|x-frame|x-content|referrer|permissions"
+# =====================================================================
+
+# --- Sem listagem de pastas (quem abrir /images/ não vê a lista de arquivos)
+Options -Indexes
+
+# --- Força HTTPS (o SSL grátis da Locaweb precisa estar ativo no painel)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Bloqueia arquivos ocultos (.env, .git, .htaccess...), exceto o
+#     .well-known, que o certificado SSL usa pra se validar
+RedirectMatch 404 "/\.(?!well-known/)"
+
+# --- Bloqueia backups, logs, configs e código que não deveria estar público
+<FilesMatch "\.(bak|old|orig|save|swp|tmp|sql|sqlite|db|log|ini|env|cfg|conf|sh|zip|tar|gz|rar|7z|md|json|lock)$">
+  Require all denied
+</FilesMatch>
+
+# --- Cabeçalhos de segurança
+<IfModule mod_headers.c>
+  # HTTPS obrigatório por 1 ano, também nos subdomínios
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # O navegador não "adivinha" o tipo do arquivo (impede servir script disfarçado)
+  Header always set X-Content-Type-Options "nosniff"
+  # Ninguém coloca o site dentro de um iframe em outro domínio (clickjacking)
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Ao clicar num link externo, o outro site só recebe o domínio, não a página
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # O site não usa câmera, microfone nem localização: bloqueia de vez
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # Mesma política das páginas (meta CSP), mais o frame-ancestors, que só
+  # funciona como cabeçalho. Se adicionar um serviço externo novo (ex.:
+  # Google Analytics), ele precisa entrar aqui E na meta das páginas.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+  # Não anuncia versão do servidor/PHP
+  Header always unset X-Powered-By
+  Header unset X-Powered-By
+</IfModule>

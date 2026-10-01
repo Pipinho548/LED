@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Iluminium Brasil — Iluminação em LED, perfis e acessórios</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="images/icone-192.png">
@@ -29,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
-<script>document.documentElement.classList.add("js");</script>
+<script src="js/js-ativo.js"></script>
 </head>
 <body>
 
@@ -158,7 +160,7 @@
 
       <a class="produto-card" href="produtos/fitas-led.html">
         <div class="produto-media">
-          <img class="produto-photo" src="images/produto-fitas-led.jpeg" alt="Fitas de LED" loading="lazy" onerror="this.remove()">
+          <img class="produto-photo" src="images/produto-fitas-led.jpeg" alt="Fitas de LED" loading="lazy" data-some-se-falhar>
         </div>
         <div class="produto-body">
           <h3>Fitas LED</h3>
@@ -169,7 +171,7 @@
 
       <a class="produto-card" href="produtos/perfis-de-aluminio.html">
         <div class="produto-media">
-          <img class="produto-photo" src="images/produto-perfis.jpeg" alt="Perfis de alumínio para LED" loading="lazy" onerror="this.remove()">
+          <img class="produto-photo" src="images/produto-perfis.jpeg" alt="Perfis de alumínio para LED" loading="lazy" data-some-se-falhar>
         </div>
         <div class="produto-body">
           <h3>Perfis de alumínio</h3>
@@ -180,7 +182,7 @@
 
       <a class="produto-card" href="produtos/difusores.html">
         <div class="produto-media">
-          <img class="produto-photo" src="images/produto-difusores.jpeg" alt="Difusores para perfil de LED" loading="lazy" onerror="this.remove()">
+          <img class="produto-photo" src="images/produto-difusores.jpeg" alt="Difusores para perfil de LED" loading="lazy" data-some-se-falhar>
         </div>
         <div class="produto-body">
           <h3>Difusores</h3>
@@ -288,16 +290,16 @@
         <div class="field-row">
           <div class="field">
             <label for="fName">Nome</label>
-            <input id="fName" name="nome" type="text" required autocomplete="name">
+            <input id="fName" name="nome" type="text" required maxlength="120" autocomplete="name">
           </div>
           <div class="field">
             <label for="fPhone">Telefone</label>
-            <input id="fPhone" name="telefone" type="tel" autocomplete="tel">
+            <input id="fPhone" name="telefone" type="tel" maxlength="30" autocomplete="tel">
           </div>
         </div>
         <div class="field">
           <label for="fEmail">E-mail</label>
-          <input id="fEmail" name="email" type="email" required autocomplete="email">
+          <input id="fEmail" name="email" type="email" required maxlength="254" autocomplete="email">
         </div>
         <div class="field">
           <label for="fSubject">Assunto</label>
@@ -310,7 +312,12 @@
         </div>
         <div class="field">
           <label for="fMessage">Mensagem</label>
-          <textarea id="fMessage" name="mensagem" required></textarea>
+          <textarea id="fMessage" name="mensagem" required minlength="10" maxlength="5000"></textarea>
+        </div>
+        <!-- campo-isca contra robôs: escondido de quem usa o site, robô preenche -->
+        <div class="campo-isca" aria-hidden="true">
+          <label for="fSite">Não preencha este campo</label>
+          <input id="fSite" name="site" type="text" tabindex="-1" autocomplete="off">
         </div>
         <button class="btn-brand" type="submit">Enviar mensagem</button>
         <p class="form-note" id="formNote">
@@ -394,82 +401,7 @@
 </footer>
 
 <script src="js/main.js"></script>
-<script>
-  /* Nav (troca de fundo ao rolar), menu mobile e ano do rodapé agora ficam
-     em js/main.js (compartilhado com as páginas de produto). Aqui só entra
-     o comportamento específico desta página. */
-
-  /* =====================================================================
-     HERO — espera as duas fotos carregarem e acende a fita.
-     ===================================================================== */
-  (function(){
-    var hero = document.querySelector(".hero");
-    if (!hero) return;
-    var on = hero.querySelector(".hero-on"), off = hero.querySelector(".hero-off");
-    if (!on || !off) return;
-    function pronta(img){
-      return new Promise(function(ok){
-        if (img.complete) return ok();
-        img.addEventListener("load", ok, { once: true });
-        img.addEventListener("error", ok, { once: true });
-      });
-    }
-    Promise.all([pronta(on), pronta(off)]).then(function(){
-      setTimeout(function(){
-        hero.classList.add("is-lit", "is-acendendo");
-        setTimeout(function(){ hero.classList.remove("is-acendendo"); }, 2000);
-      }, 700);
-    });
-  })();
-
-  /* =====================================================================
-     REVEAL AO ROLAR — seção institucional: a foto entra da esquerda, o
-     texto entra da direita, cada elemento revela só uma vez.
-     ===================================================================== */
-  (function(){
-    var reveals = document.querySelectorAll('.reveal');
-    if (!reveals.length) return;
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)){
-      reveals.forEach(function(el){ el.classList.add('is-revealed'); });
-      return;
-    }
-
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (entry.isIntersecting){
-          entry.target.classList.add('is-revealed');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.25 });
-
-    reveals.forEach(function(el){ io.observe(el); });
-  })();
-
-  /* =====================================================================
-     FORMULÁRIO DE CONTATO — ainda sem backend real. Isso só valida os
-     campos e mostra uma confirmação; falta ligar num serviço de envio.
-     ===================================================================== */
-  (function(){
-    var form = document.getElementById('contactForm');
-    var note = document.getElementById('formNote');
-    if (!form) return;
-
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      if (!form.checkValidity()){
-        form.reportValidity();
-        return;
-      }
-      if (note){
-        note.textContent = 'Recebido — mas o envio ainda não está conectado a um serviço real. Configure um backend ou serviço como Formspree/EmailJS pra receber isso de verdade.';
-        note.style.color = 'var(--tinta)';
-      }
-      form.reset();
-    });
-  })();
-</script>
+<script src="js/home.js"></script>
 
 </body>
 </html>
