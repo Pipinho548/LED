@@ -1,0 +1,5 @@
+# Configuração do GitHub Pages (Jekyll). Por padrão ele publica o
+# .htaccess; aqui ele deixa de publicar. O .htaccess só vale na Locaweb.
+include: []
+exclude:
+  - .htaccess
