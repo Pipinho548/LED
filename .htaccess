@@ -1,7 +1,7 @@
 # =====================================================================
 # SEGURANÇA DO SERVIDOR — vale na hospedagem Locaweb (Apache).
-# No GitHub Pages este arquivo é ignorado (arquivos com ponto não são
-# publicados) e não tem efeito. Testar depois de subir na Locaweb:
+# No GitHub Pages este arquivo não é publicado (o _config.yml exclui)
+# e não tem efeito. Testar depois de subir na Locaweb:
 #   curl -sI https://iluminiumbrasil.com.br | grep -iE "strict|content-security|x-frame|x-content|referrer|permissions"
 # =====================================================================
 
