@@ -350,10 +350,29 @@ h1, h2, h3{
   .nav-mobile-menu{ display: none; }
 }
 
+/* logo nova (out/2026) é mais larga que a antiga: no celular fica com 40px
+   e entre 861 e 1119px encolhe com a tela pra não encostar nos links */
+@media (max-width: 860px){
+  .nav-logo-img,
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 40px; }
+}
+.nav-logo-img{ max-width: none; }   /* nunca espremer: o tamanho vem da altura */
+@media (min-width: 1300px){
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px !important; }
+}
+@media (min-width: 861px) and (max-width: 999px){
+  .nav-logo-img,
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 30px; }
+}
+@media (min-width: 1000px) and (max-width: 1119px){
+  .nav-logo-img,
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 38px; }
+}
+
 /* telas largas: logo ainda maior na hero e o catálogo ganha o texto
    (entre 861 e 1119px não cabe junto com os links do meio) */
 @media (min-width: 1120px){
-  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px; }
+  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 48px; }
 
   .nav-catalogo{
     width: auto;
