@@ -357,9 +357,7 @@ h1, h2, h3{
   .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 40px; }
 }
 .nav-logo-img{ max-width: none; }   /* nunca espremer: o tamanho vem da altura */
-@media (min-width: 1300px){
-  .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 64px !important; }
-}
+/* logo da hero fica em 48px no máximo (out/2026: hero mais leve) */
 @media (min-width: 861px) and (max-width: 999px){
   .nav-logo-img,
   .site-nav:not(.is-solid):not(.nav-static) .nav-logo-img{ height: 30px; }
