@@ -662,23 +662,23 @@ h1, h2, h3{
 .site-footer{
   background: var(--verde-3);
   color: var(--tinta-inv-2);
-  padding: var(--s-12) 0 var(--s-5);
+  padding: var(--s-7) 0 var(--s-3);   /* rodapé mais baixo (out/2026) */
 }
 
 .footer-grid{
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-5);
-  padding-bottom: var(--s-6);
+  grid-template-columns: 1fr 1fr;   /* no celular: logo em cima, colunas de 2 em 2 */
+  gap: var(--s-4) var(--s-3);
+  padding-bottom: var(--s-4);
   border-bottom: 1px solid var(--linha-inv);
 }
-@media (min-width: 640px){ .footer-grid{ grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px){ .footer-grid{ grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--s-6); } }
+@media (max-width: 639px){ .footer-about{ grid-column: 1 / -1; } }
+@media (min-width: 1000px){ .footer-grid{ grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--s-5); } }
 
 .footer-logo{ display: inline-block; margin-bottom: var(--s-2); border-radius: var(--r-xs); }
-.footer-logo-img{ height: 36px; width: auto; display: block; }
+.footer-logo-img{ height: 32px; width: auto; display: block; }
 
-.footer-grid p{ font-size: 14.5px; line-height: 1.7; max-width: 34ch; margin: 0; }
+.footer-grid p{ font-size: 14px; line-height: 1.6; max-width: 30ch; margin: 0; }
 
 .footer-col h3{
   font-family: var(--sans);
@@ -686,14 +686,14 @@ h1, h2, h3{
   font-weight: 600;
   letter-spacing: .01em;
   color: var(--tinta-inv);
-  margin: 0 0 var(--s-2);
+  margin: 0 0 12px;
 }
 .footer-col ul{
   list-style: none;
   margin: 0; padding: 0;
   display: grid;
-  gap: 12px;
-  font-size: 14.5px;
+  gap: 8px;
+  font-size: 14px;
 }
 .footer-col a{
   text-decoration: none;
@@ -702,9 +702,9 @@ h1, h2, h3{
 }
 .footer-col a:hover{ color: var(--tinta-inv); }
 
-.footer-social{ display: flex; gap: 12px; margin-top: var(--s-3); }
+.footer-social{ display: flex; gap: 10px; margin-top: var(--s-2); }
 .footer-social a{
-  width: 40px; height: 40px;
+  width: 36px; height: 36px;
   border-radius: 50%;
   border: 1px solid var(--linha-inv);
   display: flex;
@@ -722,7 +722,7 @@ h1, h2, h3{
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding-top: var(--s-3);
-  font-size: 13px;
+  padding-top: var(--s-2);
+  font-size: 12.5px;
   color: rgba(245,246,247,.5);
 }
