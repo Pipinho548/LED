@@ -675,8 +675,8 @@ h1, h2, h3{
 @media (max-width: 639px){ .footer-about{ grid-column: 1 / -1; } }
 @media (min-width: 1000px){ .footer-grid{ grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: var(--s-5); } }
 
-.footer-logo{ display: inline-block; margin-bottom: var(--s-2); border-radius: var(--r-xs); }
-.footer-logo-img{ height: 32px; width: auto; display: block; }
+.footer-logo{ display: inline-block; margin-bottom: 14px; border-radius: var(--r-xs); }
+.footer-logo-img{ height: 46px; width: auto; display: block; }   /* mesmo tamanho da logo do menu */
 
 .footer-grid p{ font-size: 14px; line-height: 1.6; max-width: 30ch; margin: 0; }
 
