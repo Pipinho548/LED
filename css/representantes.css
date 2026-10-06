@@ -11,7 +11,7 @@
 
 .representantes-head{
   max-width: 680px;
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--s-4);
 }
 .representantes-head .kicker{ margin-bottom: var(--s-1); }
 .representantes-head h1{

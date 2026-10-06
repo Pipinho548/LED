@@ -6,7 +6,7 @@
    ===================================================================== */
 
 .produto-hero{
-  padding: calc(var(--nav-h) + var(--s-5)) 0 0;
+  padding: calc(var(--nav-h) + var(--s-3)) 0 0;   /* topo das páginas internas mais curto (out/2026) */
   background: var(--aluminio);
 }
 
@@ -15,7 +15,7 @@
   align-items: center;
   gap: var(--s-1);
   padding: 6px 0;
-  margin-bottom: var(--s-4);
+  margin-bottom: var(--s-2);
   font-size: 14px;
   font-weight: 600;
   color: var(--tinta-2);
@@ -405,7 +405,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--s-2) var(--s-4);
-  padding: 0 0 var(--s-6);
+  padding: 0 0 var(--s-4);
 }
 /* link discreto pro catálogo em PDF, no topo de cada lista */
 .loja-catalogo{
@@ -464,5 +464,5 @@
   color: var(--tinta-2);
 }
 @media (min-width: 861px){
-  .produto-hero{ padding-top: calc(var(--nav-h) + var(--s-8)); }
+  .produto-hero{ padding-top: calc(var(--nav-h) + var(--s-5)); }
 }

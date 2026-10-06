@@ -14,7 +14,7 @@
 
 .luz-demo-head{
   max-width: 680px;
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--s-4);
 }
 .luz-demo-head .kicker{ margin-bottom: var(--s-1); }
 .luz-demo-head h2{
