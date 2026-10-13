@@ -570,3 +570,8 @@
 
 /* campo-isca do formulário (anti-robô): fora da tela, sem ocupar espaço */
 .campo-isca{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* frase de efeito (13/10/2026): duas frases, uma por linha; a segunda na cor da luz */
+.hero-copy h1{ max-width: 22ch; }
+.hero-copy h1 span{ display: block; }
+.hero-copy h1 span + span{ color: var(--luz-clara); }
