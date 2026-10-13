@@ -73,11 +73,11 @@
   --t-lento:  .7s;
 
   /* tipografia */
-  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --sans:  'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --fs-h1: clamp(42px, 6vw, 88px);
-  --fs-h2: clamp(34px, 4.4vw, 56px);
-  --fs-h3: clamp(21px, 1.8vw, 24px);
+  --serif: 'Archivo', Arial, sans-serif;   /* 13/10: fonte da marca (equivalente grátis da Trade Gothic Extended do manual) */
+  --sans:  'Archivo', Arial, sans-serif;
+  --fs-h1: clamp(32px, 4.4vw, 62px);
+  --fs-h2: clamp(26px, 3.1vw, 40px);
+  --fs-h3: clamp(18px, 1.5vw, 21px);
 }
 
 *, *::before, *::after{ box-sizing: border-box; }
@@ -726,3 +726,23 @@ h1, h2, h3{
   font-size: 12.5px;
   color: rgba(245,246,247,.5);
 }
+
+/* =====================================================================
+   FONTE DA MARCA (13/10/2026): sai a serifada Fraunces, entra a Archivo
+   larga — a equivalente grátis da Trade Gothic LT Extended do manual do
+   designer. Títulos em negrito largo, sem itálico; os textinhos acima dos
+   títulos viram rótulo em maiúsculas espaçadas, como no manual.
+   ===================================================================== */
+body{ font-stretch: 108%; }
+h1, h2, h3, h4{ font-stretch: 125%; font-weight: 650 !important; letter-spacing: -.012em; }
+em, .kicker, .rep-eyebrow{ font-style: normal !important; }
+h1 em, h2 em, h3 em, h4 em{ font-weight: 400 !important; }
+.kicker, .rep-eyebrow{
+  font-family: var(--sans);
+  font-stretch: 125%;
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.nav-mobile-links a{ font-stretch: 125%; font-weight: 600; font-size: 21px; }
