@@ -575,3 +575,31 @@
 .hero-copy h1{ max-width: 22ch; }
 .hero-copy h1 span{ display: block; }
 .hero-copy h1 span + span{ color: var(--luz-clara); }
+
+/* quem somos (14/10/2026): os três pilares da marca, do manual do designer */
+.pilares{
+  list-style: none;
+  margin: var(--s-4) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.pilares li{
+  border-top: 2px solid var(--verde);
+  padding-top: var(--s-2);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--tinta-2);
+}
+.pilares strong{
+  display: block;
+  margin-bottom: 4px;
+  font-stretch: 125%;
+  font-weight: 650;
+  font-size: 17px;
+  color: var(--verde);
+}
+@media (max-width: 560px){
+  .pilares{ grid-template-columns: 1fr; gap: var(--s-2); }
+}
