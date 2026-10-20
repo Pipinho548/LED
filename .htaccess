@@ -45,3 +45,14 @@ RedirectMatch 404 "/\.(?!well-known/)"
   Header always unset X-Powered-By
   Header unset X-Powered-By
 </IfModule>
+
+# --- Páginas sempre atualizadas (20/10/2026): sem isso o navegador chutava
+#     por quanto tempo guardar o HTML e mostrava a página velha por horas
+#     depois de uma atualização. "no-cache" = pode guardar, mas pergunta ao
+#     servidor se mudou antes de mostrar (resposta curta quando não mudou).
+#     CSS e JS não precisam: o ?v= no link já muda a cada atualização.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html?$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
