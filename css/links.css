@@ -1,0 +1,150 @@
+/* =====================================================================
+   LINKS — página do link da bio do Instagram (links/index.html).
+   Fica no nosso domínio em vez do Lnk.bio: sem marca de terceiro, com a
+   cara do site e quem clica já cai no iluminiumbrasil.com.br.
+   Página independente: não usa o style.css pra carregar rápido no 4G.
+   ===================================================================== */
+
+:root{
+  --verde:   #183C32;
+  --verde-2: #2B5548;
+  --verde-3: #0E241D;
+  --bege:    #C9BC98;
+  --tinta-inv:   #F2EDE2;
+  --tinta-inv-2: rgba(242,237,226,.72);
+  --linha-inv:   rgba(242,237,226,.18);
+  --luz:        #F6B04F;
+  --luz-clara:  #FFC877;
+  --luz-nucleo: #FFF3DC;
+}
+
+*{ box-sizing: border-box; margin: 0; }
+
+html{ background: var(--verde-3); }
+
+body{
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(120% 60% at 50% 0%, var(--verde-2) 0%, var(--verde) 55%, var(--verde-3) 100%);
+  color: var(--tinta-inv);
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.links{
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 56px 20px 40px;
+  padding-top: max(56px, env(safe-area-inset-top));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.links-logo{
+  width: 148px;
+  height: auto;
+  display: block;
+}
+
+.links-frase{
+  margin-top: 32px;
+  font-stretch: 125%;
+  font-weight: 650;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  color: var(--tinta-inv);
+}
+
+/* a "fita acesa": o único efeito da página, lembra o LED ligado */
+.links-luz{
+  display: block;
+  width: 96px;
+  height: 3px;
+  margin: 22px auto 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--luz-clara) 20%, var(--luz-nucleo) 50%, var(--luz-clara) 80%, transparent);
+  box-shadow: 0 0 14px 2px rgba(246,176,79,.55), 0 0 36px 6px rgba(246,176,79,.18);
+}
+
+.links-sobre{
+  margin-top: 22px;
+  font-size: 15px;
+  color: var(--tinta-inv-2);
+  max-width: 32ch;
+  text-wrap: balance;
+}
+
+.links-lista{
+  list-style: none;
+  padding: 0;
+  margin-top: 36px;
+  width: 100%;
+  display: grid;
+  gap: 12px;
+}
+
+.link{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--linha-inv);
+  background: rgba(242,237,226,.06);
+  color: var(--tinta-inv);
+  text-decoration: none;
+  font-weight: 560;
+  font-size: 16px;
+  text-align: left;
+  transition: background-color .2s, border-color .2s;
+}
+.link svg{
+  flex: none;
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  color: var(--bege);
+}
+.link:hover{ background: rgba(242,237,226,.12); border-color: rgba(242,237,226,.32); }
+
+/* ação principal: a luz de 3000K, igual ao botão principal do site */
+.link-principal{
+  background: var(--luz);
+  border-color: var(--luz);
+  color: var(--verde-3);
+  font-weight: 650;
+}
+.link-principal svg{ color: var(--verde-3); }
+.link-principal:hover{ background: var(--luz-clara); border-color: var(--luz-clara); }
+
+.link:focus-visible,
+.links-email:focus-visible{
+  outline: 2px solid var(--luz-clara);
+  outline-offset: 3px;
+}
+
+.links-rodape{
+  margin-top: 40px;
+  font-size: 14px;
+  color: var(--tinta-inv-2);
+}
+.links-email{
+  color: var(--tinta-inv);
+  text-decoration: underline;
+  text-decoration-color: var(--linha-inv);
+  text-underline-offset: 4px;
+}
+.links-email:hover{ text-decoration-color: var(--bege); }
+
+@media (prefers-reduced-motion: reduce){
+  .link{ transition: none; }
+}
+
+.links-nav{ width: 100%; }
