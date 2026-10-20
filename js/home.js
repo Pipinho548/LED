@@ -59,10 +59,11 @@
   reveals.forEach(function(el){ io.observe(el); });
 })();
 
-/* FORMULÁRIO DE CONTATO — ainda sem backend real (vai ser o enviar.php na
-   Locaweb). Já deixa pronto o que é do navegador:
-   - valida os campos (o servidor vai validar de novo: isso aqui é só
-     ajuda pra quem preenche, não proteção);
+/* FORMULÁRIO DE CONTATO — envia pelo Web3Forms (20/10/2026): a mensagem chega
+   por e-mail no comercial@iluminiumbrasil.com.br (o e-mail da conta Web3Forms).
+   A chave abaixo é PÚBLICA por natureza (só serve pra mandar pra esse e-mail),
+   pode ficar no repositório. Responder o e-mail recebido responde o cliente.
+   - valida os campos (ajuda pra quem preenche, não proteção);
    - campo-isca escondido: pessoa não vê nem preenche, robô preenche;
    - trava o botão enquanto envia, pra não mandar duas vezes. */
 (function(){
@@ -71,6 +72,13 @@
   if (!form) return;
   var botao = form.querySelector('button[type="submit"]');
   var enviando = false;
+  var CHAVE_WEB3FORMS = '9eb00483-67ee-4f64-a184-5ac4cdf8d7d1';
+
+  function aviso(texto, cor){
+    if (!note) return;
+    note.textContent = texto;
+    note.style.color = cor || 'var(--tinta)';
+  }
 
   // telefone (opcional): só números, espaço, parênteses, + e -, de 8 a 30
   var tel = form.querySelector('input[name="telefone"]');
@@ -95,17 +103,44 @@
 
     enviando = true;
     if (botao){ botao.disabled = true; botao.setAttribute('aria-busy', 'true'); }
+    aviso('Enviando…');
 
-    if (note){
-      note.textContent = 'Recebido — mas o envio ainda não está conectado a um serviço real. Configure um backend ou serviço como Formspree/EmailJS pra receber isso de verdade.';
-      note.style.color = 'var(--tinta)';
-    }
-    form.reset();
+    var assunto = form.querySelector('select[name="assunto"]');
+    var assuntoTexto = assunto ? assunto.options[assunto.selectedIndex].text : 'Contato';
+    var dados = {
+      access_key: CHAVE_WEB3FORMS,
+      subject: 'Site Iluminium — ' + assuntoTexto,
+      from_name: 'Site Iluminium Brasil',
+      nome: form.nome.value.trim(),
+      email: form.email.value.trim(),          // o Web3Forms usa este como "responder para"
+      telefone: form.telefone.value.trim() || '—',
+      assunto: assuntoTexto,
+      mensagem: form.mensagem.value.trim()
+    };
 
-    // libera o botão de novo depois de um intervalo
-    setTimeout(function(){
+    function libera(){
       enviando = false;
       if (botao){ botao.disabled = false; botao.removeAttribute('aria-busy'); }
-    }, 4000);
+    }
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(dados)
+    })
+      .then(function(r){ return r.json().then(function(j){ return { ok: r.ok && j.success, j: j }; }); })
+      .then(function(res){
+        if (res.ok){
+          aviso('Mensagem enviada. Respondemos pelo e-mail que você informou.', 'var(--verde)');
+          form.reset();
+        } else {
+          aviso('Não conseguimos enviar agora. Tente de novo ou escreva para comercial@iluminiumbrasil.com.br.', '#9B2C2C');
+        }
+        libera();
+      })
+      .catch(function(){
+        aviso('Não conseguimos enviar agora. Tente de novo ou escreva para comercial@iluminiumbrasil.com.br.', '#9B2C2C');
+        libera();
+      });
   });
 })();

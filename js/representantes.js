@@ -12,14 +12,14 @@
 
   // dados de quem já tem representante — troque/adicione estados aqui
   // conforme forem fechando novos escritórios de representação
-  var STATE_REPS = {
-    RS: { office: 'Escritório Sul', city: 'Porto Alegre, RS', phone: '(00) 0000-0000', whatsapp: '5500000000000', email: 'sul@iluminiumbrasil.com.br' },
-    SC: { office: 'Escritório Sul', city: 'Florianópolis, SC', phone: '(00) 0000-0000', whatsapp: '5500000000000', email: 'sul@iluminiumbrasil.com.br' },
-    PR: { office: 'Escritório Sul', city: 'Curitiba, PR', phone: '(00) 0000-0000', whatsapp: '5500000000000', email: 'sul@iluminiumbrasil.com.br' }
-  };
+  // 20/10/2026: o Sul (RS, SC, PR) é da DH Representações, vendedor Palmer Bueno
+  // (contato do site dhrepresentacoes.com.br). Os outros estados ainda não têm
+  // representante e mostram a fábrica.
+  var DH = { office: 'DH Representações', city: 'Palmer Bueno, representante comercial · Lagoa Vermelha, RS', phone: '(54) 99987-6260', whatsapp: '5554999876260', email: 'palmer@dh.ind.br' };
+  var STATE_REPS = { RS: DH, SC: DH, PR: DH };
 
   // dados da fábrica — usados como alternativa pros estados que ainda não têm representante
-  var FACTORY = { phone: '(00) 0000-0000', whatsapp: '5500000000000', email: 'contato@iluminiumbrasil.com.br' };
+  var FACTORY = { phone: '(54) 99975-8770', whatsapp: '5554933806227', email: 'comercial@iluminiumbrasil.com.br' };
 
   function contactRow(iconPath, text, href){
     return '<a class="rep-contact-row" href="' + href + '" target="_blank" rel="noopener">' +
