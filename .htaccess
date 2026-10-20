@@ -40,7 +40,7 @@ RedirectMatch 404 "/\.(?!well-known/)"
   # Mesma política das páginas (meta CSP), mais o frame-ancestors, que só
   # funciona como cabeçalho. Se adicionar um serviço externo novo (ex.:
   # Google Analytics), ele precisa entrar aqui E na meta das páginas.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.google.com; connect-src 'self' https://api.web3forms.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
   # Não anuncia versão do servidor/PHP
   Header always unset X-Powered-By
   Header unset X-Powered-By
