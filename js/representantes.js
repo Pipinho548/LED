@@ -19,7 +19,8 @@
   var STATE_REPS = { RS: DH, SC: DH, PR: DH };
 
   // dados da fábrica — usados como alternativa pros estados que ainda não têm representante
-  var FACTORY = { phone: '(54) 99975-8770', whatsapp: '5554933806227', email: 'comercial@iluminiumbrasil.com.br' };
+  // (21/10/2026: telefone fixo novo; o WhatsApp é o celular do comercial)
+  var FACTORY = { phone: '(54) 2222-0277', whatsapp: '5554933806227', email: 'comercial@iluminiumbrasil.com.br' };
 
   function contactRow(iconPath, text, href){
     return '<a class="rep-contact-row" href="' + href + '" target="_blank" rel="noopener">' +

@@ -133,6 +133,7 @@ body{
 .links-rodape{
   margin-top: 40px;
   font-size: 14px;
+  line-height: 1.9;
   color: var(--tinta-inv-2);
 }
 .links-email{
