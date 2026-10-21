@@ -412,6 +412,9 @@
   font-weight: 600;
   color: var(--tinta-2);
 }
+/* telefone e WhatsApp clicáveis, na cor do texto (sublinhado só no hover) */
+.localizacao-info li a{ color: inherit; text-decoration: none; }
+.localizacao-info li a:hover{ color: var(--verde); text-decoration: underline; text-underline-offset: 3px; }
 
 .map-frame{
   border-radius: var(--r-lg);
