@@ -1,0 +1,6 @@
+# Iluminium Brasil — todas as páginas liberadas pros buscadores.
+# As páginas internas (/links e /assinatura) têm noindex no próprio HTML.
+User-agent: *
+Allow: /
+
+Sitemap: https://iluminiumbrasil.com.br/sitemap.xml
