@@ -12,11 +12,9 @@
 
   // dados de quem já tem representante — troque/adicione estados aqui
   // conforme forem fechando novos escritórios de representação
-  // 20/10/2026: o Sul (RS, SC, PR) é da DH Representações, vendedor Palmer Bueno
-  // (contato do site dhrepresentacoes.com.br). Os outros estados ainda não têm
-  // representante e mostram a fábrica.
-  var DH = { office: 'DH Representações', city: 'Palmer Bueno, representante comercial · Lagoa Vermelha, RS', phone: '(54) 99987-6260', whatsapp: '5554999876260', email: 'palmer@dh.ind.br' };
-  var STATE_REPS = { RS: DH, SC: DH, PR: DH };
+  // 21/10/2026: sem representante por enquanto (a DH saiu do site a pedido do Felipe).
+  // Todos os estados mostram a fábrica. Pra voltar a ter, é só cadastrar aqui: { RS: {...} }
+  var STATE_REPS = {};
 
   // dados da fábrica — usados como alternativa pros estados que ainda não têm representante
   // (21/10/2026: telefone fixo novo; o WhatsApp é o celular do comercial)
