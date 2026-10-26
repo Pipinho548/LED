@@ -351,6 +351,7 @@
   @media (max-width:700px){ .pend-resumo{ grid-template-columns:1fr; } .lista-pend li{ grid-template-columns:minmax(0,1fr); } .lista-pend .acoes{ justify-content:flex-start; } .passos li{ grid-template-columns:28px minmax(0,1fr); } .passos .estado{ grid-column:2; } }
   /* ===== login do banco online ===== */
   #login{ position:fixed; inset:0; z-index:40; background:radial-gradient(120% 120% at 20% 0%, #1D4A3D 0%, var(--verde-3) 55%, var(--noite) 100%); display:flex; align-items:center; justify-content:center; padding:16px; overflow:auto; }
+  #login[hidden]{ display:none; }
   .login-wrap{ width:100%; max-width:380px; display:grid; gap:18px; }
   .login-logo{ height:34px; width:auto; justify-self:center; }
   .login-caixa{ background:var(--papel); border-radius:16px; padding:26px 24px; display:grid; gap:12px; box-shadow:0 24px 60px rgba(0,0,0,.35); }
