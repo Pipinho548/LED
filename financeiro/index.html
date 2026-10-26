@@ -361,6 +361,7 @@
   .login-caixa button.link{ margin:0; justify-self:start; font-weight:500; }
   .login-msg{ margin:0; min-height:1.2em; font-size:13px; color:var(--erro); }
   .nuvem-status{ font-size:12px; color:rgba(242,237,226,.75); white-space:nowrap; }
+  #btnSenha{ background:none; border:0; color:rgba(242,237,226,.75); cursor:pointer; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
   #btnNuvem{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:#F2EDE2; border-radius:8px; padding:7px 11px; cursor:pointer; white-space:nowrap; }
   body.online #btnArq,body.online #arqStatus{ display:none; }
   @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
@@ -380,7 +381,7 @@
     <button data-aba="fechamento">Fechamento</button>
     <button data-aba="ajustes">Ajustes</button>
   </nav>
-  <div class="arq"><a id="lnkOutro" href="./" title="Só as contas a pagar e a receber, com os mesmos dados">Versão simples</a><button class="importar" data-aba="importar">Importar arquivo</button><span id="arqStatus">Dados só neste computador</span><button id="btnArq">Usar arquivo no OneDrive</button><span id="nuvemStatus" class="nuvem-status"></span><button id="btnNuvem" type="button">Banco online</button></div>
+  <div class="arq"><a id="lnkOutro" href="./" title="Só as contas a pagar e a receber, com os mesmos dados">Versão simples</a><button class="importar" data-aba="importar">Importar arquivo</button><span id="arqStatus">Dados só neste computador</span><button id="btnArq">Usar arquivo no OneDrive</button><span id="nuvemStatus" class="nuvem-status"></span><button id="btnSenha" type="button" hidden>Trocar senha</button><button id="btnNuvem" type="button">Banco online</button></div>
 </header>
 
 <main>
@@ -2038,7 +2039,7 @@ const marcaNuvem = t => { document.getElementById('nuvemStatus').textContent = t
 function telaLogin(modo = 'entrar', msg = '') {
   const el = document.getElementById('login'); el.hidden = false;
   const titulo = { entrar: 'Entrar no financeiro', senha: 'Crie a sua senha', esqueci: 'Esqueci a senha', espera: 'Abrindo…' }[modo];
-  const texto = { entrar: 'Use o seu e-mail e a sua senha. Cada sócio tem o próprio acesso.', senha: 'É a senha que você vai usar para entrar daqui para frente. Use pelo menos 8 caracteres.', esqueci: 'Coloque o seu e-mail: chega um link para criar uma senha nova.', espera: '' }[modo];
+  const texto = { entrar: 'Use o seu e-mail e a sua senha. Cada sócio tem o próprio acesso.', senha: 'É a senha que você vai usar para entrar daqui para frente. Use pelo menos 8 caracteres. Se recebeu uma senha provisória, troque aqui.', esqueci: 'Coloque o seu e-mail: chega um link para criar uma senha nova.', espera: '' }[modo];
   el.innerHTML = `<div class="login-wrap"><img class="login-logo" src="${document.querySelector('.marca-logo').src}" alt="Iluminium Brasil">
     <form class="login-caixa" id="formLogin" novalidate><h1>${titulo}</h1>${texto ? `<p class="ajuda">${texto}</p>` : ''}
     ${modo === 'entrar' || modo === 'esqueci' ? '<label class="campo">E-mail<input type="email" name="email" autocomplete="username" required></label>' : ''}
@@ -2084,7 +2085,7 @@ async function abrirNuvem() {
     S = novo; nuvem.versao = e.versao; nuvem.on = true;
   }
   document.getElementById('login').hidden = true; document.body.classList.add('online');
-  btnNuvem.textContent = 'Sair'; marcaNuvem(`${nuvem.nome} · banco online`); render(); conferirSempre();
+  btnNuvem.textContent = 'Sair'; btnSenha.hidden = false; marcaNuvem(`${nuvem.nome} · banco online`); render(); conferirSempre();
 }
 function salvarNuvem() { clearTimeout(nuvem.timer); marcaNuvem('Salvando…'); nuvem.timer = setTimeout(enviarNuvem, 700); }
 async function enviarNuvem() {
@@ -2650,6 +2651,7 @@ if (MODO === 'simples') { document.body.classList.add('simples'); document.title
   lnkOutro.href = 'completo.html'; lnkOutro.textContent = 'Sistema completo'; lnkOutro.title = 'Fluxo, ponto de equilíbrio, banco, resultado e fechamento';
   document.getElementById('painel').hidden = true; document.getElementById('sPagar').hidden = false; document.getElementById('sCaixa').hidden = false; }
 btnNuvem.onclick = () => nuvem.on ? sairNuvem() : telaLogin('entrar');
+btnSenha.onclick = () => telaLogin('senha');
 if (BUILD === 'web') { btnArq.hidden = true; arqStatus.hidden = true; }
 render();
 (async () => {
