@@ -1,0 +1,12 @@
+# =====================================================================
+# FINANCEIRO (/financeiro): páginas que só abrem com login do banco online.
+# Troca a política de segurança do site só nesta pasta: o sistema roda
+# o próprio script na página e conversa com o banco (Supabase).
+# =====================================================================
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://tbgoqionkpruythdronr.supabase.co wss://tbgoqionkpruythdronr.supabase.co https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; worker-src 'self' blob: https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  # fora dos buscadores e sem guardar cópia em cache de terceiros
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set X-Frame-Options "DENY"
+</IfModule>
