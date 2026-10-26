@@ -352,6 +352,12 @@
   /* ===== login do banco online ===== */
   #login{ position:fixed; inset:0; z-index:40; background:radial-gradient(120% 120% at 20% 0%, #1D4A3D 0%, var(--verde-3) 55%, var(--noite) 100%); display:flex; align-items:center; justify-content:center; padding:16px; overflow:auto; }
   #login[hidden]{ display:none; }
+  .anexos{ margin-top:16px; border-top:1px solid var(--linha); padding-top:12px; }
+  .anexos h3{ margin:0 0 8px; font-size:14px; }
+  .anexos ul{ list-style:none; margin:0 0 10px; padding:0; }
+  .anexos li{ display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; padding:6px 0; border-bottom:1px solid #EEF1EE; }
+  .anexos li button.link{ margin:0; font-weight:600; }
+  .anexos .anexar{ display:inline-block; cursor:pointer; }
   .login-wrap{ width:100%; max-width:380px; display:grid; gap:18px; }
   .login-logo{ height:34px; width:auto; justify-self:center; }
   .login-caixa{ background:var(--papel); border-radius:16px; padding:26px 24px; display:grid; gap:12px; box-shadow:0 24px 60px rgba(0,0,0,.35); }
@@ -1041,6 +1047,7 @@ function renderPagar() {
       c.recebidoEm ? `<span class="tag ok">chegou ${dBR(c.recebidoEm).slice(0, 5)}</span>` : `<button class="btn mini sec" data-chegou="${c.id}" title="Marcar que a mercadoria chegou hoje">Chegou</button>`);
     if (c.cat === 'Cartão Cresol') t.push(`<button class="btn mini sec" data-cartao="${c.id}">${c.itens && c.itens.length ? `detalhada (${c.itens.length} compras)` : 'Detalhar a fatura'}</button>`);
     if (c.cat === 'Financiamentos') t.push(c.fin ? `<span class="tag" title="Juros: despesa. Amortização: pagamento da dívida">juros ${brl(c.fin.juros)}</span>` : '<span class="tag ruim" title="Edite a conta e informe os juros">sem os juros separados</span>');
+    if (c.anexos && c.anexos.length) t.push(`<span class="tag" title="Abra em Editar">${c.anexos.length} anexo${c.anexos.length > 1 ? 's' : ''}</span>`);
     if (contaTravada(c)) t.push('<span class="tag trava">mês fechado</span>');
     return t.length ? ' ' + t.join(' ') : ''; };
   document.getElementById('tbPagar').innerHTML = lista.length ? grupos.map(g => `<tr class="mes"><td colspan="9"><b>${mesLongo(g.m)}</b><span>${g.l.length} contas · total ${brl(soma(g.l))} · em aberto ${brl(soma(g.l.filter(c => !c.pago)))}</span></td></tr>` +
@@ -1876,7 +1883,7 @@ function renderSimples() {
   const lp = S.contas.filter(c => (verPagas || !c.pago) && (!qp || (c.desc + ' ' + c.forn + ' ' + (c.nf ? 'NF ' + c.nf.numero : '')).toLowerCase().includes(qp))).sort((a, b) => a.venc.localeCompare(b.venc));
   const itemP = c => { const atraso = !c.pago && c.venc < h, trava = c.pago && fechado(c.pagoEm), outra = c.pagador && c.pagador !== principal ? ` · sai da conta da ${esc(entNome(c.pagador).split(' ')[0])}` : '';
     return `<li class="s-item${atraso ? ' atraso' : ''}${c.pago ? ' pago' : ''}"><time datetime="${c.venc}"><b>${c.venc.slice(8)}</b><span>${MES3[+c.venc.slice(5, 7) - 1]} · ${diaSemana(c.venc)}</span></time>
-      <button class="s-oque" type="button" data-sedit="${c.id}" title="${esc(c.desc)}"><b>${esc(resumo(c.desc))}</b><small>${esc(c.forn || c.cat)}${outra}${atraso ? ` · venceu há ${dias(c.venc, h)} dia(s)` : ''}</small></button>
+      <button class="s-oque" type="button" data-sedit="${c.id}" title="${esc(c.desc)}"><b>${esc(resumo(c.desc))}</b><small>${esc(c.forn || c.cat)}${outra}${c.anexos && c.anexos.length ? ' · ' + c.anexos.length + (c.anexos.length > 1 ? ' anexos' : ' anexo') : ''}${atraso ? ` · venceu há ${dias(c.venc, h)} dia(s)` : ''}</small></button>
       <span class="s-valor">${c.valor ? brl(c.valor) : 'a confirmar'}</span>
       <span class="s-acao">${c.pago ? `<span class="tag ok">pago ${c.pagoEm ? dBR(c.pagoEm).slice(0, 5) : ''}</span>${trava ? '' : `<button class="link" type="button" data-sdesfaz="${c.id}">desfazer</button>`}` : `<button class="btn mini" type="button" data-spagar="${c.id}" ${c.valor ? '' : 'disabled title="Coloque o valor antes"'}>Paguei</button>`}</span></li>`; };
   const mp = maisMeses(lp, c => c.venc, 'p', qp, 'contas');
@@ -1887,7 +1894,7 @@ function renderSimples() {
   const lr = S.receber.filter(r => (verRec || !r.recebido) && (!qr || (r.desc + ' ' + (r.cliente || '')).toLowerCase().includes(qr))).sort((a, b) => a.data.localeCompare(b.data));
   const itemR = r => { const atraso = !r.recebido && r.data < h, trava = r.recebido && fechado(r.recebidoEm || r.data);
     return `<li class="s-item${atraso ? ' atraso' : ''}${r.recebido ? ' pago' : ''}"><time datetime="${r.data}"><b>${r.data.slice(8)}</b><span>${MES3[+r.data.slice(5, 7) - 1]} · ${diaSemana(r.data)}</span></time>
-      <button class="s-oque" type="button" data-seditr="${r.id}" title="${esc(r.desc)}"><b>${esc(r.desc)}</b><small>${esc(r.cliente || '')}${r.venda ? ' · venda' : ''}${atraso ? ` · atrasado ${dias(r.data, h)} dia(s)` : ''}</small></button>
+      <button class="s-oque" type="button" data-seditr="${r.id}" title="${esc(r.desc)}"><b>${esc(r.desc)}</b><small>${esc(r.cliente || '')}${r.venda ? ' · venda' : ''}${r.anexos && r.anexos.length ? ' · ' + r.anexos.length + (r.anexos.length > 1 ? ' anexos' : ' anexo') : ''}${atraso ? ` · atrasado ${dias(r.data, h)} dia(s)` : ''}</small></button>
       <span class="s-valor">${brl(r.valor)}</span>
       <span class="s-acao">${r.recebido ? `<span class="tag ok">recebido ${r.recebidoEm ? dBR(r.recebidoEm).slice(0, 5) : ''}</span>${trava ? '' : `<button class="link" type="button" data-sdesfazr="${r.id}">desfazer</button>`}` : `<button class="btn mini" type="button" data-sreceb="${r.id}">Recebi</button>`}</span></li>`; };
   const mr = maisMeses(lr, r => r.data, 'r', qr, 'entradas');
@@ -1969,7 +1976,7 @@ function dlgContaSimples(c, v = {}) {
       <label class="campo">Fornecedor<input type="text" id="snF" value="${esc(x.forn)}"></label>
       <label class="campo">Categoria<select id="snC">${CATS.map(k => `<option ${k === x.cat ? 'selected' : ''}>${k}</option>`).join('')}</select></label>
       ${nova ? '<label class="campo">Repetir<select id="snRep"><option value="1">só esta vez</option><option value="3">3 meses</option><option value="6">6 meses</option><option value="12">12 meses</option></select></label>' : ''}
-    </div>${nova ? '' : `<p style="margin-top:14px"><button class="btn mini perigo" type="button" data-sapagar="c:${c.id}">Apagar esta conta</button></p>`}`, () => {
+    </div>${nova ? '' : `<p style="margin-top:14px"><button class="btn mini perigo" type="button" data-sapagar="c:${c.id}">Apagar esta conta</button></p>${htmlAnexos(c)}`}`, () => {
       const d = { venc: snV.value, desc: snD.value.trim(), valor: +snR.value || 0, forn: snF.value.trim(), cat: snC.value };
       if (!d.venc || !d.desc) { toast('Preencha o vencimento e o que é.'); setTimeout(() => dlgContaSimples(c, d), 0); return; }
       if (nova) { const rep = +snRep.value || 1, dup = S.contas.find(y => Math.abs(y.valor - d.valor) < .01 && mesmoForn(y, d) && Math.abs(dias(y.venc, d.venc)) <= 15);
@@ -1989,7 +1996,7 @@ function dlgReceberSimples(r, v = {}) {
       <label class="campo largo">De quem (cliente)<input type="text" id="srC" value="${esc(x.cliente)}"></label>
       ${nova ? `<label class="campo" style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="srVenda" checked> É uma venda</label>
       <label class="campo">Data da nota (se for venda)<input type="date" id="srNota" value="${hoje()}"></label>` : ''}
-    </div>${nova ? '<p class="ajuda" style="margin-top:10px">Venda entra também no resultado do mês, pela data da nota. Aporte de sócio ou devolução: desmarque "É uma venda".</p>' : `<p style="margin-top:14px"><button class="btn mini perigo" type="button" data-sapagar="r:${r.id}">Apagar esta entrada</button></p>`}`, () => {
+    </div>${nova ? '<p class="ajuda" style="margin-top:10px">Venda entra também no resultado do mês, pela data da nota. Aporte de sócio ou devolução: desmarque "É uma venda".</p>' : `<p style="margin-top:14px"><button class="btn mini perigo" type="button" data-sapagar="r:${r.id}">Apagar esta entrada</button></p>${htmlAnexos(r)}`}`, () => {
       const d = { data: srD.value, desc: srO.value.trim(), cliente: srC.value.trim(), valor: +srV.value || 0 };
       if (!d.data || !d.desc || !d.valor) { toast('Preencha quando entra, o que é e o valor.'); setTimeout(() => dlgReceberSimples(r, d), 0); return; }
       if (nova) { const e = { id: uid(), ...d, recebido: false };
@@ -2125,6 +2132,50 @@ async function sairNuvem() {
   try { const sb = await cliente(); await sb.auth.signOut(); } catch (e) {}
   location.reload();
 }
+
+const nomeArquivo = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w.\-]+/g, '-').slice(-80);
+const itemPorId = id => S.contas.find(x => x.id === id) || S.receber.find(x => x.id === id);
+const irmaos = c => c && c.nf ? S.contas.filter(y => y !== c && y.nf && y.nf.numero === c.nf.numero && mesmoForn(y, c)) : [];
+const parcelaDe = y => ((y.desc.match(/\((\d+\/\d+)/) || [])[1] ? 'parcela ' + y.desc.match(/\((\d+\/\d+)/)[1] : resumo(y.desc).slice(0, 30));
+function htmlAnexos(x) {
+  if (!x) return '';
+  if (!nuvem.on) return '<div class="anexos"><p class="ajuda">Para anexar a nota, o boleto ou o comprovante, entre no banco online.</p></div>';
+  const lin = (a, de) => `<li><button class="link" type="button" data-abrirax="${esc(a.path)}">${esc(a.nome)}</button><span class="ajuda">${Math.max(1, Math.round((a.tam || 0) / 1024))} KB${a.em ? ' · ' + esc(a.em) : ''}${de ? ' · ' + esc(de) : ''}</span>${de ? '' : `<button class="btn mini perigo" type="button" data-tiraax="${esc(a.path)}" data-dono="${x.id}" aria-label="Tirar o anexo ${esc(a.nome)}">×</button>`}</li>`;
+  const meus = (x.anexos || []).map(a => lin(a)), dos = irmaos(x).flatMap(y => (y.anexos || []).map(a => lin(a, 'da ' + parcelaDe(y))));
+  return `<div class="anexos" data-anexosde="${x.id}"><h3>Anexos <span class="ajuda">(nota, boleto, comprovante)</span></h3>
+    ${meus.length || dos.length ? `<ul>${meus.join('')}${dos.join('')}</ul>` : '<p class="ajuda">Nenhum arquivo ainda.</p>'}
+    <label class="btn mini sec anexar">Anexar arquivo (PDF, foto ou XML)<input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.xml" multiple hidden data-anexar="${x.id}"></label></div>`;
+}
+const redesenharAnexos = x => { const el = document.querySelector(`[data-anexosde="${x.id}"]`); if (el) el.outerHTML = htmlAnexos(x); };
+async function anexar(x, files) {
+  const sb = await cliente(), el = document.querySelector(`[data-anexosde="${x.id}"]`); if (el) el.insertAdjacentHTML('beforeend', '<p class="ajuda" data-enviando>Enviando…</p>');
+  let n = 0;
+  for (const f of files) {
+    if (f.size > 10 * 1024 * 1024) { toast(`${f.name} passa de 10 MB.`); continue; }
+    const path = `${S.contas.includes(x) ? 'contas' : 'receber'}/${x.id}/${Date.now()}-${nomeArquivo(f.name)}`;
+    const { error } = await sb.storage.from('anexos').upload(path, f, { contentType: f.type || 'application/octet-stream', upsert: false });
+    if (error) { toast(`Não consegui anexar ${f.name}: ${error.message}`); continue; }
+    (x.anexos = x.anexos || []).push({ path, nome: f.name, tipo: f.type, tam: f.size, em: new Date().toLocaleString('pt-BR').slice(0, 17), quem: nuvem.nome }); n++;
+    hist(`Anexou "${f.name}" em "${x.desc}"`);
+  }
+  if (n) { salvar(); toast(n === 1 ? 'Arquivo anexado.' : n + ' arquivos anexados.'); }
+  redesenharAnexos(x);
+}
+async function abrirAnexo(path) {
+  const w = window.open('', '_blank');
+  try { const sb = await cliente(), { data, error } = await sb.storage.from('anexos').createSignedUrl(path, 600); if (error) throw error;
+    if (w) w.location.href = data.signedUrl; else location.href = data.signedUrl; }
+  catch (e) { if (w) w.close(); toast('Não consegui abrir o anexo: ' + e.message); }
+}
+async function tirarAnexo(x, path) {
+  const a = (x.anexos || []).find(y => y.path === path); if (!a || !confirm(`Tirar o anexo "${a.nome}"? O arquivo é apagado.`)) return;
+  try { const sb = await cliente(), { error } = await sb.storage.from('anexos').remove([path]); if (error) throw error; } catch (e) { toast('Não consegui apagar o arquivo: ' + e.message); return; }
+  x.anexos = x.anexos.filter(y => y.path !== path); hist(`Tirou o anexo "${a.nome}" de "${x.desc}"`); salvar(); redesenharAnexos(x);
+}
+document.body.addEventListener('change', e => { const t = e.target; if (!t.dataset || !t.dataset.anexar) return; const x = itemPorId(t.dataset.anexar); if (x && t.files.length) anexar(x, [...t.files]); });
+document.body.addEventListener('click', e => { const t = e.target.closest('[data-abrirax],[data-tiraax]'); if (!t) return;
+  if (t.dataset.abrirax) abrirAnexo(t.dataset.abrirax);
+  if (t.dataset.tiraax) { const x = itemPorId(t.dataset.dono); if (x) tirarAnexo(x, t.dataset.tiraax); } });
 
 function renderAjustes() {
   const f = document.getElementById('formSaldo'); f.valor.value = S.saldoInformado.valor; f.data.value = S.saldoInformado.data;
@@ -2443,6 +2494,7 @@ function dlgEditar(c) {
     ${fin ? `<label class="campo" title="Juros desta parcela: é despesa. O resto é amortização da dívida.">Juros desta parcela (R$)<input type="number" step="0.01" id="edJ" value="${c.fin ? c.fin.juros : ''}"></label>
       <label class="campo" title="Parte da parcela que é de outra pessoa (ex.: a parte do José)">Parte de outra pessoa (R$)<input type="number" step="0.01" id="edO" value="${c.fin ? c.fin.outros || '' : ''}"></label>` : ''}</div>
     ${c.nf ? `<p class="ajuda" style="margin-top:12px">NF ${esc(c.nf.numero)} de ${esc(c.nf.emitente)}${c.nf.dest ? ', em nome de ' + esc(c.nf.dest) + (c.nf.destDoc ? ' (' + esc(c.nf.destDoc) + ')' : '') : ''}. Arquivo: ${esc(c.nf.arquivo || '')}.</p>` : ''}
+    ${htmlAnexos(c)}
     ${c.valorOriginal ? `<p class="ajuda">Valor original ${brl(c.valorOriginal)} (ajustado pelo banco).</p>` : ''}${fornec ? '' : ''}`,
     () => { const antes = { ...c };
       if (edM.value && fechado(edM.value)) { avisoTrava(edM.value); return; }
