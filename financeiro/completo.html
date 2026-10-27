@@ -358,6 +358,7 @@
   .anexos li{ display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; padding:6px 0; border-bottom:1px solid #EEF1EE; }
   .anexos li button.link{ margin:0; font-weight:600; }
   .anexos .anexar{ display:inline-block; cursor:pointer; }
+  td.desc button.link{ margin:0; font-weight:400; color:inherit; text-decoration-thickness:1px; text-decoration-color:var(--linha-forte); }
   .login-wrap{ width:100%; max-width:380px; display:grid; gap:18px; }
   .login-logo{ height:34px; width:auto; justify-self:center; }
   .login-caixa{ background:var(--papel); border-radius:16px; padding:26px 24px; display:grid; gap:12px; box-shadow:0 24px 60px rgba(0,0,0,.35); }
@@ -1329,7 +1330,7 @@ function renderExtrato() {
     if (trava || !daEmpresa(t) || SO_BANCO.includes(t.cat)) return '';
     return `<button class="btn mini sec" data-ligar="${t.fitid}">Ligar</button>`; };
   document.getElementById('tbExtrato').innerHTML = l.length ? l.map(t => { const trava = fechado(t.data);
-    return `<tr class="${t.cat === NAO_GASTO || t.cat === TRANSF ? 'pago' : ''}"><td>${dBR(t.data)}</td><td class="ent">${esc(entNome(t.ent).replace(' Representações', ''))}${t.acct ? `<div class="ajuda">conta ${esc(t.acct)}</div>` : ''}</td><td class="desc">${esc(t.memo)}</td>
+    return `<tr class="${t.cat === NAO_GASTO || t.cat === TRANSF ? 'pago' : ''}"><td>${dBR(t.data)}</td><td class="ent">${esc(entNome(t.ent).replace(' Representações', ''))}${t.acct ? `<div class="ajuda">conta ${esc(t.acct)}</div>` : ''}</td><td class="desc"><button class="link" type="button" data-bancoax="${esc(t.fitid)}" title="Ver e anexar a nota ou o comprovante">${esc(t.memo)}</button>${t.anexos && t.anexos.length ? `<div class="ajuda">${t.anexos.length} anexo${t.anexos.length > 1 ? 's' : ''}</div>` : ''}</td>
       <td><input type="text" class="obs" data-obsx="${t.fitid}" value="${esc(t.obs || '')}" placeholder="o que foi?" aria-label="O que foi" ${trava ? 'disabled' : ''}></td>
       <td><select class="mini" data-catx="${t.fitid}" ${trava ? 'disabled' : ''}><option value="">—</option>${opts(t.cat)}</select></td><td class="n ${t.valor < 0 ? 'neg' : ''}">${brl(t.valor)}</td><td>${ligado(t)}</td></tr>`; }).join('') : '<tr><td colspan="7" class="vazio">Nenhum extrato importado. Vá em Importar e arraste o arquivo OFX do banco.</td></tr>';
   renderConciliacao();
@@ -1961,7 +1962,7 @@ function renderBancoSimples() {
   document.getElementById('sBancoLista').innerHTML = g.map(({ m, l }) => { const ent = l.filter(({ t }) => t.valor > 0 && daEmpresa(t)).reduce((a, { t }) => a + t.valor, 0), sai = -l.filter(({ t }) => t.valor < 0 && daEmpresa(t)).reduce((a, { t }) => a + t.valor, 0);
     return `<h2 class="s-mes">${mesLongo(m)}<span>entrou ${brl(ent)} · saiu ${brl(sai)}</span></h2><ul>${l.map(({ t }) => { const fd = fimDia[t.ent + '|' + t.data], anula = t.cat === NAO_GASTO, transf = t.cat === TRANSF;
       return `<li class="s-item b-item${anula || transf ? ' pago' : ''}"><time datetime="${t.data}"><b>${t.data.slice(8)}</b><span>${MES3[+t.data.slice(5, 7) - 1]} · ${diaSemana(t.data)}</span></time>
-        <div class="s-oque" style="cursor:default"><b>${esc(t.obs || nomeBanco(t))}</b><small>${esc(t.cat || 'sem categoria')}${anula ? ' (se anula)' : ''} · ${esc(nomeBanco(t))}${varias ? ' · conta ' + esc(entNome(t.ent).split(' ')[0]) : ''}</small></div>
+        <button class="s-oque" type="button" data-bancoax="${esc(t.fitid)}" title="Ver e anexar a nota ou o comprovante"><b>${esc(t.obs || nomeBanco(t))}</b><small>${esc(t.cat || 'sem categoria')}${anula ? ' (se anula)' : ''} · ${esc(nomeBanco(t))}${varias ? ' · conta ' + esc(entNome(t.ent).split(' ')[0]) : ''}${t.anexos && t.anexos.length ? ' · ' + t.anexos.length + (t.anexos.length > 1 ? ' anexos' : ' anexo') : ''}</small></button>
         <span class="s-valor ${t.valor < 0 ? 'neg' : 'pos'}">${t.valor > 0 ? '+' : ''}${brl(t.valor)}</span>
         <span class="s-acao b-saldo">${fd && fd.ultimo === t.fitid ? `<small>saldo do dia</small>${brl(fd.saldo)}` : ''}</span></li>`; }).join('')}</ul>`; }).join('');
 }
@@ -2134,29 +2135,32 @@ async function sairNuvem() {
 }
 
 const nomeArquivo = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\w.\-]+/g, '-').slice(-80);
-const itemPorId = id => S.contas.find(x => x.id === id) || S.receber.find(x => x.id === id);
+const itemPorId = id => S.contas.find(x => x.id === id) || S.receber.find(x => x.id === id) || S.extrato.find(x => x.fitid === id);
+const chaveAx = x => x.id || x.fitid, nomeItem = x => x.desc || x.obs || x.memo;
 const irmaos = c => c && c.nf ? S.contas.filter(y => y !== c && y.nf && y.nf.numero === c.nf.numero && mesmoForn(y, c)) : [];
 const parcelaDe = y => ((y.desc.match(/\((\d+\/\d+)/) || [])[1] ? 'parcela ' + y.desc.match(/\((\d+\/\d+)/)[1] : resumo(y.desc).slice(0, 30));
+const vizinhos = x => x.fitid ? [itemPorId(x.conta || x.receber || '')].filter(y => y && !y.fitid).map(y => [y, 'da conta ' + resumo(y.desc).slice(0, 30)])
+  : [...irmaos(x).map(y => [y, 'da ' + parcelaDe(y)]), ...S.extrato.filter(t => t.conta === x.id || t.receber === x.id).map(t => [t, 'do banco, ' + dBR(t.data)])];
 function htmlAnexos(x) {
   if (!x) return '';
   if (!nuvem.on) return '<div class="anexos"><p class="ajuda">Para anexar a nota, o boleto ou o comprovante, entre no banco online.</p></div>';
-  const lin = (a, de) => `<li><button class="link" type="button" data-abrirax="${esc(a.path)}">${esc(a.nome)}</button><span class="ajuda">${Math.max(1, Math.round((a.tam || 0) / 1024))} KB${a.em ? ' · ' + esc(a.em) : ''}${de ? ' · ' + esc(de) : ''}</span>${de ? '' : `<button class="btn mini perigo" type="button" data-tiraax="${esc(a.path)}" data-dono="${x.id}" aria-label="Tirar o anexo ${esc(a.nome)}">×</button>`}</li>`;
-  const meus = (x.anexos || []).map(a => lin(a)), dos = irmaos(x).flatMap(y => (y.anexos || []).map(a => lin(a, 'da ' + parcelaDe(y))));
-  return `<div class="anexos" data-anexosde="${x.id}"><h3>Anexos <span class="ajuda">(nota, boleto, comprovante)</span></h3>
+  const lin = (a, de) => `<li><button class="link" type="button" data-abrirax="${esc(a.path)}">${esc(a.nome)}</button><span class="ajuda">${Math.max(1, Math.round((a.tam || 0) / 1024))} KB${a.em ? ' · ' + esc(a.em) : ''}${de ? ' · ' + esc(de) : ''}</span>${de ? '' : `<button class="btn mini perigo" type="button" data-tiraax="${esc(a.path)}" data-dono="${esc(chaveAx(x))}" aria-label="Tirar o anexo ${esc(a.nome)}">×</button>`}</li>`;
+  const meus = (x.anexos || []).map(a => lin(a)), dos = vizinhos(x).flatMap(([y, de]) => (y.anexos || []).map(a => lin(a, de)));
+  return `<div class="anexos" data-anexosde="${esc(chaveAx(x))}"><h3>Anexos <span class="ajuda">(nota, boleto, comprovante)</span></h3>
     ${meus.length || dos.length ? `<ul>${meus.join('')}${dos.join('')}</ul>` : '<p class="ajuda">Nenhum arquivo ainda.</p>'}
-    <label class="btn mini sec anexar">Anexar arquivo (PDF, foto ou XML)<input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.xml" multiple hidden data-anexar="${x.id}"></label></div>`;
+    <label class="btn mini sec anexar">Anexar arquivo (PDF, foto ou XML)<input type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.xml" multiple hidden data-anexar="${esc(chaveAx(x))}"></label></div>`;
 }
-const redesenharAnexos = x => { const el = document.querySelector(`[data-anexosde="${x.id}"]`); if (el) el.outerHTML = htmlAnexos(x); };
+const redesenharAnexos = x => { const el = document.querySelector(`[data-anexosde="${chaveAx(x)}"]`); if (el) el.outerHTML = htmlAnexos(x); };
 async function anexar(x, files) {
-  const sb = await cliente(), el = document.querySelector(`[data-anexosde="${x.id}"]`); if (el) el.insertAdjacentHTML('beforeend', '<p class="ajuda" data-enviando>Enviando…</p>');
+  const sb = await cliente(), el = document.querySelector(`[data-anexosde="${chaveAx(x)}"]`); if (el) el.insertAdjacentHTML('beforeend', '<p class="ajuda" data-enviando>Enviando…</p>');
   let n = 0;
   for (const f of files) {
     if (f.size > 10 * 1024 * 1024) { toast(`${f.name} passa de 10 MB.`); continue; }
-    const path = `${S.contas.includes(x) ? 'contas' : 'receber'}/${x.id}/${Date.now()}-${nomeArquivo(f.name)}`;
+    const path = `${S.contas.includes(x) ? 'contas' : S.receber.includes(x) ? 'receber' : 'banco'}/${nomeArquivo(chaveAx(x))}/${Date.now()}-${nomeArquivo(f.name)}`;
     const { error } = await sb.storage.from('anexos').upload(path, f, { contentType: f.type || 'application/octet-stream', upsert: false });
     if (error) { toast(`Não consegui anexar ${f.name}: ${error.message}`); continue; }
     (x.anexos = x.anexos || []).push({ path, nome: f.name, tipo: f.type, tam: f.size, em: new Date().toLocaleString('pt-BR').slice(0, 17), quem: nuvem.nome }); n++;
-    hist(`Anexou "${f.name}" em "${x.desc}"`);
+    hist(`Anexou "${f.name}" em "${nomeItem(x)}"`);
   }
   if (n) { salvar(); toast(n === 1 ? 'Arquivo anexado.' : n + ' arquivos anexados.'); }
   redesenharAnexos(x);
@@ -2170,10 +2174,15 @@ async function abrirAnexo(path) {
 async function tirarAnexo(x, path) {
   const a = (x.anexos || []).find(y => y.path === path); if (!a || !confirm(`Tirar o anexo "${a.nome}"? O arquivo é apagado.`)) return;
   try { const sb = await cliente(), { error } = await sb.storage.from('anexos').remove([path]); if (error) throw error; } catch (e) { toast('Não consegui apagar o arquivo: ' + e.message); return; }
-  x.anexos = x.anexos.filter(y => y.path !== path); hist(`Tirou o anexo "${a.nome}" de "${x.desc}"`); salvar(); redesenharAnexos(x);
+  x.anexos = x.anexos.filter(y => y.path !== path); hist(`Tirou o anexo "${a.nome}" de "${nomeItem(x)}"`); salvar(); redesenharAnexos(x);
 }
 document.body.addEventListener('change', e => { const t = e.target; if (!t.dataset || !t.dataset.anexar) return; const x = itemPorId(t.dataset.anexar); if (x && t.files.length) anexar(x, [...t.files]); });
-document.body.addEventListener('click', e => { const t = e.target.closest('[data-abrirax],[data-tiraax]'); if (!t) return;
+function dlgBancoAnexos(t) {
+  abrirDialogo('Lançamento do banco', `<p style="margin:0 0 4px"><b>${esc(t.obs || nomeBanco(t))}</b></p>
+    <p class="ajuda" style="margin:0">${dBR(t.data)} · ${t.valor > 0 ? '+' : ''}${brl(t.valor)} · ${esc(t.memo)}${t.cat ? ' · ' + esc(t.cat) : ''}</p>${htmlAnexos(t)}`);
+}
+document.body.addEventListener('click', e => { const t = e.target.closest('[data-abrirax],[data-tiraax],[data-bancoax]'); if (!t) return;
+  if (t.dataset.bancoax) { const x = S.extrato.find(y => y.fitid === t.dataset.bancoax); if (x) dlgBancoAnexos(x); return; }
   if (t.dataset.abrirax) abrirAnexo(t.dataset.abrirax);
   if (t.dataset.tiraax) { const x = itemPorId(t.dataset.dono); if (x) tirarAnexo(x, t.dataset.tiraax); } });
 
