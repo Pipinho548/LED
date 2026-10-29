@@ -2179,7 +2179,7 @@ function htmlCobrar(simples) {
     ${f.filter(x => ks.includes(x.k)).map(x => `<span class="tag ${x.forte ? 'ruim' : 'corrigir'}" title="${esc(x.dica)}">${x.txt}</span>`).join(' ')}${ks.includes('nf') && f.some(x => x.k === 'nf') ? ` <button class="link" type="button" data-semnf="${c.id}" title="Para o que não tem nota: passagem, recibo, cupom">não tem nota</button>` : ''}</li>`;
   return `<section class="cobrar" aria-labelledby="t-cobrar"><h2 id="t-cobrar">Documentos para cobrar</h2>
     ${cobrar.length ? `<p class="ajuda">Peça a cada fornecedor o que falta. Da nota fiscal, peça o XML: é o documento oficial, o contador precisa dele e o sistema lê sozinho.</p>
-    <ul class="cobrar-forn">${Object.entries(porForn).sort((a, b) => b[1].length - a[1].length).map(([forn, xs]) => `<li><b>${esc(forn)}</b><ul>${xs.map(x => linha(x, ['nf', 'xml', 'boleto'])).join('')}</ul></li>`).join('')}</ul>` : ''}
+    <ul class="cobrar-forn">${Object.entries(porForn).sort((a, b) => b[1].some(x => x.f.some(f => f.forte)) - a[1].some(x => x.f.some(f => f.forte)) || b[1].length - a[1].length).map(([forn, xs]) => `<li><b>${esc(forn)}</b><ul>${xs.map(x => linha(x, ['nf', 'xml', 'boleto'])).join('')}</ul></li>`).join('')}</ul>` : ''}
     ${guardar.length ? `<details><summary>${guardar.length} conta(s) paga(s) sem comprovante anexado</summary><ul class="cobrar-forn"><li><ul>${guardar.map(x => linha(x, ['comp'])).join('')}</ul></li></ul></details>` : ''}</section>`; }
 function htmlAnexos(x) {
   if (!x) return '';
