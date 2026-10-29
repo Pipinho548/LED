@@ -237,6 +237,21 @@
   .pend-resumo .corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .pend-resumo .investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.prazo{ background:#E8ECEA; color:var(--tinta-2); } .tag.corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .tag.investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.trava{ background:#E6E9F0; color:#3D4A66; }
+  .pn-topo{ display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap; margin-bottom:14px; } .pn-topo h1{ margin:0; } .pn-topo .sub{ margin:2px 0 0; }
+  .pn-acoes{ display:flex; gap:8px; flex-wrap:wrap; } .pn-alerta{ margin-bottom:14px; }
+  .kpis{ display:grid; grid-template-columns:repeat(6, minmax(0, 1fr)); gap:10px; margin-bottom:16px; }
+  .kpi{ background:var(--papel); border:1px solid var(--linha); border-radius:10px; padding:12px 14px; text-align:left; display:flex; flex-direction:column; gap:2px; min-width:0; }
+  button.kpi{ cursor:pointer; } button.kpi:hover{ border-color:var(--linha-forte); }
+  .kpi span{ font-size:12px; color:var(--tinta-2); } .kpi b{ font-size:20px; font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .kpi small{ font-size:11px; color:var(--tinta-2); line-height:1.3; }
+  .kpi.destaque{ background:var(--verde); border-color:var(--verde); } .kpi.destaque span, .kpi.destaque small{ color:#C9D6D0; } .kpi.destaque b{ color:var(--luz); }
+  .kpi.ruim{ background:var(--erro-bg); border-color:#F1C2BD; } .kpi.ruim b, .kpi.ruim span{ color:var(--erro); }
+  .pn-grade{ display:grid; grid-template-columns:minmax(0, 1.7fr) minmax(0, 1fr); gap:16px; align-items:start; } .pn-meio{ grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); margin-top:16px; }
+  .pn-lado{ display:grid; gap:16px; } .pn-tit{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:8px; } .pn-tit h2{ margin:0; font-size:16px; } .pn-tit span{ font-size:12px; color:var(--tinta-2); }
+  .pn-tab td{ padding:6px 8px; font-size:13px; } .pn-tab th{ padding:6px 8px; } .pn-tab td.desc{ max-width:300px; } .pn-tab td.forn{ max-width:170px; font-size:12px; color:var(--tinta-2); } .pn-tab .tabela{ overflow-x:auto; border:0; border-radius:0; } .pn-tab .tabela table{ min-width:0; } .pn-tab td.data{ white-space:nowrap; } .pn-tab td.data small{ color:var(--tinta-2); font-size:11px; }
+  .pn-tab tr.vencida td{ color:var(--erro); } .pn-tab .link{ margin-top:8px; }
+  .pn-barra{ width:35%; } .pn-barra span{ display:block; height:6px; border-radius:3px; background:var(--verde-2); }
+  @media (max-width:1100px){ .kpis{ grid-template-columns:repeat(3, minmax(0, 1fr)); } .pn-grade, .pn-meio{ grid-template-columns:1fr; } }
+  @media (max-width:560px){ .kpis{ grid-template-columns:1fr 1fr; } }
   #peResumo > :not(.filtro-ent){ display:none; }
   .cobrar{ background:var(--erro-bg); border:1px solid #F1C2BD; border-left:5px solid var(--erro); border-radius:10px; padding:14px 18px; margin:0 0 14px; }
   .cobrar h2{ color:var(--erro); margin:0 0 4px; font-size:17px; } .cobrar .ajuda{ margin:0 0 8px; }
@@ -990,30 +1005,55 @@ function renderPainel() {
     return { e, pago: l.filter(c => c.pago).reduce((a, c) => a + c.valor, 0), aPagar: l.filter(c => !c.pago).reduce((a, c) => a + c.valor, 0), n: l.length }; }).filter(o => o.n);
   const filtroTxt = S.filtroEnt ? `<p class="aviso-filtro">Contando só as contas pagas por ${esc(S.filtroEnt.map(entNome).join(', '))}. Mude em Fluxo de caixa.</p>` : '';
 
+  const fimMes = ultimoDia(mesDe(h)), em7 = addDias(h, 7), em15 = addDias(h, 15);
+  const semana = abertas.filter(c => c.venc >= h && c.venc <= em7), doMes = abertas.filter(c => c.venc >= h && c.venc <= fimMes);
+  const recMes = rec.filter(x => x.data <= fimMes), p0 = pj[0] || { fim: cx.valor };
+  const kpi = (rot, val, det, cls = '', ir = '') => `<${ir ? 'button type="button" data-irpara="' + ir + '"' : 'div'} class="kpi ${cls}"><span>${rot}</span><b>${val}</b><small>${det}</small></${ir ? 'button' : 'div'}>`;
+  const saldos = (S.caixaContas || []).filter(id => S.saldos[id]).map(id => `${esc(entNome(id).split(' ')[0])} ${brl(S.saldos[id].valor)} em ${dBR(S.saldos[id].data).slice(0, 5)}`).join(' · ') || esc(cx.fonte);
+  const lista = venc.concat(abertas.filter(c => c.venc >= h && c.venc <= em15)).sort((a, b) => a.venc.localeCompare(b.venc));
+  const linhaPg = c => `<tr class="${c.venc < h ? 'vencida' : ''}"><td class="data">${dBR(c.venc).slice(0, 5)} <small>${SEMANA[new Date(c.venc + 'T12:00').getDay()]}</small></td>
+    <td class="desc" title="${esc(c.desc)}">${esc(resumo(c.desc))}${tagsDoc(c) ? ' ' + tagsDoc(c) : ''}</td><td class="forn">${esc(c.forn || '')}${c.pagador && c.pagador !== contaPrincipal() ? ` <span class="tag">sai da ${esc(entNome(c.pagador).split(' ')[0])}</span>` : ''}</td>
+    <td class="n">${brl(c.valor)}</td><td class="n"><button class="btn mini sec" data-pagar="${c.id}">Paguei</button></td></tr>`;
+  const pj6 = pj.slice(0, 6);
+  const linhaFx = p => `<tr><td>${mesLongo(p.mes)}</td><td class="n">${brl(p.ent)}</td><td class="n">${brl(p.sai)}</td><td class="n ${p.fim < 0 ? 'neg' : ''}"><b>${brl(p.fim)}</b></td></tr>`;
+  const mesAt = mesDe(h), cats = {}; S.contas.filter(c => mesDe(c.venc) === mesAt && c.valor > 0).forEach(c => { const l = c.itens && c.itens.length ? c.itens : [c]; l.forEach(i => { cats[i.cat || c.cat] = (cats[i.cat || c.cat] || 0) + (+i.valor || 0); }); });
+  const catL = Object.entries(cats).sort((a, b) => b[1] - a[1]), catTot = catL.reduce((a, x) => a + x[1], 0);
+  const linhaCat = ([k, v]) => `<tr><td>${esc(k)}</td><td class="pn-barra"><span style="width:${catTot ? (v / catL[0][1] * 100).toFixed(1) : 0}%"></span></td><td class="n">${brl(v)}</td><td class="n ajuda">${catTot ? Math.round(v / catTot * 100) : 0}%</td></tr>`;
+  const recL = rec.slice().sort((a, b) => a.data.localeCompare(b.data)).slice(0, 6);
+
   document.getElementById('painel').innerHTML = `
-    <div class="hero${neg ? ' com-falta' : ''}">
-      <div class="hero-txt">
-        <p class="data">${dBR(h)}</p>
-        <h1 class="manchete">${manchete}</h1>
-        <p class="explica">${explica}</p>
-      </div>
-      <div class="hoje"><span>Em caixa agora</span><strong>${brl(cx.valor)}</strong><small>${esc(cx.fonte)}, ${dBR(cx.data)}</small></div>
-      <ol class="fita" aria-label="Saldo no fim de cada mês">${fita}</ol>
-    </div>
+    <div class="pn-topo"><div><h1>Painel financeiro</h1><p class="sub">${dBR(h)} · saldo pelo último extrato de cada conta</p></div>
+      <div class="pn-acoes"><button class="btn sec" data-irpara="pagar">Contas a pagar</button><button class="btn sec" data-irpara="receber">A receber</button><button class="btn sec" data-irpara="extrato">Banco</button></div></div>
     ${filtroTxt}
-    <div class="painel-grade">
-      <section class="bloco" aria-labelledby="t-agenda">
-        <div class="bloco-topo"><h2 id="t-agenda">A pagar nos próximos 30 dias</h2><span class="total">${brl(soma(prox) + soma(venc))}</span></div>
-        ${agenda}
-        <button class="link" data-irpara="pagar">Ver todas as contas a pagar</button>
-      </section>
-      <div class="lateral">
-        ${pend.length ? `<section class="bloco" aria-labelledby="t-pend"><h2 id="t-pend">Para alinhar</h2>
-          <ul class="pendencias">${pend.map(([t, ir]) => `<li><button class="link" data-irpara="${ir}">${esc(t)}</button></li>`).join('')}</ul></section>` : ''}
-        ${outros.length ? `<section class="bloco"><h2>Pago por outras contas</h2><p class="ajuda">Contas da empresa que saem da conta de um sócio ou da JDR. Precisam ser devolvidas ou registradas como aporte.</p>
-          <table><tbody>${outros.map(o => `<tr><td>${esc(o.e.nome)}</td><td class="n">${brl(o.pago + o.aPagar)}</td><td><button class="btn mini sec" data-verpag="${o.e.id}">Ver</button></td></tr>`).join('')}</tbody></table></section>` : ''}
+    ${neg ? `<div class="faixa erro pn-alerta"><b>O caixa fica negativo em ${nomeMesLongo(neg.mes)}/${neg.mes.slice(2, 4)}</b> (${brl(neg.fim)}). ${(() => { const g = abertas.filter(c => mesDe(c.venc) === neg.mes).sort((a, b) => b.valor - a.valor)[0]; return g ? `A maior conta do mês é ${esc(resumo(g.forn || g.desc))}, ${brl(g.valor)}. ` : ''; })()}Até lá precisa entrar venda.</div>` : ''}
+    <div class="kpis">
+      ${kpi('Saldo em conta', brl(cx.valor), saldos, 'destaque', 'extrato')}
+      ${kpi('Vencidas sem baixa', brl(soma(venc)), venc.length ? venc.length + ' conta(s)' : 'nenhuma', venc.length ? 'ruim' : '', 'pagar')}
+      ${kpi('A pagar em 7 dias', brl(soma(semana)), semana.length + ' conta(s)', '', 'pagar')}
+      ${kpi('A pagar até ' + dBR(fimMes).slice(0, 5), brl(soma(doMes)), doMes.length + ' conta(s)', '', 'pagar')}
+      ${kpi('A receber até ' + dBR(fimMes).slice(0, 5), brl(soma(recMes)), recMes.length + ' entrada(s)', '', 'receber')}
+      ${kpi('Saldo previsto em ' + dBR(fimMes).slice(0, 5), brl(p0.fim), 'se tudo for pago e recebido', p0.fim < 0 ? 'ruim' : '', 'equilibrio')}
+    </div>
+    <div class="pn-grade">
+      <section class="card pn-tab"><div class="pn-tit"><h2>Próximos pagamentos</h2><span>vencidas e próximos 15 dias · ${brl(soma(lista))}</span></div>
+        ${lista.length ? `<div class="tabela"><table><thead><tr><th>Venc.</th><th>Descrição</th><th>Fornecedor</th><th class="n">Valor</th><th></th></tr></thead><tbody>${lista.map(linhaPg).join('')}</tbody></table></div>` : '<p class="vazio">Nada vence nos próximos 15 dias.</p>'}
+        <button class="link" data-irpara="pagar">Ver todas as contas a pagar</button></section>
+      <div class="pn-lado">
+        <section class="card"><div class="pn-tit"><h2>Pendências</h2><span>${pend.length || 'nenhuma'}</span></div>
+          ${pend.length ? `<ul class="pendencias">${pend.map(([x, ir]) => `<li><button class="link" data-irpara="${ir}">${esc(x)}</button></li>`).join('')}</ul>` : '<p class="vazio">Tudo em dia.</p>'}</section>
+        <section class="card pn-tab"><div class="pn-tit"><h2>A receber</h2><span>${brl(soma(rec))}</span></div>
+          ${recL.length ? `<table><tbody>${recL.map(x => `<tr class="${x.data < h ? 'vencida' : ''}"><td class="data">${dBR(x.data).slice(0, 5)}</td><td class="desc">${esc(resumo(x.desc))}</td><td class="n">${brl(x.valor)}</td></tr>`).join('')}</tbody></table>` : '<p class="vazio">Nada a receber lançado.</p>'}</section>
       </div>
-    </div>`;
+    </div>
+    <div class="pn-grade pn-meio">
+      <section class="card pn-tab"><div class="pn-tit"><h2>Fluxo de caixa</h2><span>próximos ${pj6.length} meses</span></div>
+        <table><thead><tr><th>Mês</th><th class="n">Entradas</th><th class="n">Saídas</th><th class="n">Saldo no fim</th></tr></thead><tbody>${pj6.map(linhaFx).join('')}</tbody></table>
+        <button class="link" data-irpara="equilibrio">Ver o fluxo completo</button></section>
+      <section class="card pn-tab"><div class="pn-tit"><h2>Saídas de ${nomeMesLongo(mesAt)} por categoria</h2><span>${brl(catTot)}</span></div>
+        ${catL.length ? `<table><tbody>${catL.slice(0, 9).map(linhaCat).join('')}</tbody></table>` : '<p class="vazio">Nenhuma conta neste mês.</p>'}</section>
+    </div>
+    ${outros.length ? `<section class="card pn-tab" style="margin-top:16px"><div class="pn-tit"><h2>Pago por outras contas</h2><span>para devolver ou registrar como aporte</span></div>
+      <table><tbody>${outros.map(o => `<tr><td>${esc(o.e.nome)}</td><td class="n">${brl(o.pago + o.aPagar)}</td><td class="n"><button class="btn mini sec" data-verpag="${o.e.id}">Ver</button></td></tr>`).join('')}</tbody></table></section>` : ''}`;
 }
 const addDias = (iso, n) => { const d = new Date(iso + 'T12:00'); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
 
