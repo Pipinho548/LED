@@ -976,8 +976,6 @@ function renderPainel() {
   const falta = [...new Set(abertas.filter(c => /a confirmar|aguardando/i.test(c.desc)).map(c => oQueFalta(c.desc)))];
   if (falta.length) pend.push([`Dado faltando: ${falta.join('; ')}.`, 'pagar']);
   const semPagador = abertas.filter(c => !c.pagador); if (semPagador.length) pend.push([`${semPagador.length} conta(s) sem a conta bancária de onde vai sair o dinheiro.`, 'pagar']);
-  const semDoc = S.pe.fixos.filter(i => i.sit === 'est' || i.sit === 'pe'); if (semDoc.length) pend.push([`${semDoc.length} custos do ponto de equilíbrio ainda sem documento (${brl(soma(semDoc))} por mês).`, 'equilibrio']);
-  if (S.pe.variaveis.some(v => v.sit === 'est') || (S.pe.impostos || []).some(i => i.sit === 'est')) pend.push(['Os percentuais da venda (impostos, comissão, frete) ainda são estimativa. Peça os impostos ao contador.', 'equilibrio']);
   const semCat = S.extrato.filter(t => !t.cat).length; if (semCat) pend.push([`${semCat} lançamento(s) do banco sem categoria.`, 'extrato']);
   const pb = pendenciasBanco().filter(p => p.tipo !== 'prazo'); if (pb.length) pend.push([`${pb.length} pendência(s) na conferência com o banco (${pb.filter(p => p.tipo === 'investigar').length} para investigar).`, 'extrato']);
   const fd = S.contas.filter(c => faltaDoc(c).some(f => f.forte)); if (fd.length) pend.unshift([`${fd.length} conta(s) com nota fiscal ou boleto para cobrar do fornecedor.`, 'pagar']);
