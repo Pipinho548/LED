@@ -237,6 +237,12 @@
   .pend-resumo .corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .pend-resumo .investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.prazo{ background:#E8ECEA; color:var(--tinta-2); } .tag.corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .tag.investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.trava{ background:#E6E9F0; color:#3D4A66; }
+  .cobrar{ background:var(--erro-bg); border:1px solid #F1C2BD; border-left:5px solid var(--erro); border-radius:10px; padding:14px 18px; margin:0 0 14px; }
+  .cobrar h2{ color:var(--erro); margin:0 0 4px; font-size:17px; } .cobrar .ajuda{ margin:0 0 8px; }
+  .cobrar-forn{ list-style:none; margin:0; padding:0; display:grid; gap:8px; } .cobrar-forn ul{ list-style:none; margin:2px 0 0; padding:0 0 0 12px; display:grid; gap:3px; }
+  .cobrar-forn li li{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; } .cobrar details{ margin-top:10px; } .cobrar summary{ cursor:pointer; color:#7A5A1C; font-size:13px; }
+  .cobrar .tag{ background:#fff; border:1px solid #F1C2BD; } .cobrar .tag.corrigir{ border-color:#F1DBAE; } .cobrar button.link{ padding:0; margin:0; }
+  .s-docs{ display:flex; flex-wrap:wrap; gap:4px; margin-top:3px; } .anexos select.mini{ margin:0 6px; max-width:170px; }
   .lista-pend{ list-style:none; margin:0; padding:0; }
   .lista-pend li{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:4px 12px; align-items:center; padding:9px 0; border-bottom:1px solid #EEF1EE; }
   .lista-pend li:last-child{ border-bottom:0; }
@@ -418,6 +424,7 @@
         <div><button class="btn" type="submit">Adicionar</button></div>
       </form>
     </details>
+    <div id="cobrarPagar"></div>
     <div class="meses" id="mesesPagar" role="group" aria-label="Mês"></div>
     <div class="filtros">
       <label class="campo">Situação<select id="fSit"><option value="">Todas</option><option value="aberto">Em aberto</option><option value="vencida">Vencidas</option><option value="pago">Pagas</option></select></label>
@@ -596,6 +603,7 @@
   <section id="sPagar" hidden>
     <div class="s-cab"><h1>Contas a pagar</h1><button class="btn" type="button" data-snova="pagar">+ Nova conta</button></div>
     <div class="s-resumo" id="sPagarResumo"></div>
+    <div id="sCobrar"></div>
     <div class="s-ferr"><input type="search" id="sPagarBusca" placeholder="Buscar conta ou fornecedor" aria-label="Buscar conta"><label><input type="checkbox" id="sPagarPagas"> Mostrar as pagas</label></div>
     <div class="s-lista" id="sPagarLista"></div>
   </section>
@@ -972,6 +980,7 @@ function renderPainel() {
   if (S.pe.variaveis.some(v => v.sit === 'est') || (S.pe.impostos || []).some(i => i.sit === 'est')) pend.push(['Os percentuais da venda (impostos, comissão, frete) ainda são estimativa. Peça os impostos ao contador.', 'equilibrio']);
   const semCat = S.extrato.filter(t => !t.cat).length; if (semCat) pend.push([`${semCat} lançamento(s) do banco sem categoria.`, 'extrato']);
   const pb = pendenciasBanco().filter(p => p.tipo !== 'prazo'); if (pb.length) pend.push([`${pb.length} pendência(s) na conferência com o banco (${pb.filter(p => p.tipo === 'investigar').length} para investigar).`, 'extrato']);
+  const fd = S.contas.filter(c => faltaDoc(c).some(f => f.forte)); if (fd.length) pend.unshift([`${fd.length} conta(s) com nota fiscal ou boleto para cobrar do fornecedor.`, 'pagar']);
   const sn = S.contas.filter(c => c.semNota); if (sn.length) pend.push([`${sn.length} mercadoria(s) chegaram sem nota (${brl(soma(sn))}). Cobre a nota do fornecedor.`, 'pagar']);
   const mAnt = addMes(mesDe(h), -1); if (temMovimento(mAnt) && !fechado(mAnt)) pend.push([`O fechamento de ${nomeMesLongo(mAnt)} ainda não foi feito (prazo do contador: ${dBR(diaUtil(mesDe(h), S.contadorDia))}).`, 'fechamento']);
   if (!pastaBackup) pend.push(['Escolha uma pasta para o backup automático dos dados (de preferência no OneDrive).', 'ajustes']);
@@ -1036,6 +1045,7 @@ function renderPagar() {
     && (!fb || (c.desc + ' ' + c.forn + ' ' + (c.nf ? 'NF ' + c.nf.numero : '')).toLowerCase().includes(fb))).sort((a, b) => a.venc.localeCompare(b.venc));
   const soma = l => l.reduce((a, c) => a + c.valor, 0);
   const porEnt = [...new Set(lista.map(c => c.pagador || ''))].map(id => `${entNome(id)} ${brl(soma(lista.filter(c => (c.pagador || '') === id)))}`).join(' · ');
+  document.getElementById('cobrarPagar').innerHTML = htmlCobrar(false);
   document.getElementById('totPagar').textContent = `${lista.length} contas · total ${brl(soma(lista))} · em aberto ${brl(soma(lista.filter(c => !c.pago)))}${porEnt ? ' · por conta: ' + porEnt : ''}`;
   const grupos = []; for (const c of lista) { const m = mesDe(c.venc); if (!grupos.length || grupos[grupos.length - 1].m !== m) grupos.push({ m, l: [] }); grupos[grupos.length - 1].l.push(c); }
   const tagNF = c => { if (!c.nf) return ''; const d = entPorDoc(c.nf.destDoc), fora = c.nf.destDoc && (!d || d.id === 'jdr');
@@ -1044,6 +1054,7 @@ function renderPagar() {
     if (cp !== mesDe(c.venc)) t.push(`<span class="tag" title="Mês a que a despesa se refere">ref. ${mesCurto(cp)}</span>`);
     if (+c.rateio > 1) t.push(`<span class="tag" title="No resultado, o valor é dividido pelos meses">vale ${c.rateio} meses</span>`);
     if (c.semNota) t.push('<span class="tag ruim">chegou sem nota</span>');
+    const td = tagsDoc(c); if (td) t.push(td);
     if (c.cat === 'Fornecedores (estoque)' && !/frete/i.test(c.desc)) t.push(`<span class="tag${c.pedido ? ' ok' : ''}" title="Pedido de compra no Nomus">${c.pedido ? 'pedido ' + esc(c.pedido) : 'sem pedido'}</span>`,
       c.recebidoEm ? `<span class="tag ok">chegou ${dBR(c.recebidoEm).slice(0, 5)}</span>` : `<button class="btn mini sec" data-chegou="${c.id}" title="Marcar que a mercadoria chegou hoje">Chegou</button>`);
     if (c.cat === 'Cartão Cresol') t.push(`<button class="btn mini sec" data-cartao="${c.id}">${c.itens && c.itens.length ? `detalhada (${c.itens.length} compras)` : 'Detalhar a fatura'}</button>`);
@@ -1880,11 +1891,12 @@ function renderSimples() {
   const soma = l => l.reduce((a, x) => a + x.valor, 0), principal = contaPrincipal();
   const abertas = S.contas.filter(c => !c.pago), venc = abertas.filter(c => c.venc < h), semana = abertas.filter(c => c.venc >= h && c.venc <= dom), mes = abertas.filter(c => c.venc <= fimMes);
   document.getElementById('sPagarResumo').innerHTML = (venc.length ? resumoNum('Vencidas, sem baixa', soma(venc), venc.length, 'atraso') : '') + resumoNum('Esta semana', soma(semana), semana.length) + resumoNum('Até o fim do mês', soma(mes), mes.length) + resumoNum('Tudo em aberto', soma(abertas), abertas.length);
+  document.getElementById('sCobrar').innerHTML = htmlCobrar(true);
   const qp = document.getElementById('sPagarBusca').value.trim().toLowerCase(), verPagas = document.getElementById('sPagarPagas').checked;
   const lp = S.contas.filter(c => (verPagas || !c.pago) && (!qp || (c.desc + ' ' + c.forn + ' ' + (c.nf ? 'NF ' + c.nf.numero : '')).toLowerCase().includes(qp))).sort((a, b) => a.venc.localeCompare(b.venc));
   const itemP = c => { const atraso = !c.pago && c.venc < h, trava = c.pago && fechado(c.pagoEm), outra = c.pagador && c.pagador !== principal ? ` · sai da conta da ${esc(entNome(c.pagador).split(' ')[0])}` : '';
     return `<li class="s-item${atraso ? ' atraso' : ''}${c.pago ? ' pago' : ''}"><time datetime="${c.venc}"><b>${c.venc.slice(8)}</b><span>${MES3[+c.venc.slice(5, 7) - 1]} · ${diaSemana(c.venc)}</span></time>
-      <button class="s-oque" type="button" data-sedit="${c.id}" title="${esc(c.desc)}"><b>${esc(resumo(c.desc))}</b><small>${esc(c.forn || c.cat)}${outra}${c.anexos && c.anexos.length ? ' · ' + c.anexos.length + (c.anexos.length > 1 ? ' anexos' : ' anexo') : ''}${atraso ? ` · venceu há ${dias(c.venc, h)} dia(s)` : ''}</small></button>
+      <button class="s-oque" type="button" data-sedit="${c.id}" title="${esc(c.desc)}"><b>${esc(resumo(c.desc))}</b><small>${esc(c.forn || c.cat)}${outra}${c.anexos && c.anexos.length ? ' · ' + c.anexos.length + (c.anexos.length > 1 ? ' anexos' : ' anexo') : ''}${atraso ? ` · venceu há ${dias(c.venc, h)} dia(s)` : ''}</small>${tagsDoc(c) ? `<span class="s-docs">${tagsDoc(c)}</span>` : ''}</button>
       <span class="s-valor">${c.valor ? brl(c.valor) : 'a confirmar'}</span>
       <span class="s-acao">${c.pago ? `<span class="tag ok">pago ${c.pagoEm ? dBR(c.pagoEm).slice(0, 5) : ''}</span>${trava ? '' : `<button class="link" type="button" data-sdesfaz="${c.id}">desfazer</button>`}` : `<button class="btn mini" type="button" data-spagar="${c.id}" ${c.valor ? '' : 'disabled title="Coloque o valor antes"'}>Paguei</button>`}</span></li>`; };
   const mp = maisMeses(lp, c => c.venc, 'p', qp, 'contas');
@@ -2141,10 +2153,38 @@ const irmaos = c => c && c.nf ? S.contas.filter(y => y !== c && y.nf && y.nf.num
 const parcelaDe = y => ((y.desc.match(/\((\d+\/\d+)/) || [])[1] ? 'parcela ' + y.desc.match(/\((\d+\/\d+)/)[1] : resumo(y.desc).slice(0, 30));
 const vizinhos = x => x.fitid ? [itemPorId(x.conta || x.receber || '')].filter(y => y && !y.fitid).map(y => [y, 'da conta ' + resumo(y.desc).slice(0, 30)])
   : [...irmaos(x).map(y => [y, 'da ' + parcelaDe(y)]), ...S.extrato.filter(t => t.conta === x.id || t.receber === x.id).map(t => [t, 'do banco, ' + dBR(t.data)])];
+const TIPOS_DOC = { 'nf-xml': 'Nota fiscal (XML)', 'nf-pdf': 'Nota fiscal (PDF)', boleto: 'Boleto', comprovante: 'Comprovante de pagamento', outro: 'Outro (contrato, pedido…)' };
+const PISTAS_DOC = [['comprovante', /comprovante|boleto pago|pago pelo|pix (sicoob|cresol)|sicoob_.*pix|aprovado|recibo de pagamento/i], ['nf-pdf', /(?<![a-z])(nf|nfe|nfs-?e|danfe|nota fiscal|ct-?e)(?![a-z])|procnfe/i],
+  ['boleto', /boleto|cobran[çc]a/i], ['outro', /contrato|projeto|proposta|cota[çc][ãa]o|or[çc]amento|pedido|identidade/i]];
+function tipoDoc(a) { if (a.doc) return a.doc; if (/\.xml$/i.test(a.nome) || /xml/i.test(a.tipo || '')) return 'nf-xml';
+  let m1 = null; for (const [k, re] of PISTAS_DOC) { const m = a.nome.match(re); if (m && (!m1 || m.index < m1.i)) m1 = { k, i: m.index }; } return m1 ? m1.k : 'outro'; }
+const CATS_NF = ['Fornecedores (estoque)', 'Insumos e embalagens', 'Frete de venda', 'Móveis e equipamentos', 'Escritório e limpeza', 'Marketing', 'Prestadores', 'Custos fixos', 'Medicina do trabalho', 'Outras despesas'];
+const precisaNF = c => !c.semNF && CATS_NF.includes(c.cat) && !(c.itens && c.itens.length);
+const tiposDaConta = c => (c.anexos || []).concat(vizinhos(c).flatMap(([y]) => y.anexos || [])).map(tipoDoc);
+function faltaDoc(c) {
+  const h = hoje(), t = tiposDaConta(c), out = [];
+  const xml = t.includes('nf-xml') || (c.nf && /\.xml$/i.test(c.nf.arquivo || '')), nota = xml || t.includes('nf-pdf') || !!c.nf;
+  if (precisaNF(c) && (c.pago || c.recebidoEm || c.venc <= addDias(h, 7))) {
+    if (!nota) out.push({ k: 'nf', txt: 'nota fiscal', forte: true, dica: 'Peça a nota ao fornecedor, de preferência o arquivo XML' });
+    else if (!xml) out.push({ k: 'xml', txt: 'XML da nota', forte: false, dica: 'Só tem o PDF da nota. O XML é o documento oficial e o contador precisa dele' }); }
+  if (!c.pago && /boleto/i.test(c.forma || '') && !t.includes('boleto') && c.venc <= addDias(h, 15)) out.push({ k: 'boleto', txt: 'boleto', forte: true, dica: 'Vence em ' + dBR(c.venc) + ' e o boleto ainda não está anexado' });
+  if (c.pago && !c.conc && !t.includes('comprovante')) out.push({ k: 'comp', txt: 'comprovante', forte: false, dica: 'Paga, mas sem comprovante anexado e sem ligação com o extrato do banco' });
+  return out; }
+const tagsDoc = c => faltaDoc(c).map(f => `<span class="tag ${f.forte ? 'ruim' : 'corrigir'}" title="${esc(f.dica)}">${f.forte ? 'cobrar ' : 'falta '}${f.txt}</span>`).join(' ');
+function htmlCobrar(simples) {
+  const l = S.contas.map(c => ({ c, f: faltaDoc(c) })).filter(x => x.f.length); if (!l.length) return '';
+  const cobrar = l.filter(x => x.f.some(f => f.k !== 'comp')), guardar = l.filter(x => x.f.some(f => f.k === 'comp'));
+  const porForn = {}; cobrar.forEach(x => { const k = x.c.forn || resumo(x.c.desc); (porForn[k] = porForn[k] || []).push(x); });
+  const linha = ({ c, f }, ks) => `<li><button class="link" type="button" data-${simples ? 'sedit' : 'editdoc'}="${c.id}">${esc(resumo(c.desc))}</button> <span class="ajuda">${brl(c.valor)}${c.pago ? ', pago ' + dBR(c.pagoEm || c.venc).slice(0, 5) : ', vence ' + dBR(c.venc).slice(0, 5)}</span>
+    ${f.filter(x => ks.includes(x.k)).map(x => `<span class="tag ${x.forte ? 'ruim' : 'corrigir'}" title="${esc(x.dica)}">${x.txt}</span>`).join(' ')}${ks.includes('nf') && f.some(x => x.k === 'nf') ? ` <button class="link" type="button" data-semnf="${c.id}" title="Para o que não tem nota: passagem, recibo, cupom">não tem nota</button>` : ''}</li>`;
+  return `<section class="cobrar" aria-labelledby="t-cobrar"><h2 id="t-cobrar">Documentos para cobrar</h2>
+    ${cobrar.length ? `<p class="ajuda">Peça a cada fornecedor o que falta. Da nota fiscal, peça o XML: é o documento oficial, o contador precisa dele e o sistema lê sozinho.</p>
+    <ul class="cobrar-forn">${Object.entries(porForn).sort((a, b) => b[1].length - a[1].length).map(([forn, xs]) => `<li><b>${esc(forn)}</b><ul>${xs.map(x => linha(x, ['nf', 'xml', 'boleto'])).join('')}</ul></li>`).join('')}</ul>` : ''}
+    ${guardar.length ? `<details><summary>${guardar.length} conta(s) paga(s) sem comprovante anexado</summary><ul class="cobrar-forn"><li><ul>${guardar.map(x => linha(x, ['comp'])).join('')}</ul></li></ul></details>` : ''}</section>`; }
 function htmlAnexos(x) {
   if (!x) return '';
   if (!nuvem.on) return '<div class="anexos"><p class="ajuda">Para anexar a nota, o boleto ou o comprovante, entre no banco online.</p></div>';
-  const lin = (a, de) => `<li><button class="link" type="button" data-abrirax="${esc(a.path)}">${esc(a.nome)}</button><span class="ajuda">${Math.max(1, Math.round((a.tam || 0) / 1024))} KB${a.em ? ' · ' + esc(a.em) : ''}${de ? ' · ' + esc(de) : ''}</span>${de ? '' : `<button class="btn mini perigo" type="button" data-tiraax="${esc(a.path)}" data-dono="${esc(chaveAx(x))}" aria-label="Tirar o anexo ${esc(a.nome)}">×</button>`}</li>`;
+  const lin = (a, de) => `<li><button class="link" type="button" data-abrirax="${esc(a.path)}">${esc(a.nome)}</button>${de ? `<span class="tag">${esc(TIPOS_DOC[tipoDoc(a)])}</span>` : `<select class="mini" data-tipoax="${esc(a.path)}" data-dono="${esc(chaveAx(x))}" aria-label="Tipo do arquivo">${Object.entries(TIPOS_DOC).map(([k, v]) => `<option value="${k}" ${k === tipoDoc(a) ? 'selected' : ''}>${v}</option>`).join('')}</select>`}<span class="ajuda">${Math.max(1, Math.round((a.tam || 0) / 1024))} KB${a.em ? ' · ' + esc(a.em) : ''}${de ? ' · ' + esc(de) : ''}</span>${de ? '' : `<button class="btn mini perigo" type="button" data-tiraax="${esc(a.path)}" data-dono="${esc(chaveAx(x))}" aria-label="Tirar o anexo ${esc(a.nome)}">×</button>`}</li>`;
   const meus = (x.anexos || []).map(a => lin(a)), dos = vizinhos(x).flatMap(([y, de]) => (y.anexos || []).map(a => lin(a, de)));
   return `<div class="anexos" data-anexosde="${esc(chaveAx(x))}"><h3>Anexos <span class="ajuda">(nota, boleto, comprovante)</span></h3>
     ${meus.length || dos.length ? `<ul>${meus.join('')}${dos.join('')}</ul>` : '<p class="ajuda">Nenhum arquivo ainda.</p>'}
@@ -2156,10 +2196,14 @@ async function anexar(x, files) {
   let n = 0;
   for (const f of files) {
     if (f.size > 10 * 1024 * 1024) { toast(`${f.name} passa de 10 MB.`); continue; }
+    let nfx = null; if (/\.xml$/i.test(f.name) && S.contas.includes(x)) try { const nf = lerNFeXML(await f.text()); if (nf.numero && nf.emitente) nfx = nf; } catch (e) {}
     const path = `${S.contas.includes(x) ? 'contas' : S.receber.includes(x) ? 'receber' : 'banco'}/${nomeArquivo(chaveAx(x))}/${Date.now()}-${nomeArquivo(f.name)}`;
     const { error } = await sb.storage.from('anexos').upload(path, f, { contentType: f.type || 'application/octet-stream', upsert: false });
     if (error) { toast(`Não consegui anexar ${f.name}: ${error.message}`); continue; }
-    (x.anexos = x.anexos || []).push({ path, nome: f.name, tipo: f.type, tam: f.size, em: new Date().toLocaleString('pt-BR').slice(0, 17), quem: nuvem.nome }); n++;
+    (x.anexos = x.anexos || []).push({ path, nome: f.name, tipo: f.type, tam: f.size, em: new Date().toLocaleString('pt-BR').slice(0, 17), quem: nuvem.nome, ...(nfx ? { doc: 'nf-xml' } : {}) }); n++;
+    if (nfx && !x.nf) { x.nf = { numero: nfx.numero, emitente: nfx.emitente, emitenteDoc: nfx.cnpj, dest: nfx.dest, destDoc: nfx.destDoc, emissao: nfx.emissao, total: nfx.total, arquivo: f.name };
+      hist(`NF ${nfx.numero} de ${nfx.emitente} lida do XML e ligada a "${nomeItem(x)}"`);
+      toast(`Nota ${nfx.numero} lida do XML.` + (Math.abs(nfx.total - x.valor) >= .01 ? ` Atenção: a nota é de ${brl(nfx.total)} e a conta de ${brl(x.valor)}.` : '')); }
     hist(`Anexou "${f.name}" em "${nomeItem(x)}"`);
   }
   if (n) { salvar(); toast(n === 1 ? 'Arquivo anexado.' : n + ' arquivos anexados.'); }
@@ -2178,11 +2222,16 @@ async function tirarAnexo(x, path) {
   if (!outros) try { const sb = await cliente(), { error } = await sb.storage.from('anexos').remove([path]); if (error) throw error; } catch (e) { toast('Não consegui apagar o arquivo: ' + e.message); return; }
   x.anexos = x.anexos.filter(y => y.path !== path); hist(`Tirou o anexo "${a.nome}" de "${nomeItem(x)}"`); salvar(); redesenharAnexos(x);
 }
+document.body.addEventListener('change', e => { const t = e.target; if (!t.dataset || !t.dataset.tipoax) return; const x = itemPorId(t.dataset.dono), a = x && (x.anexos || []).find(y => y.path === t.dataset.tipoax); if (!a) return;
+  a.doc = t.value; hist(`Anexo "${a.nome}" marcado como ${TIPOS_DOC[t.value]}`); salvar(); });
 document.body.addEventListener('change', e => { const t = e.target; if (!t.dataset || !t.dataset.anexar) return; const x = itemPorId(t.dataset.anexar); if (x && t.files.length) anexar(x, [...t.files]); });
 function dlgBancoAnexos(t) {
   abrirDialogo('Lançamento do banco', `<p style="margin:0 0 4px"><b>${esc(t.obs || nomeBanco(t))}</b></p>
     <p class="ajuda" style="margin:0">${dBR(t.data)} · ${t.valor > 0 ? '+' : ''}${brl(t.valor)} · ${esc(t.memo)}${t.cat ? ' · ' + esc(t.cat) : ''}</p>${htmlAnexos(t)}`);
 }
+document.body.addEventListener('click', e => { const t = e.target.closest('[data-editdoc],[data-semnf]'); if (!t) return; const c = S.contas.find(x => x.id === (t.dataset.editdoc || t.dataset.semnf)); if (!c) return;
+  if (t.dataset.editdoc) { dlgEditar(c); return; }
+  if (confirm(`"${resumo(c.desc)}" não tem nota fiscal (passagem, recibo, cupom)? O sistema para de cobrar.`)) { c.semNF = true; hist(`Conta "${c.desc}": não tem nota fiscal`); mudou(); } });
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-abrirax],[data-tiraax],[data-bancoax]'); if (!t) return;
   if (t.dataset.bancoax) { const x = S.extrato.find(y => y.fitid === t.dataset.bancoax); if (x) dlgBancoAnexos(x); return; }
   if (t.dataset.abrirax) abrirAnexo(t.dataset.abrirax);
@@ -2391,10 +2440,16 @@ async function importarNF(file) {
   const nossa = S.entidades.find(e => e.id === 'ilum'); if (nf.cnpj && nossa && digitos(nf.cnpj) === digitos(nossa.doc)) return dlgVenda(nf, file);
   const dono = entPorDoc(nf.destDoc), destTxt = nf.dest || nf.destDoc ? `${nf.dest || 'CNPJ'}${nf.destDoc ? ' (' + nf.destDoc + ')' : ''}` : '';
   const semNota = S.contas.filter(c => c.semNota && mesmoForn(c, { forn: nf.emitente }));
+  const perto = c => Math.abs(c.valor - nf.total) < Math.max(1, nf.total * .02);
+  const pedidos = S.contas.filter(c => !c.nf && precisaNF(c) && (mesmoForn(c, { forn: nf.emitente }) || perto(c))).sort((a, b) => Math.abs(a.valor - nf.total) - Math.abs(b.valor - nf.total)).slice(0, 5);
+  const escolhido = pedidos.find(perto);
   abrirDialogo('Nota fiscal ' + (nf.numero || '') + ' · ' + file.name, `
     ${nf.aviso ? `<div class="faixa aviso">${nf.aviso}</div>` : ''}
     ${destTxt ? `<div class="faixa ${dono && dono.id !== 'jdr' ? 'ok' : 'erro'}">Nota em nome de <b>${esc(destTxt)}</b>${dono ? (dono.id !== 'jdr' ? '.' : `: é da ${esc(dono.nome)}, não da Iluminium nem de um sócio.`) : ': esse CNPJ não está cadastrado em Ajustes, "Quem paga".'}</div>` : '<div class="faixa aviso">Não achei em nome de quem está a nota. Confira no PDF.</div>'}
     ${semNota.length ? `<div class="faixa aviso"><label><input type="checkbox" id="nfTrocaSN" checked> Esta nota substitui ${semNota.length === 1 ? 'a mercadoria que chegou sem nota' : semNota.length + ' mercadorias que chegaram sem nota'} de ${esc(semNota[0].forn)} (${brl(semNota.reduce((a, c) => a + c.valor, 0))}).</label></div>` : ''}
+    ${pedidos.length ? `<div class="faixa ${escolhido ? 'ok' : 'aviso'}"><b>Esta nota é de uma conta que já está lançada?</b>
+      <label style="display:block;margin-top:6px"><input type="radio" name="nfLiga" value="" ${escolhido ? '' : 'checked'}> Não: lançar as parcelas da nota</label>
+      ${pedidos.map(c => `<label style="display:block"><input type="radio" name="nfLiga" value="${c.id}" ${c === escolhido ? 'checked' : ''}> Sim: ${esc(resumo(c.desc))} (${brl(c.valor)}, ${c.pago ? 'pago em ' + dBR(c.pagoEm || c.venc) : 'vence ' + dBR(c.venc)})</label>`).join('')}</div>` : ''}
     <div class="form" style="grid-template-columns:2fr 1fr 1fr 1fr">
       <label class="campo">Fornecedor<input type="text" id="nfForn" value="${esc(nf.emitente)}"></label>
       <label class="campo">Nº da nota<input type="text" id="nfNum" value="${esc(nf.numero)}"></label>
@@ -2409,6 +2464,11 @@ async function importarNF(file) {
     <p class="ajuda" id="nfSoma"></p>`, () => {
       const forn = nfForn.value, numero = nfNum.value, cat = nfCat.value, pagador = nfPag.value; let n = 0, dup = 0, parecida = 0;
       const info = { numero, emitente: forn, emitenteDoc: nf.cnpj, dest: nf.dest, destDoc: nf.destDoc, emissao: nf.emissao, total: +nfTot.value || 0, arquivo: file.name };
+      const liga = (document.querySelector('[name="nfLiga"]:checked') || {}).value, cl = liga && S.contas.find(c => c.id === liga);
+      if (cl) { cl.nf = info; if (nfRec.value) cl.recebidoEm = nfRec.value; if (nfPed.value.trim()) cl.pedido = nfPed.value.trim();
+        hist(`Nota ${numero} de ${forn} ligada à conta "${cl.desc}" (já lançada, ${cl.pago ? 'paga' : 'a pagar'})`); mudou();
+        if (nuvem.on) anexar(cl, [file]);
+        toast(`Nota ${numero} ligada a "${resumo(cl.desc)}".` + (Math.abs((+nfTot.value || 0) - cl.valor) >= .01 ? ` A nota é de ${brl(+nfTot.value || 0)} e a conta de ${brl(cl.valor)}: confira frete ou desconto.` : '')); return; }
       if (window.nfTrocaSN && nfTrocaSN.checked) { S.contas = S.contas.filter(c => !semNota.includes(c)); hist(`Nota ${numero} de ${forn} substituiu ${semNota.length} mercadoria(s) sem nota`); }
       const linhas = [...document.querySelectorAll('#nfDups tr')]; linhas.forEach((tr, i) => { const [d, v] = tr.querySelectorAll('input'); if (!d.value || !+v.value) return;
         const nova = { id: uid(), venc: d.value, desc: `NF ${numero} – ${forn} (${i + 1}/${linhas.length})`, forn, cat, valor: +v.value, forma: 'Boleto', pagador, nf: info, pago: false, origem: 'nf', pedido: nfPed.value.trim() || undefined, recebidoEm: nfRec.value || undefined };
@@ -2502,6 +2562,7 @@ function dlgEditar(c) {
     <label class="campo">Nº do pedido (Nomus)<input type="text" id="edPed" value="${esc(c.pedido || '')}"></label>
     <label class="campo">Mercadoria chegou em<input type="date" id="edRec" value="${c.recebidoEm || ''}"></label>
     <label class="campo" style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="edSN" ${c.semNota ? 'checked' : ''}> Chegou sem nota</label>
+    <label class="campo" style="flex-direction:row;align-items:center;gap:6px" title="Passagem, recibo, cupom: o sistema para de cobrar a nota"><input type="checkbox" id="edSemNF" ${c.semNF ? 'checked' : ''}> Não tem nota fiscal</label>
     ${fin ? `<label class="campo" title="Juros desta parcela: é despesa. O resto é amortização da dívida.">Juros desta parcela (R$)<input type="number" step="0.01" id="edJ" value="${c.fin ? c.fin.juros : ''}"></label>
       <label class="campo" title="Parte da parcela que é de outra pessoa (ex.: a parte do José)">Parte de outra pessoa (R$)<input type="number" step="0.01" id="edO" value="${c.fin ? c.fin.outros || '' : ''}"></label>` : ''}</div>
     ${c.nf ? `<p class="ajuda" style="margin-top:12px">NF ${esc(c.nf.numero)} de ${esc(c.nf.emitente)}${c.nf.dest ? ', em nome de ' + esc(c.nf.dest) + (c.nf.destDoc ? ' (' + esc(c.nf.destDoc) + ')' : '') : ''}. Arquivo: ${esc(c.nf.arquivo || '')}.</p>` : ''}
@@ -2516,8 +2577,9 @@ function dlgEditar(c) {
       if (edPed.value.trim()) c.pedido = edPed.value.trim(); else delete c.pedido;
       if (edRec.value) c.recebidoEm = edRec.value; else delete c.recebidoEm;
       if (edSN.checked) c.semNota = true; else delete c.semNota;
+      if (edSemNF.checked) c.semNF = true; else delete c.semNF;
       if (window.edJ && edJ.value !== '') { const j = +edJ.value || 0, o = +(edO.value || 0); c.fin = { juros: r2(j), outros: r2(o), amort: r2(c.valor - j - o) }; } else if (window.edJ) delete c.fin;
-      const nomes = { venc: 'vencimento', desc: 'descrição', valor: 'valor', forn: 'fornecedor', cat: 'categoria', forma: 'forma', pagador: 'conta', pagoEm: 'pago em', comp: 'mês de referência', rateio: 'meses', pedido: 'pedido', recebidoEm: 'chegou em', semNota: 'sem nota' };
+      const nomes = { venc: 'vencimento', desc: 'descrição', valor: 'valor', forn: 'fornecedor', cat: 'categoria', forma: 'forma', pagador: 'conta', pagoEm: 'pago em', comp: 'mês de referência', rateio: 'meses', pedido: 'pedido', recebidoEm: 'chegou em', semNota: 'sem nota', semNF: 'não tem nota fiscal' };
       const mud = Object.keys(nomes).filter(k => String(antes[k] ?? '') !== String(c[k] ?? '')).map(k => `${nomes[k]} de "${antes[k] ?? ''}" para "${c[k] ?? ''}"`);
       if (mud.length) hist(`Conta "${antes.desc}": ${mud.join('; ')}`); mudou(); });
 }
