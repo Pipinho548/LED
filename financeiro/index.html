@@ -237,6 +237,7 @@
   .pend-resumo .corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .pend-resumo .investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.prazo{ background:#E8ECEA; color:var(--tinta-2); } .tag.corrigir{ background:var(--alerta-bg); color:#7A5A1C; } .tag.investigar{ background:var(--erro-bg); color:var(--erro); }
   .tag.trava{ background:#E6E9F0; color:#3D4A66; }
+  #peResumo > :not(.filtro-ent){ display:none; }
   .cobrar{ background:var(--erro-bg); border:1px solid #F1C2BD; border-left:5px solid var(--erro); border-radius:10px; padding:14px 18px; margin:0 0 14px; }
   .cobrar h2{ color:var(--erro); margin:0 0 4px; font-size:17px; } .cobrar .ajuda{ margin:0 0 8px; }
   .cobrar-forn{ list-style:none; margin:0; padding:0; display:grid; gap:8px; } .cobrar-forn ul{ list-style:none; margin:2px 0 0; padding:0 0 0 12px; display:grid; gap:3px; }
@@ -388,7 +389,7 @@
     <button data-aba="painel" aria-current="page">Painel</button>
     <button data-aba="pagar">Contas a pagar</button>
     <button data-aba="receber">A receber</button>
-    <button data-aba="equilibrio">Fluxo e equilíbrio</button>
+    <button data-aba="equilibrio">Fluxo de caixa</button>
     <button data-aba="extrato">Banco</button>
     <button data-aba="pessoas">Pessoas</button>
     <button data-aba="resultado">Resultado</button>
@@ -472,15 +473,16 @@
 
   <!-- ================= PONTO DE EQUILÍBRIO ================= -->
   <section id="equilibrio" hidden>
-    <h1>Fluxo de caixa + ponto de equilíbrio</h1>
-    <p class="sub">Duas perguntas diferentes: quanto precisamos vender por mês (ponto de equilíbrio, aqui em cima) e quando o dinheiro acaba (fluxo de caixa, na tabela). Preencha o faturamento previsto na tabela; o resto vem das Contas a pagar e das premissas mais abaixo.</p>
+    <h1>Fluxo de caixa</h1>
+    <p class="sub">Quanto vai ter em caixa no fim de cada mês: o saldo de hoje, mais o que vai entrar, menos as contas a pagar. Preencha o faturamento previsto na tabela; o resto vem das Contas a pagar e do A receber.</p>
+    <p class="sub" hidden>Duas perguntas diferentes: quanto precisamos vender por mês (ponto de equilíbrio, aqui em cima) e quando o dinheiro acaba (fluxo de caixa, na tabela). Preencha o faturamento previsto na tabela; o resto vem das Contas a pagar e das premissas mais abaixo.</p>
     <div id="peResumo"></div>
     <h2 style="margin-top:24px">Fluxo de caixa mês a mês</h2>
     <div id="fluxoAvisos"></div>
     <div class="card" style="padding:0"><div class="fluxo" id="fluxoTabela"></div></div>
     <p class="ajuda" style="margin-top:8px">Valores em R$. Clique num valor de custo para ver as contas daquele mês. No faturamento previsto, coloque só vendas novas (as que já estão no A receber entram sozinhas). <button class="btn mini sec" id="btnCongelar" type="button">Guardar esta previsão como orçamento</button></p>
     <div class="espaco"></div>
-    <div class="card" style="margin-bottom:18px">
+    <div class="card" style="margin-bottom:18px" hidden>
       <h2>Premissas: o que sai de cada venda</h2>
       <p class="ajuda">Em % do faturamento. A margem de contribuição é o que sobra depois deles e dos impostos. Valores iniciais da planilha "FLUXO PE INTEGRADO": troquem pelos reais.</p>
       <div class="premissas">
@@ -515,8 +517,8 @@
       <div class="planilha"><table><thead><tr><th>Imposto</th><th class="n">% da venda até 2026</th><th class="n">% em 2027</th><th>Quando paga</th><th>Situação</th></tr></thead><tbody id="tbImp"></tbody></table></div>
     </div>
     <div class="card">
-        <h2>Custos fixos do mês (modelo)</h2>
-        <p class="ajuda">As contas fixas que vocês esperam ter todo mês. Se mudar um valor ou marcar "Ainda não tem", o sistema pergunta se ajusta as Contas a pagar também.</p>
+        <h2>Contas fixas de todo mês</h2>
+        <p class="ajuda">As contas que se repetem todo mês. O fluxo usa esta lista para os meses que ainda não têm a conta lançada. Se mudar um valor ou marcar "Ainda não tem", o sistema pergunta se ajusta as Contas a pagar também.</p>
         <div class="planilha"><table><thead><tr><th>Conta</th><th class="n">Por mês (R$)</th><th>Situação</th><th></th></tr></thead><tbody id="tbFixos"></tbody></table></div>
         <form class="form" id="formFixo" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-top:14px">
           <label class="campo largo">Nova conta fixa<input type="text" name="nome" required placeholder="ex.: Energia elétrica"></label>
@@ -986,7 +988,7 @@ function renderPainel() {
 
   const outros = S.entidades.filter(e => !S.caixaContas.includes(e.id) && e.id !== 'ilum').map(e => { const l = S.contas.filter(c => c.pagador === e.id);
     return { e, pago: l.filter(c => c.pago).reduce((a, c) => a + c.valor, 0), aPagar: l.filter(c => !c.pago).reduce((a, c) => a + c.valor, 0), n: l.length }; }).filter(o => o.n);
-  const filtroTxt = S.filtroEnt ? `<p class="aviso-filtro">Contando só as contas pagas por ${esc(S.filtroEnt.map(entNome).join(', '))}. Mude em Fluxo e equilíbrio.</p>` : '';
+  const filtroTxt = S.filtroEnt ? `<p class="aviso-filtro">Contando só as contas pagas por ${esc(S.filtroEnt.map(entNome).join(', '))}. Mude em Fluxo de caixa.</p>` : '';
 
   document.getElementById('painel').innerHTML = `
     <div class="hero${neg ? ' com-falta' : ''}">
@@ -1006,13 +1008,6 @@ function renderPainel() {
         <button class="link" data-irpara="pagar">Ver todas as contas a pagar</button>
       </section>
       <div class="lateral">
-        <section class="bloco equilibrio" aria-labelledby="t-pe">
-          <h2 id="t-pe">Quanto precisamos vender por mês</h2>
-          <p class="meta"><strong>${isFinite(r.pe1) ? brlCurto(r.pe1) : '—'}</strong> para a fábrica se pagar</p>
-          <p class="ajuda">${isFinite(r.pe2) ? `${brlCurto(r.pe2)} pagando também as parcelas dos empréstimos, e ${brlCurto(r.pe3)} pagando também a retirada dos sócios. ` : ''}De cada R$ 100 vendidos, sobram ${brl(Math.max(r.mc, 0) * 100)} para pagar as contas fixas.</p>
-          ${rec.length ? `<p class="ajuda">Entradas previstas: ${brl(soma(rec))} em ${rec.length} lançamento(s).</p>` : ''}
-          <button class="link" data-irpara="equilibrio">Ver o fluxo e o ponto de equilíbrio</button>
-        </section>
         ${pend.length ? `<section class="bloco" aria-labelledby="t-pend"><h2 id="t-pend">Para alinhar</h2>
           <ul class="pendencias">${pend.map(([t, ir]) => `<li><button class="link" data-irpara="${ir}">${esc(t)}</button></li>`).join('')}</ul></section>` : ''}
         ${outros.length ? `<section class="bloco"><h2>Pago por outras contas</h2><p class="ajuda">Contas da empresa que saem da conta de um sócio ou da JDR. Precisam ser devolvidas ou registradas como aporte.</p>
@@ -1220,7 +1215,7 @@ function renderPE() {
     <div class="filtro-ent"><span>Contas pagas por:</span>${filtro}</div>`;
   document.getElementById('fluxoAvisos').innerHTML = `
     ${falta.length ? `<div class="faixa aviso">De ${nomeMes(falta.map(x => x.m).sort()[0])} em diante, ${falta.length} contas fixas do modelo ainda não estão nas Contas a pagar, e o caixa desses meses aparece melhor do que vai ser. <button class="btn mini" id="btnFaltantes" type="button">Lançar até ${nomeMes(F.meses[F.meses.length - 1])}</button></div>` : ''}
-    <p class="ajuda" style="margin:0 0 10px">O ponto de equilíbrio lá em cima usa o modelo de custos fixos. O da tabela usa as contas lançadas em cada mês mais os custos que ainda só estão no modelo (${brl(F.soPE)} por mês), por isso pode dar um pouco diferente. No último mês aparece "—": ainda faltam as contas do mês seguinte (salário e aluguel são pagos no começo do outro mês).</p>`;
+    <p class="ajuda" style="margin:0 0 10px" hidden>O ponto de equilíbrio lá em cima usa o modelo de custos fixos. O da tabela usa as contas lançadas em cada mês mais os custos que ainda só estão no modelo (${brl(F.soPE)} por mês), por isso pode dar um pouco diferente. No último mês aparece "—": ainda faltam as contas do mês seguinte (salário e aluguel são pagos no começo do outro mês).</p>`;
   const fmt = v => Math.abs(v) < .5 ? '–' : (v < 0 ? '-' : '') + Math.round(Math.abs(v)).toLocaleString('pt-BR');
   const linha = (rot, f, cls = '', ir) => `<tr class="${cls}"><th scope="row" title="${esc(rot.replace(/<[^>]+>/g, ''))}">${rot}</th>${L.map(l => { const v = f(l), n = typeof v === 'number', link = ir && n && Math.abs(v) >= .5;
     return `<td class="n${n && v < -.5 ? ' neg' : ''}${link ? ' link' : ''}"${link ? ` data-ir="${l.m}|${esc(ir)}"` : ''}>${n ? (isFinite(v) ? fmt(v) : '—') : v}</td>`; }).join('')}</tr>`;
@@ -1244,10 +1239,10 @@ function renderPE() {
     ${(P.impostos || []).filter(i => i.sit !== 'nao' && !i.porFora).map(impLinha).join('')}
     ${tem('varLanc') ? linha('Variáveis já lançadas nas contas (comissão, frete, impostos)', l => l.varLanc) : ''}
     ${linha('Total despesas variáveis', l => l.totVar, 'tot')}
-    ${secao('Custos fixos operacionais (entram no ponto de equilíbrio)')}
+    ${secao('Custos fixos')}
     ${usadas.map(k => linha(esc(k), l => l.fixos[k], '', k)).join('')}
     ${linha('Total custos fixos', l => l.totFix, 'tot')}
-    ${secao('Financiamentos (saem do caixa, fora do ponto de equilíbrio operacional)')}
+    ${secao('Financiamentos')}
     ${linha('Parcelas e custos de empréstimos', l => l.fin, '', 'Financiamentos')}
     ${secao('Retirada dos sócios e investimentos (não é custo)')}
     ${linha('Retirada de lucro', l => l.ret, '', 'Retirada de lucro')}
@@ -1255,17 +1250,6 @@ function renderPE() {
     ${linha('Total de saídas', l => l.sai, 'tot')}
     ${linha('Variação do mês', l => l.ent - l.sai)}
     ${linha('Saldo final', l => l.fim, 'saldo')}
-    ${secao('Ponto de equilíbrio do mês')}
-    ${linha('Margem de contribuição', l => l.mc > 0 ? pctTxt(l.mc) : '—')}
-    ${linha('Custos fixos do mês (contas + só no modelo)', l => l.parcial ? '—' : l.cf)}
-    ${linha('Degrau 1: a fábrica se paga', l => l.pe, 'tot')}
-    ${linha('Degrau 2: + parcelas dos empréstimos', l => l.peFin)}
-    ${linha('Degrau 3: + retirada dos sócios', l => l.peRet)}
-    ${linha('Faturamento previsto', l => l.fat)}
-    ${linha('Diferença faturamento × degrau 1', l => l.fat - l.pe)}
-    ${linha('Atingimento do degrau 1', l => l.pe > 0 && isFinite(l.pe) ? pctTxt(l.fat / l.pe) : '—')}
-    ${linha('Resultado operacional (estimado)', l => l.parcial ? '—' : l.fat * l.mc - l.cf)}
-    ${linha('Situação', sit)}
   </tbody></table>`;
   const opSit = (s, sem) => Object.entries(SITS).filter(([k]) => !sem || !sem.includes(k)).map(([k, t]) => `<option value="${k}" ${k === s ? 'selected' : ''}>${t}</option>`).join('');
   document.getElementById('tbFixos').innerHTML = GRUPOS.map(g => { const l = P.fixos.filter(i => i.grupo === g); if (!l.length) return '';
@@ -2774,7 +2758,7 @@ fCat.innerHTML += CATS.map(c => `<option>${c}</option>`).join('');
 if (MODO === 'simples') { document.body.classList.add('simples'); document.title = 'Contas · Iluminium Brasil';
   document.querySelector('.marca small').textContent = 'Contas a pagar e a receber';
   abas.innerHTML = '<button data-aba="sPagar" aria-current="page">A pagar</button><button data-aba="sReceber">A receber</button><button data-aba="sBanco">Banco</button><button data-aba="sGastos">Gastos</button>';
-  lnkOutro.href = 'completo.html'; lnkOutro.textContent = 'Sistema completo'; lnkOutro.title = 'Fluxo, ponto de equilíbrio, banco, resultado e fechamento';
+  lnkOutro.href = 'completo.html'; lnkOutro.textContent = 'Sistema completo'; lnkOutro.title = 'Fluxo de caixa, banco, resultado e fechamento';
   document.getElementById('painel').hidden = true; document.getElementById('sPagar').hidden = false; document.getElementById('sCaixa').hidden = false; }
 btnNuvem.onclick = () => nuvem.on ? sairNuvem() : telaLogin('entrar');
 btnSenha.onclick = () => telaLogin('senha');
