@@ -2174,8 +2174,10 @@ const tagsDoc = c => faltaDoc(c).map(f => `<span class="tag ${f.forte ? 'ruim' :
 function htmlCobrar(simples) {
   const l = S.contas.map(c => ({ c, f: faltaDoc(c) })).filter(x => x.f.length); if (!l.length) return '';
   const cobrar = l.filter(x => x.f.some(f => f.k !== 'comp')), guardar = l.filter(x => x.f.some(f => f.k === 'comp'));
-  const porForn = {}; cobrar.forEach(x => { const k = x.c.forn || resumo(x.c.desc); (porForn[k] = porForn[k] || []).push(x); });
-  const linha = ({ c, f }, ks) => `<li><button class="link" type="button" data-${simples ? 'sedit' : 'editdoc'}="${c.id}">${esc(resumo(c.desc))}</button> <span class="ajuda">${brl(c.valor)}${c.pago ? ', pago ' + dBR(c.pagoEm || c.venc).slice(0, 5) : ', vence ' + dBR(c.venc).slice(0, 5)}</span>
+  const porForn = {}, mesmaNota = {}; cobrar.forEach(x => { const kn = x.c.nf && x.c.nf.numero && !x.f.some(f => f.k === 'boleto') ? x.c.forn + '|' + x.c.nf.numero : '';
+    if (kn && mesmaNota[kn]) { mesmaNota[kn].n++; mesmaNota[kn].total += x.c.valor; return; } x.n = 1; x.total = x.c.valor; if (kn) mesmaNota[kn] = x;
+    const k = x.c.forn || resumo(x.c.desc); (porForn[k] = porForn[k] || []).push(x); });
+  const linha = ({ c, f, n = 1, total = c.valor }, ks) => `<li><button class="link" type="button" data-${simples ? 'sedit' : 'editdoc'}="${c.id}">${esc(n > 1 ? 'NF ' + c.nf.numero + ' – ' + resumo(c.desc).replace(/^NF \S+ – /, '').replace(/\s*\(\d+\/\d+\)$/, '') : resumo(c.desc))}</button> <span class="ajuda">${n > 1 ? `${n} parcelas, ${brl(total)}` : brl(c.valor) + (c.pago ? ', pago ' + dBR(c.pagoEm || c.venc).slice(0, 5) : ', vence ' + dBR(c.venc).slice(0, 5))}</span>
     ${f.filter(x => ks.includes(x.k)).map(x => `<span class="tag ${x.forte ? 'ruim' : 'corrigir'}" title="${esc(x.dica)}">${x.txt}</span>`).join(' ')}${ks.includes('nf') && f.some(x => x.k === 'nf') ? ` <button class="link" type="button" data-semnf="${c.id}" title="Para o que não tem nota: passagem, recibo, cupom">não tem nota</button>` : ''}</li>`;
   return `<section class="cobrar" aria-labelledby="t-cobrar"><h2 id="t-cobrar">Documentos para cobrar</h2>
     ${cobrar.length ? `<p class="ajuda">Peça a cada fornecedor o que falta. Da nota fiscal, peça o XML: é o documento oficial, o contador precisa dele e o sistema lê sozinho.</p>
