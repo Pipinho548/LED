@@ -2172,8 +2172,10 @@ async function abrirAnexo(path) {
   catch (e) { if (w) w.close(); toast('Não consegui abrir o anexo: ' + e.message); }
 }
 async function tirarAnexo(x, path) {
-  const a = (x.anexos || []).find(y => y.path === path); if (!a || !confirm(`Tirar o anexo "${a.nome}"? O arquivo é apagado.`)) return;
-  try { const sb = await cliente(), { error } = await sb.storage.from('anexos').remove([path]); if (error) throw error; } catch (e) { toast('Não consegui apagar o arquivo: ' + e.message); return; }
+  const a = (x.anexos || []).find(y => y.path === path); if (!a) return;
+  const outros = S.contas.concat(S.receber, S.extrato).filter(y => y !== x && (y.anexos || []).some(z => z.path === path)).length;
+  if (!confirm(outros ? `Tirar o anexo "${a.nome}" daqui? Ele continua em mais ${outros} ${outros > 1 ? 'lugares' : 'lugar'}.` : `Tirar o anexo "${a.nome}"? O arquivo é apagado.`)) return;
+  if (!outros) try { const sb = await cliente(), { error } = await sb.storage.from('anexos').remove([path]); if (error) throw error; } catch (e) { toast('Não consegui apagar o arquivo: ' + e.message); return; }
   x.anexos = x.anexos.filter(y => y.path !== path); hist(`Tirou o anexo "${a.nome}" de "${nomeItem(x)}"`); salvar(); redesenharAnexos(x);
 }
 document.body.addEventListener('change', e => { const t = e.target; if (!t.dataset || !t.dataset.anexar) return; const x = itemPorId(t.dataset.anexar); if (x && t.files.length) anexar(x, [...t.files]); });
