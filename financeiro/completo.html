@@ -484,6 +484,10 @@
     <div class="tabela"><table><thead><tr><th>Data</th><th>Descrição</th><th>Cliente</th><th class="n">Valor</th><th>Recebido?</th><th>No banco</th><th></th></tr></thead><tbody id="tbReceber"></tbody></table></div>
     <div class="espaco"></div>
     <div class="card"><h2>Vendas registradas</h2><div id="listaVendas"></div></div>
+    <div class="espaco"></div>
+    <div class="card"><h2>Amostras enviadas</h2>
+      <p class="ajuda" style="margin:0 0 10px">Remessas sem cobrança (amostra grátis, bonificação). Não são venda: não entram no A receber nem no resultado. Aqui aparece quanto cada cliente custou. O frete, a GNRE e outros gastos vêm das contas a pagar que você ligar à remessa. O valor de referência é o que está na nota e não conta como gasto.</p>
+      <div id="listaAmostras"></div></div>
   </section>
 
   <!-- ================= PONTO DE EQUILÍBRIO ================= -->
@@ -797,6 +801,7 @@ function normalizar() {
   if (!S.caixaContas) S.caixaContas = [S.caixaDe];
   if (S.caixaContas.includes('jdr') && !S.caixaContas.includes('ilum') && !(S.migr || {}).caixa2) { S.caixaContas.push('ilum'); (S.migr = S.migr || {}).caixa2 = 1; }
   if (!S.saldos) S.saldos = {};
+  if (!S.amostras) S.amostras = [];
   S.contas.forEach(c => { if (c.pagador === undefined) c.pagador = c.cat === 'Financiamentos' && /cresol/i.test(c.forn) ? 'jdr' : 'ilum'; });
   S.extrato.forEach(t => { if (t.ent === undefined) t.ent = S.caixaContas[0]; });
   if (!S.pe) S.pe = peInicial();
@@ -1115,7 +1120,52 @@ function renderReceber() {
   document.getElementById('listaVendas').innerHTML = V.length ? `<table><thead><tr><th>Data</th><th>Nota</th><th>Cliente</th><th class="n">Produtos</th><th class="n">IPI</th><th>Itens</th><th></th></tr></thead><tbody>${V.map(v => `<tr><td>${dBR(v.data)}</td><td>${esc(v.nf || 's/n')}</td><td>${esc(v.cliente)}</td><td class="n">${brl(valorVenda(v))}</td><td class="n">${v.ipi ? brl(v.ipi) : ''}</td>
     <td class="ajuda">${v.itens && v.itens.length ? v.itens.length + ' produto(s)' : ''}</td><td><button class="btn mini perigo" data-apagarv2="${v.id}" aria-label="Apagar venda" ${fechado(v.data) ? 'disabled' : ''}>×</button></td></tr>`).join('')}</tbody></table>
     <p class="ajuda" style="margin-top:8px">Total: ${brl(V.reduce((a, v) => a + valorVenda(v), 0))} em ${V.length} venda(s).</p>` : '<p class="vazio">Nenhuma venda registrada. As vendas entram no resultado do mês (aba Resultado).</p>';
+  renderAmostras();
 }
+
+const TIPOS_AM = { frete: 'Frete', gnre: 'GNRE', outro: 'Outros' };
+function gastosAmostra(a) {
+  const g = { frete: 0, gnre: 0, outro: 0, itens: [] };
+  S.contas.filter(c => c.amostra === a.id).forEach(c => { const t = TIPOS_AM[c.amostraTipo] ? c.amostraTipo : 'outro'; g[t] += c.valor; g.itens.push(c); });
+  g.total = r2(g.frete + g.gnre + g.outro); return g;
+}
+function renderAmostras() {
+  const el = document.getElementById('listaAmostras'); if (!el) return;
+  const A = [...(S.amostras || [])].sort((a, b) => b.data.localeCompare(a.data) || String(b.nf).localeCompare(String(a.nf)));
+  if (!A.length) { el.innerHTML = '<p class="vazio">Nenhuma amostra registrada. Em Importar, arraste o XML de uma nota nossa de remessa de amostra grátis: ela vem para cá e não vira venda.</p>'; return; }
+  const G = new Map(A.map(a => [a.id, gastosAmostra(a)])), v = x => x ? brl(x) : '<span class="ajuda">-</span>';
+  const por = {}; A.forEach(a => { const k = a.cliente || 'Sem nome', r = por[k] = por[k] || { n: 0, ref: 0, gasto: 0 }; r.n++; r.ref += a.ref || 0; r.gasto += G.get(a.id).total; });
+  const tot = A.reduce((s, a) => s + G.get(a.id).total, 0);
+  el.innerHTML = `<h3 style="margin:0 0 6px;font-size:14px">Quanto cada cliente custou</h3>
+    <table><thead><tr><th>Cliente</th><th class="n">Remessas</th><th class="n">Valor de referência</th><th class="n">Gasto (frete, GNRE, outros)</th></tr></thead><tbody>${Object.entries(por).sort((a, b) => b[1].gasto - a[1].gasto).map(([k, r]) => `<tr><td>${esc(k)}</td><td class="n">${r.n}</td><td class="n">${brl(r2(r.ref))}</td><td class="n"><b>${brl(r2(r.gasto))}</b></td></tr>`).join('')}</tbody></table>
+    <h3 style="margin:16px 0 6px;font-size:14px">Remessas</h3>
+    <table><thead><tr><th>Data</th><th>Nota</th><th>Cliente</th><th class="n">Referência</th><th class="n">Frete</th><th class="n">GNRE</th><th class="n">Outros</th><th class="n">Total gasto</th><th></th></tr></thead><tbody>${A.map(a => { const g = G.get(a.id);
+      return `<tr><td>${dBR(a.data)}</td><td>${esc(a.nf || 's/n')}</td><td>${esc(a.cliente)}${g.itens.length ? `<div class="ajuda">${g.itens.map(c => `${esc(resumo(c.desc).slice(0, 48))} (${brl(c.valor)}${c.pago ? '' : ', a pagar'})`).join(' · ')}</div>` : '<div class="ajuda">sem gastos ligados ainda</div>'}</td>
+        <td class="n">${brl(a.ref || 0)}</td><td class="n">${v(g.frete)}</td><td class="n">${v(g.gnre)}</td><td class="n">${v(g.outro)}</td><td class="n"><b>${brl(g.total)}</b></td>
+        <td style="white-space:nowrap"><button class="btn mini" data-ligaram="${a.id}">Ligar gasto</button> <button class="btn mini perigo" data-apagaram="${a.id}" aria-label="Apagar amostra">×</button></td></tr>`; }).join('')}</tbody></table>
+    <p class="ajuda" style="margin-top:8px">Gasto total das amostras: <b>${brl(r2(tot))}</b> em ${A.length} remessa(s).</p>`;
+}
+function dlgLigarGasto(a) {
+  const lig = S.contas.filter(c => c.amostra === a.id), livres = S.contas.filter(c => !c.amostra).sort((x, y) => (y.venc || '').localeCompare(x.venc || '')).slice(0, 120);
+  abrirDialogo(`Gastos da amostra · NF ${a.nf || 's/n'} · ${a.cliente}`, `
+    ${lig.length ? `<h2>Já ligados</h2><table><tbody>${lig.map(c => `<tr><td>${esc(resumo(c.desc).slice(0, 70))}</td><td>${TIPOS_AM[c.amostraTipo] || 'Outros'}</td><td class="n">${brl(c.valor)}</td><td><button class="btn mini perigo" data-desligar="${c.id}">Tirar</button></td></tr>`).join('')}</tbody></table>` : '<p class="ajuda">Nenhum gasto ligado a esta remessa ainda.</p>'}
+    <h2 style="margin-top:14px">Ligar uma conta a pagar</h2>
+    <div class="form" style="grid-template-columns:3fr 1fr">
+      <label class="campo">Conta<select id="amConta"><option value="">Escolha a conta…</option>${livres.map(c => `<option value="${c.id}">${dBR(c.venc)} · ${esc(resumo(c.desc).slice(0, 60))} · ${brl(c.valor)}</option>`).join('')}</select></label>
+      <label class="campo">Tipo de gasto<select id="amTipo">${Object.entries(TIPOS_AM).map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select></label>
+    </div>
+    <p class="ajuda" style="margin-top:8px">A conta continua em Contas a pagar do mesmo jeito. Ligar só faz o valor aparecer no custo desta amostra.</p>`, () => {
+      const c = S.contas.find(x => x.id === amConta.value); if (!c) return;
+      c.amostra = a.id; c.amostraTipo = amTipo.value; hist(`Ligou "${resumo(c.desc)}" (${brl(c.valor)}) à amostra NF ${a.nf || 's/n'} de ${a.cliente} como ${TIPOS_AM[amTipo.value].toLowerCase()}`); mudou(); });
+  dlgCorpo.onclick = e => { const t = e.target.closest('[data-desligar]'); if (!t) return; const c = S.contas.find(x => x.id === t.dataset.desligar); if (!c) return;
+    delete c.amostra; delete c.amostraTipo; hist(`Tirou "${resumo(c.desc)}" da amostra NF ${a.nf || 's/n'} de ${a.cliente}`); mudou(); dlgLigarGasto(a); };
+}
+document.body.addEventListener('click', e => { const t = e.target.closest('[data-ligaram],[data-apagaram]'); if (!t) return;
+  const a = (S.amostras || []).find(x => x.id === (t.dataset.ligaram || t.dataset.apagaram)); if (!a) return;
+  if (t.dataset.ligaram) { dlgLigarGasto(a); return; }
+  if (confirm(`Apagar a amostra NF ${a.nf || 's/n'} de ${a.cliente}? Os gastos ligados continuam em Contas a pagar, só deixam de aparecer aqui.`)) {
+    S.contas.forEach(c => { if (c.amostra === a.id) { delete c.amostra; delete c.amostraTipo; } }); S.amostras = S.amostras.filter(x => x !== a);
+    hist(`Apagou a amostra NF ${a.nf || 's/n'} de ${a.cliente}`); mudou(); } });
 
 const GRUPOS = ['Pessoas', 'Estrutura', 'Sistemas e serviços', 'Outros', 'Financiamentos', 'Retirada dos sócios'];
 const CAT_GRUPO = { 'Pessoas': 'Salários', 'Financiamentos': 'Financiamentos', 'Outros': 'Outras despesas', 'Retirada dos sócios': 'Retirada de lucro' };
@@ -1823,6 +1873,20 @@ function dlgVenda(nf, file) {
     });
 }
 
+function dlgAmostra(nf, file) {
+  abrirDialogo('Remessa sem cobrança ' + (nf.numero || '') + ' · ' + file.name, `<div class="faixa ok">Esta nota foi emitida pela Iluminium como <b>remessa sem cobrança</b> (amostra, bonificação). <b>Não é venda</b>: não vai para o A receber nem para o resultado. Ela entra em <b>Amostras enviadas</b>, onde você liga o frete e a GNRE para ver quanto o cliente custou.</div>
+    <div class="form" style="grid-template-columns:2fr 1fr 1fr 1fr">
+      <label class="campo">Cliente<input type="text" id="aCli" value="${esc(nf.dest)}"></label>
+      <label class="campo">Nº da nota<input type="text" id="aNum" value="${esc(nf.numero)}"></label>
+      <label class="campo">Emissão<input type="date" id="aData" value="${nf.emissao}"></label>
+      <label class="campo">Valor de referência<input type="number" step="0.01" id="aRef" value="${nf.vProd != null ? nf.vProd : nf.total}"></label>
+    </div>
+    <p class="ajuda" style="margin-top:8px">O valor de referência é o que está na nota. Serve só de comparação e não conta como gasto.</p>`, () => {
+      const numero = aNum.value; if ((S.amostras || []).some(x => x.nf === numero && digitos(x.clienteDoc) === digitos(nf.destDoc))) { toast('Essa remessa já estava lançada em Amostras enviadas.'); return; }
+      const a = { id: uid(), data: aData.value, nf: numero, cliente: aCli.value, clienteDoc: nf.destDoc, ref: +aRef.value || 0, arquivo: file.name };
+      (S.amostras = S.amostras || []).push(a); hist(`Amostra lançada: NF ${numero}, ${a.cliente}, referência ${brl(a.ref)}`); mudou(); toast('Amostra lançada. Ligue o frete e a GNRE em "Ligar gasto".'); });
+}
+
 let xlsxPronto = null;
 function carregarXlsx() {
   if (xlsxPronto) return xlsxPronto;
@@ -2409,7 +2473,8 @@ function lerNFeXML(txt) {
   const total = parseFloat(q('vNF')) || 0, dest = x.getElementsByTagName('dest')[0];
   const tot = x.getElementsByTagName('ICMSTot')[0], tv = k => tot ? parseFloat(q(k, tot)) || 0 : 0;
   const itens = [...x.getElementsByTagName('det')].map(d => { const p = d.getElementsByTagName('prod')[0]; return p ? { cod: q('cProd', p), desc: q('xProd', p), q: parseFloat(q('qCom', p)) || 0, un: q('uCom', p), v: parseFloat(q('vProd', p)) || 0 } : null; }).filter(Boolean);
-  return { numero: q('nNF'), emitente: emit ? q('xNome', emit) : '', cnpj: emit ? q('CNPJ', emit) : '', emissao: (q('dhEmi') || q('dEmi')).slice(0, 10), total,
+  const cfops = [...x.getElementsByTagName('CFOP')].map(c => c.textContent.trim()), semCobranca = /amostra gr[áa]tis|bonifica[çc][ãa]o|brinde/i.test(q('natOp')) || (cfops.length > 0 && cfops.every(c => /^[56]91[01]$/.test(c)));
+  return { numero: q('nNF'), emitente: emit ? q('xNome', emit) : '', cnpj: emit ? q('CNPJ', emit) : '', emissao: (q('dhEmi') || q('dEmi')).slice(0, 10), total, semCobranca,
     dest: dest ? q('xNome', dest) : '', destDoc: dest ? q('CNPJ', dest) || q('CPF', dest) : '', dups: dups.length ? dups : [{ venc: (q('dhEmi') || '').slice(0, 10), valor: total }],
     vProd: tot ? r2(tv('vProd') - tv('vDesc')) : null, vIPI: tv('vIPI'), vICMS: tv('vICMS'), vPIS: tv('vPIS'), vCOFINS: tv('vCOFINS'), itens };
 }
@@ -2461,7 +2526,7 @@ function lerDanfe(t) {
 }
 async function importarNF(file) {
   const nf = /\.xml$/i.test(file.name) ? lerNFeXML(await file.text()) : lerDanfe(await textoPDF(file, 3));
-  const nossa = S.entidades.find(e => e.id === 'ilum'); if (nf.cnpj && nossa && digitos(nf.cnpj) === digitos(nossa.doc)) return dlgVenda(nf, file);
+  const nossa = S.entidades.find(e => e.id === 'ilum'); if (nf.cnpj && nossa && digitos(nf.cnpj) === digitos(nossa.doc)) return nf.semCobranca ? dlgAmostra(nf, file) : dlgVenda(nf, file);
   const dono = entPorDoc(nf.destDoc), destTxt = nf.dest || nf.destDoc ? `${nf.dest || 'CNPJ'}${nf.destDoc ? ' (' + nf.destDoc + ')' : ''}` : '';
   const semNota = S.contas.filter(c => c.semNota && mesmoForn(c, { forn: nf.emitente }));
   const perto = c => Math.abs(c.valor - nf.total) < Math.max(1, nf.total * .02);
